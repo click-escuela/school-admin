@@ -16,11 +16,15 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "student")
 @Entity
 public class Student{
@@ -56,6 +60,7 @@ public class Student{
 	
 	@Column(name = "email", nullable = false)
 	private String email;
+	
 	@OneToOne(cascade= CascadeType.ALL)
 	@JoinColumn(name = "id_parent", nullable = false)
 	private Parent parent;

@@ -21,7 +21,7 @@ import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
-import click.escuela.student.service.impl.StudentService;
+import click.escuela.student.service.impl.StudentServiceImpl;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +34,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class StudentController {
 
 	@Autowired
-	private StudentService studentService;
+	private StudentServiceImpl studentService;
 	
 	@Operation(summary = "Get student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.dto.StudentDTO;
+import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Student;
@@ -16,16 +17,22 @@ import click.escuela.student.repository.StudentRepository;
 import click.escuela.student.service.ServiceGeneric;
 
 @Service
-public class StudentService implements ServiceGeneric<StudentApi, StudentDTO> {
+public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO> {
 
 	@Autowired
 	private StudentRepository studentRepository;
 	
 	@Override
 	public void create(StudentApi studentApi) throws TransactionException {
-		Student student = Mapper.mapperToStudent(studentApi);
-		studentRepository.save(student);
-		
+
+		try {
+			Student student = Mapper.mapperToStudent(studentApi);
+			studentRepository.save(student);
+		} catch (Exception e) {
+			throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
+					StudentEnum.CREATE_ERROR.getDescription());
+		}
+
 	}
 
 	@Override
