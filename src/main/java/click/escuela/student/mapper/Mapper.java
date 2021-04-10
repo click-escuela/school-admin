@@ -26,6 +26,7 @@ public class Mapper {
 		student.setParent(mapperToParent(studentApi.getParentApi()));
 		return student;
 	}
+	
 	public static StudentDTO mapperToStudentDTO(Student student) {
 		return modelMapper.map(student, StudentDTO.class);
 	}
