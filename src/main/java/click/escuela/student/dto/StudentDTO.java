@@ -18,9 +18,15 @@ public class StudentDTO {
 	@JsonProperty(value = "name")
 	private String name;
 	
+	@JsonProperty(value = "surname")
+	private String surname;
+
 	@JsonProperty(value = "document")
 	private String document;
 	
+	@JsonProperty(value = "grade")
+	private String grade;
+
 	@JsonProperty(value = "birthday")
 	private LocalDate birthday;
 	

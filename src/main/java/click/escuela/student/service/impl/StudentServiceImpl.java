@@ -22,6 +22,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	@Autowired
 	private StudentRepository studentRepository;
 	
+	
 	@Override
 	public void create(StudentApi studentApi) throws TransactionException {
 
@@ -34,7 +35,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		}
 
 	}
-
+	
 	@Override
 	public StudentDTO get(String id) throws TransactionException {
 		
@@ -60,5 +61,9 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return Mapper.mapperToStudentsDTO(studentRepository.findBySchool(school));
 	}
 	
+	
+	public List<StudentDTO> findAll(){
+		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
+	}
 
 }

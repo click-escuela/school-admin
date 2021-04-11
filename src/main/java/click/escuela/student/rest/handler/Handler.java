@@ -1,6 +1,5 @@
 package click.escuela.student.rest.handler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;

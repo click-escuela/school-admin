@@ -39,6 +39,10 @@ public class Student{
     @NotBlank(message="El nombre no puede estar vacía")	
 	private String name;
 	
+	@Column(name = "surname", nullable = false)
+    @NotBlank(message="El apellido no puede estar vacío")	
+	private String surname;
+	
 	@Column(name = "document", nullable = false)
 	private String document;
 	
@@ -47,6 +51,9 @@ public class Student{
 	
 	@Column(name = "school", nullable = false)
 	private String school;
+	
+	@Column(name = "grade", nullable = false)
+	private String grade;
 	
 	@Column(name = "birthday", nullable = false, columnDefinition = "DATETIME")
 	private LocalDate birthday;

@@ -36,6 +36,14 @@ public class StudentController {
 	@Autowired
 	private StudentServiceImpl studentService;
 	
+	@Operation(summary = "Get all the students", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
+	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> getStudents() {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.findAll());
+	}
+
+	
 	@Operation(summary = "Get student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -44,6 +52,7 @@ public class StudentController {
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.get(studentId));
 	}
+	
 	@Operation(summary = "Get student by schoolId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "/school/{schoolId}", produces = { MediaType.APPLICATION_JSON_VALUE })

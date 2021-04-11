@@ -15,6 +15,9 @@ public class ParentDTO {
 	@JsonProperty(value = "name")
 	private String name;
 	
+	@JsonProperty(value = "surname")
+	private String surname;
+	
 	@JsonProperty(value = "document")
 	private String document;
 	
