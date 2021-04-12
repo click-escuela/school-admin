@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import click.escuela.student.enumerator.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,13 +50,17 @@ public class Student{
 	private String document;
 	
 	@Column(name = "gender", nullable = false)
-	private String gender;
+	@Enumerated(EnumType.STRING)
+	private GenderType gender;
 	
 	@Column(name = "school", nullable = false)
 	private String school;
 	
 	@Column(name = "grade", nullable = false)
 	private String grade;
+	
+	@Column(name = "division", nullable = false)
+	private String division;
 	
 	@Column(name = "birthday", nullable = false, columnDefinition = "DATETIME")
 	private LocalDate birthday;
