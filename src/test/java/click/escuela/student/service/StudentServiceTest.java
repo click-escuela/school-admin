@@ -15,6 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
+import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Adress;
@@ -37,13 +38,13 @@ public class StudentServiceTest{
 	@Before
 	public void setUp() {
 		Student student = StudentBuilder.getBuilder().setAbsences(3).setBirthday(LocalDate.now()).setCellPhone("535435").
-				setDocument("342343232").setEmail("oscar@gmail.com").setGender("M").setName("oscar").setParent(new Parent()).getStudent();
+				setDocument("342343232").setDivision("B").setGrade("2°").setEmail("oscar@gmail.com").setGender(GenderType.MALE).setName("oscar").setParent(new Parent()).getStudent();
 		
 		ParentApi parentApi = new ParentApi();
 		parentApi.setAdressApi(new AdressApi());
 		
 		studentApi = StudentApiBuilder.getBuilder().setAdressApi(new AdressApi()).setBirthday(LocalDate.now())
-				.setCellPhone("4534543").setDocument("435345").setEmail("oscar@gmail.com").setGender("M")
+				.setCellPhone("4534543").setDivision("C").setGrade("3°").setDocument("435345").setEmail("oscar@gmail.com").setGender(GenderType.MALE)
 				.setName("oscar").setParentApi(parentApi).setSchool("1234").getStudentApi();
 		Optional<Student> optional = Optional.of(student);
 
@@ -70,7 +71,7 @@ public class StudentServiceTest{
 	@Test(expected = Test.None.class)
 	public void whenCreateIsError() throws TransactionException {
 		StudentApi studentApi = StudentApiBuilder.getBuilder().setAdressApi(new AdressApi()).setBirthday(LocalDate.now())
-				.setCellPhone("4534543").setDocument("55555").setEmail("oscar@gmail.com").setGender("M")
+				.setCellPhone("4534543").setDocument("55555").setDivision("F").setGrade("3°").setEmail("oscar@gmail.com").setGender(GenderType.MALE)
 				.setName("oscar").setParentApi(new ParentApi()).setSchool("1234").getStudentApi();
 		
 		assertThatExceptionOfType(TransactionException.class)

@@ -3,6 +3,7 @@ package click.escuela.student.util;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.model.Adress;
 import click.escuela.student.model.Course;
 import click.escuela.student.model.Parent;
@@ -13,8 +14,10 @@ public class StudentBuilder {
 	private UUID id;
 	private String name;
 	private String document;
-	private String gender;
+	private GenderType gender;
 	private String school;
+	private String grade;
+	private String division;
 	private LocalDate birthday;
 	private Adress adress;
 	private String cellPhone;
@@ -42,13 +45,23 @@ public class StudentBuilder {
 		return this;
 	}
 
-	public StudentBuilder setGender(String gender) {
+	public StudentBuilder setGender(GenderType gender) {
 		this.gender = gender;
 		return this;
 	}
 
 	public StudentBuilder setSchool(String school) {
 		this.school = school;
+		return this;
+	}
+	
+	public StudentBuilder setDivision(String division) {
+		this.division = division;
+		return this;
+	}
+	
+	public StudentBuilder setGrade(String grade) {
+		this.grade = grade;
 		return this;
 	}
 
@@ -99,6 +112,8 @@ public class StudentBuilder {
 		student.setDocument(document);
 		student.setEmail(email);
 		student.setGender(gender);
+		student.setDivision(division);
+		student.setGrade(grade);
 		student.setId(id);
 		student.setName(name);
 		student.setParent(parent);
