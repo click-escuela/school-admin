@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
-@RequestMapping(path = "/student")
+@RequestMapping(path = "/school/{schoolId}/student")
 public class StudentController {
 
 	@Autowired
@@ -46,7 +46,7 @@ public class StudentController {
 	}
 	@Operation(summary = "Get student by schoolId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
-	@GetMapping(value = "/school/{schoolId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> getBySchool(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId) throws TransactionException {
 
