@@ -44,6 +44,7 @@ public class StudentServiceTest{
 	public void setUp() {
  		PowerMockito.mockStatic(Mapper.class);
 		
+
 		Student student = StudentBuilder.getBuilder().setAbsences(3).setBirthday(LocalDate.now()).setCellPhone("535435").
 				setDocument("342343232").setDivision("B").setGrade("2°").setEmail("oscar@gmail.com").setGender(GenderType.MALE).setName("oscar").setParent(new Parent()).getStudent();
 		
@@ -61,6 +62,7 @@ public class StudentServiceTest{
 
  		Mockito.when(studentRepository.save(student)).thenReturn(student);		
  		//Mockito.when(clientRepository.findById(1L)).thenReturn(optional);
+
 		//Mockito.when(clientRepository.findAll()).thenReturn(Arrays.asList(new Client(1L,"23423432","oscar",LocalDateTime.of(2020, 10, 20, 12, 12))));
 
 		//Mockito.doNothing().when(clientRepository).delete(Mockito.any());
@@ -78,11 +80,12 @@ public class StudentServiceTest{
 			hasError = true;
 		}
 		assertThat(hasError).isFalse();
-
 	}
 	
 	@Test(expected = Test.None.class)
-	public void whenCreateIsError()  {
+
+	public void whenCreateIsError() {
+
 		StudentApi studentApi = StudentApiBuilder.getBuilder().setAdressApi(new AdressApi()).setBirthday(LocalDate.now())
 				.setCellPhone("4534543").setDocument("55555").setDivision("F").setGrade("3°").setEmail("oscar@gmail.com").setGender(GenderType.MALE.toString())
 				.setName("oscar").setParentApi(new ParentApi()).setSchool("1234").getStudentApi();
@@ -91,7 +94,8 @@ public class StudentServiceTest{
 		
 		assertThatExceptionOfType(TransactionException.class)
 		  .isThrownBy(() -> {
-			  studentServiceImpl.create(null);
+
+				studentServiceImpl.create(null);
 		}).withMessage("No se pudo crear el estudiante correctamente");
 
 	}
