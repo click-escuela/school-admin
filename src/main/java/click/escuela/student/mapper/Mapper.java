@@ -10,6 +10,7 @@ import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.dto.StudentDTO;
+import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.model.Adress;
 import click.escuela.student.model.Parent;
 import click.escuela.student.model.Student;
@@ -21,6 +22,8 @@ public class Mapper {
 	
 	public static Student mapperToStudent(StudentApi studentApi) {
 		Student student = modelMapper.map(studentApi, Student.class);
+		//Fijarse el enum. Para poder compartir, usar enum, valuof
+		student.setGender(mapperToEnum(studentApi.getGender()));
 		student.setAdress(mapperToAdress(studentApi.getAdressApi()));
 		student.setParent(mapperToParent(studentApi.getParentApi()));
 		return student;
@@ -46,6 +49,10 @@ public class Mapper {
 	
 	public static Adress mapperToAdress(AdressApi adressApi) {
 		return modelMapper.map(adressApi, Adress.class);
+	}
+	
+	public static GenderType mapperToEnum(String string) {
+		return modelMapper.map(GenderType.valueOf(string),GenderType.class);
 	}
 	
 	public static List<StudentDTO> mapperToStudentsDTO(List<Student> students) {

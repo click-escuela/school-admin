@@ -1,5 +1,6 @@
 package click.escuela.student.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDate;
@@ -7,9 +8,12 @@ import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.student.api.AdressApi;
@@ -26,6 +30,7 @@ import click.escuela.student.service.impl.StudentServiceImpl;
 import click.escuela.student.util.StudentApiBuilder;
 import click.escuela.student.util.StudentBuilder;
 
+@RunWith(PowerMockRunner.class)
 @PrepareForTest({Mapper.class})
 public class StudentServiceTest{
 	
@@ -37,6 +42,8 @@ public class StudentServiceTest{
 	
 	@Before
 	public void setUp() {
+ 		PowerMockito.mockStatic(Mapper.class);
+		
 		Student student = StudentBuilder.getBuilder().setAbsences(3).setBirthday(LocalDate.now()).setCellPhone("535435").
 				setDocument("342343232").setDivision("B").setGrade("2°").setEmail("oscar@gmail.com").setGender(GenderType.MALE).setName("oscar").setParent(new Parent()).getStudent();
 		
@@ -44,17 +51,16 @@ public class StudentServiceTest{
 		parentApi.setAdressApi(new AdressApi());
 		
 		studentApi = StudentApiBuilder.getBuilder().setAdressApi(new AdressApi()).setBirthday(LocalDate.now())
-				.setCellPhone("4534543").setDivision("C").setGrade("3°").setDocument("435345").setEmail("oscar@gmail.com").setGender(GenderType.MALE)
+				.setCellPhone("4534543").setDivision("C").setGrade("3°").setDocument("435345").setEmail("oscar@gmail.com").setGender(GenderType.MALE.toString())
 				.setName("oscar").setParentApi(parentApi).setSchool("1234").getStudentApi();
 		Optional<Student> optional = Optional.of(student);
 
-		Mockito.when(Mapper.mapperToStudent(studentApi)).thenReturn(student);
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
-
 		Mockito.when(Mapper.mapperToParent(Mockito.any())).thenReturn(new Parent());
+ 		Mockito.when(Mapper.mapperToStudent(studentApi)).thenReturn(student);
 
-		Mockito.when(studentRepository.save(Mockito.any())).thenReturn(student);
-		//Mockito.when(clientRepository.findById(1L)).thenReturn(optional);
+ 		Mockito.when(studentRepository.save(student)).thenReturn(student);		
+ 		//Mockito.when(clientRepository.findById(1L)).thenReturn(optional);
 		//Mockito.when(clientRepository.findAll()).thenReturn(Arrays.asList(new Client(1L,"23423432","oscar",LocalDateTime.of(2020, 10, 20, 12, 12))));
 
 		//Mockito.doNothing().when(clientRepository).delete(Mockito.any());
@@ -63,21 +69,30 @@ public class StudentServiceTest{
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
 	}
 	
-	@Test(expected = Test.None.class)
-	public void whenCreateIsOk() throws TransactionException {
+	@Test
+	public void whenCreateIsOk() {
+		boolean hasError = false;
+		try {
+			studentServiceImpl.create(studentApi);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isFalse();
 
-		studentServiceImpl.create(studentApi);
 	}
+	
 	@Test(expected = Test.None.class)
-	public void whenCreateIsError() throws TransactionException {
+	public void whenCreateIsError()  {
 		StudentApi studentApi = StudentApiBuilder.getBuilder().setAdressApi(new AdressApi()).setBirthday(LocalDate.now())
-				.setCellPhone("4534543").setDocument("55555").setDivision("F").setGrade("3°").setEmail("oscar@gmail.com").setGender(GenderType.MALE)
+				.setCellPhone("4534543").setDocument("55555").setDivision("F").setGrade("3°").setEmail("oscar@gmail.com").setGender(GenderType.MALE.toString())
 				.setName("oscar").setParentApi(new ParentApi()).setSchool("1234").getStudentApi();
+		
+		Mockito.when(studentRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		
 		assertThatExceptionOfType(TransactionException.class)
 		  .isThrownBy(() -> {
-				studentServiceImpl.create(studentApi);
-		}).withMessage("El Cliente que quiere eliminar no existe");
+			  studentServiceImpl.create(null);
+		}).withMessage("No se pudo crear el estudiante correctamente");
 
 	}
 	

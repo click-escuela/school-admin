@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Student Api")
 public class StudentApi extends PersonApi{
 
-	public StudentApi(String name, String surname, String document, GenderType gender, LocalDate birthday, AdressApi adressApi,
+	public StudentApi(String name, String surname, String document, String gender, LocalDate birthday, AdressApi adressApi,
 			String cellPhone, String email,ParentApi parentApi, String school, String grade, String division) {
 		
 		super(name, surname, document, gender, birthday, adressApi, cellPhone, email);

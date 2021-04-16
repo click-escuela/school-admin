@@ -1,35 +1,19 @@
 package click.escuela.student.util;
 
 import java.time.LocalDate;
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.enumerator.GenderType;
-import click.escuela.student.model.Adress;
-import click.escuela.student.model.Course;
-import click.escuela.student.model.Parent;
-import click.escuela.student.model.Student;
+
 
 public class StudentApiBuilder {
 
 	private String name;
 	private String surname;
 	private String document;
-	private GenderType gender;
+	private String gender;
 	private String grade;
 	private String division;
 	private LocalDate birthday;
@@ -54,7 +38,7 @@ public class StudentApiBuilder {
 		this.document = document;
 		return this;
 	}
-	public StudentApiBuilder setGender(GenderType gender) {
+	public StudentApiBuilder setGender(String gender) {
 		this.gender = gender;
 		return this;
 	}

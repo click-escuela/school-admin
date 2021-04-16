@@ -45,10 +45,9 @@ public class PersonApi {
 	@JsonProperty(value = "document", required = true)
 	private String document;
 
-	//@NotBlank(message = "Gender cannot be null")
-	@Enumerated(EnumType.STRING)
+	@NotBlank(message = "Gender cannot be null")
 	@JsonProperty(value = "gender", required = true)
-	private GenderType gender;
+	private String gender;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonProperty(value = "birthday", required = true)

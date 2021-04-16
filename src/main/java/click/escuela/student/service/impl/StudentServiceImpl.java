@@ -47,9 +47,30 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return studentDto;
 	}
 
-	@Override
-	public void update(StudentApi studentApi) throws TransactionException {
-		studentRepository.saveAndFlush(Mapper.mapperToStudent(studentApi));
+	
+	public void update(String id, StudentApi studentApi) throws TransactionException {	
+		UUID idReal= UUID.fromString(id);
+		if(findID(idReal).equals(null)) {
+			throw new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
+					StudentEnum.UPDATE_ERROR.getDescription());
+		}
+		else {
+			Student student=studentRepository.findById(idReal).get();
+			student.setName(studentApi.getName());
+			student.setSurname(studentApi.getSurname());
+			student.setDocument(studentApi.getDocument());
+			student.setGender(Mapper.mapperToEnum(studentApi.getGender()));
+			student.setSchool(studentApi.getSchool());
+			student.setGrade(studentApi.getGrade());
+			student.setDivision(studentApi.getDivision());
+			student.setBirthday(studentApi.getBirthday());
+			student.setAdress(Mapper.mapperToAdress(studentApi.getAdressApi()));
+			student.setCellPhone(studentApi.getCellPhone());
+			student.setEmail(studentApi.getEmail());
+			student.setParent(Mapper.mapperToParent(studentApi.getParentApi()));
+		
+			studentRepository.save(student);
+		}
 	}
 
 	@Override
@@ -64,6 +85,29 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	
 	public List<StudentDTO> findAll(){
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
+	}
+
+	public Student findID(UUID id) {
+		Optional<Student> optional= studentRepository.findById(id);
+		if(optional.isPresent()) {
+			return optional.get();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	@Override
+	public void update(StudentApi studentApi) throws TransactionException {
+		/*try {
+			Student student = Mapper.mapperToStudent(studentApi);
+			studentRepository.save(student);
+		} catch (Exception e) {
+			throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
+					StudentEnum.CREATE_ERROR.getDescription());
+		}
+		//studentRepository.saveAndFlush(Mapper.mapperToStudent(studentApi));*/
+		
 	}
 
 }
