@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
-import click.escuela.student.enumerator.GenderType;
 
 
 public class StudentApiBuilder {
