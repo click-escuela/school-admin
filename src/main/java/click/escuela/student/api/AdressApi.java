@@ -16,7 +16,6 @@ import lombok.Setter;
 @Schema(description = "Adress Api")
 public class AdressApi {
 
-	
 	@NotBlank(message = "Street cannot be null")
 	@JsonProperty(value = "street", required = true)
 	private String street;
