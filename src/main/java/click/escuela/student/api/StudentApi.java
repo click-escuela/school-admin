@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import click.escuela.student.enumerator.GenderType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,13 +23,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class StudentApi extends PersonApi{
 
 	public StudentApi(String name, String surname, String document, String gender, LocalDate birthday, AdressApi adressApi,
-			String cellPhone, String email,ParentApi parentApi, String school, String grade, String division) {
+			String cellPhone, String email,ParentApi parentApi, String school, String grade, String division, String level) {
 		
 		super(name, surname, document, gender, birthday, adressApi, cellPhone, email);
 		this.parentApi = parentApi;
 		this.school = school;
 		this.grade= grade;
 		this.division=division;
+		this.level=level;
 	}
 
 	@JsonProperty(value = "parent", required = true)
@@ -48,5 +48,10 @@ public class StudentApi extends PersonApi{
 	@NotBlank(message = "Division cannot be null")
 	@JsonProperty(value = "division", required = true)
 	private String division;
+	
+
+	@NotBlank(message = "Level cannot be null")
+	@JsonProperty(value = "level", required = true)
+	private String level;
 
 }

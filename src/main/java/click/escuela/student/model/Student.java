@@ -18,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import click.escuela.student.enumerator.EducationLevels;
 import click.escuela.student.enumerator.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -61,6 +62,11 @@ public class Student{
 	
 	@Column(name = "division", nullable = false)
 	private String division;
+	
+
+	@Column(name = "level", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private EducationLevels level;
 	
 	@Column(name = "birthday", nullable = false, columnDefinition = "DATETIME")
 	private LocalDate birthday;

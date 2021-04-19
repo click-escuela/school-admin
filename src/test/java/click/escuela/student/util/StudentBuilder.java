@@ -13,6 +13,7 @@ public class StudentBuilder {
 
 	private UUID id;
 	private String name;
+	private String surname;
 	private String document;
 	private GenderType gender;
 	private String school;
@@ -37,6 +38,11 @@ public class StudentBuilder {
 
 	public StudentBuilder setName(String name) {
 		this.name = name;
+		return this;
+	}
+	
+	public StudentBuilder setSurname(String surname) {
+		this.surname = surname;
 		return this;
 	}
 
@@ -116,6 +122,7 @@ public class StudentBuilder {
 		student.setGrade(grade);
 		student.setId(id);
 		student.setName(name);
+		student.setSurname(surname);
 		student.setParent(parent);
 		student.setSchool(school);
 		

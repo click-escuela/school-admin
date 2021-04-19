@@ -1,7 +1,5 @@
 package click.escuela.student.rest;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +20,6 @@ import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.service.impl.StudentServiceImpl;
-
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +32,7 @@ public class StudentController {
 
 	@Autowired
 	private StudentServiceImpl studentService;
-	
+
 	//Metodo de prueba
 	@Operation(summary = "Get all the students", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
@@ -68,6 +65,7 @@ public class StudentController {
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> create(
 		 @RequestBody @Validated StudentApi studentApi) throws TransactionException {
+		
 		studentService.create(studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.CREATE_OK);
 	}
@@ -83,7 +81,6 @@ public class StudentController {
 	}
 	
 	//Todo lo que venga en string
-	
 	@Operation(summary = "Delete student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })

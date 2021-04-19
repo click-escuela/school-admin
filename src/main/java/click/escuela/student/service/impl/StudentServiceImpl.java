@@ -1,5 +1,6 @@
 package click.escuela.student.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,26 +16,34 @@ import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Student;
 import click.escuela.student.repository.StudentRepository;
 import click.escuela.student.service.ServiceGeneric;
+import click.escuela.student.util.Validation;
 
 @Service
 public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO> {
 
 	@Autowired
 	private StudentRepository studentRepository;
-	
+	//private Validation validation;
 	
 	@Override
 	public void create(StudentApi studentApi) throws TransactionException {
-
-		try {
-			Student student = Mapper.mapperToStudent(studentApi);
-			studentRepository.save(student);
-		} catch (Exception e) {
-			throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
-					StudentEnum.CREATE_ERROR.getDescription());
+		
+		//if(!validation.StudentExists(studentApi)) {
+			try {
+				
+				Student student = Mapper.mapperToStudent(studentApi);
+				studentRepository.save(student);
+			} catch (Exception e) {
+				throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
+						StudentEnum.CREATE_ERROR.getDescription());
+	//	}
+		}
+		/*	else {
+				throw new TransactionException(StudentEnum.STUDENT_EXIST.getCode(),
+						StudentEnum.STUDENT_EXIST.getDescription());
+			}*/
 		}
 
-	}
 	
 	@Override
 	public StudentDTO get(String id) throws TransactionException {
@@ -79,7 +88,10 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 	
 	public List<StudentDTO> getBySchool(String school) {
-		return Mapper.mapperToStudentsDTO(studentRepository.findBySchool(school));
+		List<Student> student=new ArrayList<>();
+		student=studentRepository.findBySchool(school);
+
+		return Mapper.mapperToStudentsDTO(student);
 	}
 	
 	

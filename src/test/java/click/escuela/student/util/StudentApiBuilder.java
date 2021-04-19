@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
-import click.escuela.student.enumerator.GenderType;
 
 
 public class StudentApiBuilder {
@@ -16,6 +15,7 @@ public class StudentApiBuilder {
 	private String gender;
 	private String grade;
 	private String division;
+	private String level;
 	private LocalDate birthday;
 	private AdressApi adressApi;
 	private String cellPhone;
@@ -48,6 +48,10 @@ public class StudentApiBuilder {
 	}
 	public StudentApiBuilder setGrade(String grade) {
 		this.grade = grade;
+		return this;
+	}
+	public StudentApiBuilder setLevel(String level) {
+		this.level = level;
 		return this;
 	}
 	public StudentApiBuilder setBirthday(LocalDate birthday) {
@@ -84,13 +88,14 @@ public class StudentApiBuilder {
 		studentApi.setDocument(document);
 		studentApi.setDivision(division);
 		studentApi.setGrade(grade);
+		studentApi.setLevel(level);
 		studentApi.setEmail(email);
 		studentApi.setGender(gender);
 		studentApi.setName(name);
 		studentApi.setName(surname);
 		studentApi.setParentApi(parentApi);
 		studentApi.setSchool(school);
-		return new StudentApi(name, surname, document, gender, birthday, adressApi, cellPhone, email, parentApi, school, grade, division);
+		return new StudentApi(name, surname, document, gender, birthday, adressApi, cellPhone, email, parentApi, school, grade, division,level);
 	}
 	
 	
