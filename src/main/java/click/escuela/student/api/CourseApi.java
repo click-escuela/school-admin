@@ -19,12 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
 @Schema(description = "Course Api")
-
 public class CourseApi {
-	@NotBlank(message = "Name cannot be empty")
-	@Size(max = 50, message = "Name must be 50 characters")
-	@JsonProperty(value = "name", required = true)
-	private String name;
 	
 	@NotNull(message = "Year cannot be empty")
 	@JsonProperty(value = "year", required = true)

@@ -12,9 +12,6 @@ public class CourseDTO {
 	@JsonProperty(value = "gradeId")
 	private String gradeId;
 	
-	@JsonProperty(value = "name")
-	private String name;
-	
 	@JsonProperty(value = "year")
 	private Integer year;
 	
@@ -25,6 +22,6 @@ public class CourseDTO {
 	private Integer countStudent;
 
 	@JsonProperty(value = "teacher")
-	private String teacher;;
+	private String teacher;
 	
 }

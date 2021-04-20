@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.student.api.CourseApi;
 import click.escuela.student.dto.CourseDTO;
-import click.escuela.student.enumerator.StudentEnum;
+import click.escuela.student.enumerator.CourseEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.service.impl.CourseServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +50,7 @@ public class CourseController {
 		 @RequestBody @Validated CourseApi courseApi) throws TransactionException {
 		
 		courseService.create(courseApi);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.CREATE_OK);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseEnum.CREATE_OK);
 	}
 
 	@PutMapping(value = "/{id}")

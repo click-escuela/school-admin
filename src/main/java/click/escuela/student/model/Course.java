@@ -30,10 +30,6 @@ public class Course {
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	private UUID gradeId;
 	
-	@Column(name = "name", nullable = false)
-	@NotBlank(message="El nombre no puede estar vacío")	
-	private String name;
-	
 	@Column(name = "year", nullable = false)
 	private Integer year;
 	
