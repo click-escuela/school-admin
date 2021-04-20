@@ -12,6 +12,5 @@ import click.escuela.student.model.Student;
 public interface StudentRepository extends JpaRepository <Student, UUID> {
 
 	public List<Student> findBySchool(String school);
-
 	public Optional<Student> findByDocumentAndGender(String document, GenderType mapperToEnum); 
 }
