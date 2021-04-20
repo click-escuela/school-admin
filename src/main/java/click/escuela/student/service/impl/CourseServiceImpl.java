@@ -51,7 +51,8 @@ public class CourseServiceImpl implements ServiceGeneric<CourseApi, CourseDTO>{
 	}
 	
 	public List<CourseDTO> findAll(){
-		return Mapper.mapperToCoursesDTO(courseRepository.findAll());
+		List<Course> listCourses=courseRepository.findAll();
+		return Mapper.mapperToCoursesDTO(listCourses);
 	}
 
 }

@@ -19,10 +19,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "course")
+@Entity
 public class Course {
 	@Id
 	@Column(name = "grade_id", columnDefinition = "BINARY(16)")
