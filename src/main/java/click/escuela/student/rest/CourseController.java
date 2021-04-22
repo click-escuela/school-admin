@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController(value = "/courses")
+@RestController(value = "/school/{schoolId}/course")
 public class CourseController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> getStudents() {
@@ -25,7 +25,7 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}
 	
-	@PutMapping(value = "/{id}/student/add/{student}")
+	@PutMapping(value = "/{idCourse}/student/add/{student}")
 	public ResponseEntity<?> addStudent() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}

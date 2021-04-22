@@ -18,9 +18,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
@@ -28,6 +30,7 @@ import lombok.Setter;
 @Schema(description = "Person Api")
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class PersonApi {
 
 	@NotBlank(message = "Name cannot be empty")

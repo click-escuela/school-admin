@@ -20,6 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import click.escuela.student.enumerator.GenderType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "student")
 @Entity
+@Builder
 public class Student{
 	
 	@Id

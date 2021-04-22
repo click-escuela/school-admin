@@ -27,8 +27,7 @@ import click.escuela.student.model.Parent;
 import click.escuela.student.model.Student;
 import click.escuela.student.repository.StudentRepository;
 import click.escuela.student.service.impl.StudentServiceImpl;
-import click.escuela.student.util.StudentApiBuilder;
-import click.escuela.student.util.StudentBuilder;
+
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Mapper.class})
@@ -45,15 +44,15 @@ public class StudentServiceTest{
  		PowerMockito.mockStatic(Mapper.class);
 		
 
-		Student student = StudentBuilder.getBuilder().setAbsences(3).setBirthday(LocalDate.now()).setCellPhone("535435").
-				setDocument("342343232").setDivision("B").setGrade("2°").setEmail("oscar@gmail.com").setGender(GenderType.MALE).setName("oscar").setParent(new Parent()).getStudent();
+		Student student = Student.builder().absences(3).birthday(LocalDate.now()).cellPhone("535435").
+				document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE).name("oscar").parent(new Parent()).build();
 		
 		ParentApi parentApi = new ParentApi();
 		parentApi.setAdressApi(new AdressApi());
 		
-		studentApi = StudentApiBuilder.getBuilder().setAdressApi(new AdressApi()).setBirthday(LocalDate.now())
-				.setCellPhone("4534543").setDivision("C").setGrade("3°").setDocument("435345").setEmail("oscar@gmail.com").setGender(GenderType.MALE.toString())
-				.setName("oscar").setParentApi(parentApi).setSchool("1234").getStudentApi();
+		studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now())
+				.cellPhone("4534543").division("C").grade("3°").document("435345").email("oscar@gmail.com").gender(GenderType.MALE.toString())
+				.name("oscar").parentApi(parentApi).school("1234").build();
 		Optional<Student> optional = Optional.of(student);
 
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
@@ -86,9 +85,9 @@ public class StudentServiceTest{
 
 	public void whenCreateIsError() {
 
-		StudentApi studentApi = StudentApiBuilder.getBuilder().setAdressApi(new AdressApi()).setBirthday(LocalDate.now())
-				.setCellPhone("4534543").setDocument("55555").setDivision("F").setGrade("3°").setEmail("oscar@gmail.com").setGender(GenderType.MALE.toString())
-				.setName("oscar").setParentApi(new ParentApi()).setSchool("1234").getStudentApi();
+		StudentApi studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now())
+				.cellPhone("4534543").document("55555").division("F").grade("3°").email("oscar@gmail.com").gender(GenderType.MALE.toString())
+				.name("oscar").parentApi(new ParentApi()).school("1234").build();
 		
 		Mockito.when(studentRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		
