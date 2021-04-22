@@ -55,7 +55,7 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> getBySchool(
-			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId) throws TransactionException {
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId){
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getBySchool(schoolId));
 	}
@@ -80,7 +80,6 @@ public class StudentController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.UPDATE_OK);
 	}
 	
-	//Todo lo que venga en string
 	@Operation(summary = "Delete student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })

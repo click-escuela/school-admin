@@ -40,12 +40,6 @@ public class Handler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 	
-	/*@ExceptionHandler(NullPointerException.class)
-	public ResponseEntity<String> nullException(TransactionException e) {
-		logger.error(e.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-	}*/
-	
 	private ErrorStudent processFieldErrors(List<org.springframework.validation.FieldError> fieldErrors) {
 		ErrorStudent error = new ErrorStudent(BAD_REQUEST.value(), "validation error");
 		for (org.springframework.validation.FieldError fieldError : fieldErrors) {

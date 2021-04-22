@@ -89,7 +89,7 @@ public class Student{
 	private Integer absences;
 	
 	@OneToOne
-	@JoinColumn(name = "id", nullable = true)
+	@JoinColumn(name = "course", nullable = true)
 	private Course course;
 	
 }

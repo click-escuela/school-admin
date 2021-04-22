@@ -1,6 +1,5 @@
 package click.escuela.student.api;
 
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,18 +19,18 @@ import lombok.Setter;
 @JsonInclude(Include.NON_EMPTY)
 @Schema(description = "Course Api")
 public class CourseApi {
-	
+
 	@NotNull(message = "Year cannot be empty")
 	@JsonProperty(value = "year", required = true)
 	private Integer year;
-	
+
 	@NotBlank(message = "Division cannot be empty")
 	@Size(max = 10, message = "Division must be 50 characters")
 	@JsonProperty(value = "division", required = true)
 	private String division;
 
 	@NotNull(message = "CountStudent cannot be empty")
-	
+
 	@JsonProperty(value = "countStudent", required = true)
 	private Integer countStudent;
 

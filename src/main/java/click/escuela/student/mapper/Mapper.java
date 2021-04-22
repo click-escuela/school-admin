@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.CourseApi;
+import click.escuela.student.api.CourseApiUpdate;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.dto.CourseDTO;
@@ -101,6 +102,14 @@ public class Mapper {
 		List<CourseDTO> courseDTOList = new ArrayList<CourseDTO>();
 		courses.stream().forEach(p->courseDTOList.add(mapperToCourseDTO(p)));
 		return courseDTOList;
+	}
+
+	public static CourseApi mapperToCourseApi(Course course) {
+		return modelMapper.map(course, CourseApi.class);
+	}
+
+	public static CourseApiUpdate mapperToCourseApiUpdate(Course course) {
+		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
 	
