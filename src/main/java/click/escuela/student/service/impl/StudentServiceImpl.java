@@ -54,10 +54,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return studentDto;
 	}
 
+	
 	public void update(String id, StudentApi studentApi) throws TransactionException {	
 		UUID idReal= UUID.fromString(id);
 		if(!StudentFindID(idReal)) {
-					StudentEnum.UPDATE_ERROR.getDescription();
+			throw new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
+					StudentEnum.UPDATE_ERROR.getDescription());
 		} else {
 			Student student = null;
 			Optional<Student> optional = studentRepository.findById(idReal);
@@ -96,7 +98,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public List<StudentDTO> findAll(){
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
 	}
-
 
 	public boolean StudentFindID(UUID id) {
 		Boolean exist = false;

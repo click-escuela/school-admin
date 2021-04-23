@@ -81,8 +81,18 @@ public class StudentServiceTest{
 		assertThat(hasError).isFalse();
 	}
 	
-	@Test(expected = Test.None.class)
-
+	@Test
+	public void whenUpdateOk() {
+		boolean hasError = false;
+		try {
+			studentServiceImpl.update(studentApi);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isFalse();
+	}
+	
+	@Test
 	public void whenCreateIsError() {
 
 		StudentApi studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now())
@@ -94,7 +104,7 @@ public class StudentServiceTest{
 		assertThatExceptionOfType(TransactionException.class)
 		  .isThrownBy(() -> {
 
-				studentServiceImpl.create(null);
+				studentServiceImpl.create(studentApi);
 		}).withMessage("No se pudo crear el estudiante correctamente");
 
 	}
