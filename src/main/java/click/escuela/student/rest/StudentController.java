@@ -36,6 +36,15 @@ public class StudentController {
 	@Autowired
 	private StudentServiceImpl studentService;
 	
+	//Metodo de prueba
+	@Operation(summary = "Get all the students", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
+	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> getStudents() {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.findAll());
+	}
+
+	
 	@Operation(summary = "Get student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -44,6 +53,7 @@ public class StudentController {
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.get(studentId));
 	}
+	
 	@Operation(summary = "Get student by schoolId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -64,12 +74,16 @@ public class StudentController {
 
 	@Operation(summary = "Update student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
-	@PutMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@Parameter(name = "Student Api", required = true) @RequestBody StudentUpdateApi studentUpdateApi) throws TransactionException {
-		studentService.update(studentUpdateApi);
+	@PutMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> update( 
+			@RequestBody @Validated StudentUpdateApi studentUpdateApi) throws TransactionException {
+		
+		studentService.update(studentUpdateApi.getId(),studentUpdateApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.UPDATE_OK);
 	}
-
+	
+	//Todo lo que venga en string
+	
 	@Operation(summary = "Delete student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })

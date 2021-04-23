@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -16,7 +18,9 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import click.escuela.student.enumerator.GenderType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +31,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "student")
 @Entity
+@Builder
 public class Student{
 	
 	@Id
@@ -39,14 +44,25 @@ public class Student{
     @NotBlank(message="El nombre no puede estar vacía")	
 	private String name;
 	
+	@Column(name = "surname", nullable = false)
+    @NotBlank(message="El apellido no puede estar vacío")	
+	private String surname;
+	
 	@Column(name = "document", nullable = false)
 	private String document;
 	
 	@Column(name = "gender", nullable = false)
-	private String gender;
+	@Enumerated(EnumType.STRING)
+	private GenderType gender;
 	
 	@Column(name = "school", nullable = false)
 	private String school;
+	
+	@Column(name = "grade", nullable = false)
+	private String grade;
+	
+	@Column(name = "division", nullable = false)
+	private String division;
 	
 	@Column(name = "birthday", nullable = false, columnDefinition = "DATETIME")
 	private LocalDate birthday;
