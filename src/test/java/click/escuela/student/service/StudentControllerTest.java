@@ -1,9 +1,11 @@
 package click.escuela.student.service;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +33,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
+import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
@@ -53,6 +56,7 @@ public class StudentControllerTest {
 	
 	private ObjectMapper mapper;
 	private StudentApi studentApi;
+	private StudentUpdateApi studentUpdateApi;
 	private ParentApi parentApi;
 	private AdressApi adressApi;
 	private static String EMPTY = "";
@@ -70,11 +74,17 @@ public class StudentControllerTest {
 				birthday(LocalDate.now()).cellPhone("3534543").document("33543534").
 				email("oscar.umnbetrqgmail.com").gender("F").name("oscar").surname("umbert").build();
 		
+		
 		studentApi = StudentApi.builder().adressApi(adressApi).birthday(LocalDate.now()).document("32333222")
 				.cellPhone("4534543").division("C").grade("3°").email("oscar@gmail.com").
 				gender(GenderType.MALE.toString()).name("oscar").surname("umbert").parentApi(parentApi).school("1234").build();
 		
+		studentUpdateApi = new StudentUpdateApi(studentApi);
+		studentUpdateApi.setId(UUID.randomUUID().toString());
+		
 		doNothing().when(studentService).create(Mockito.any());
+		//doNothing().when(studentService).update(Mockito.any());
+		
 
 	}
 	
@@ -83,7 +93,7 @@ public class StudentControllerTest {
 		
 		MvcResult result = mockMvc.perform(post("/school/{schoolId}/student","123").
 				contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().is2xxSuccessful()).andReturn();
-		String response = result.getResponse().getContentAsString().replace("", "");
+		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(StudentEnum.CREATE_OK.name());
 		
 	}
@@ -272,6 +282,29 @@ public class StudentControllerTest {
 	}
 	private String toJson(final Object obj) throws JsonProcessingException {
 		return mapper.writeValueAsString(obj);
+	}
+	
+	@Test
+	public void whenUpdatOk() throws JsonProcessingException, Exception {
+		
+		MvcResult result = mockMvc.perform(put("/school/{schoolId}/student","123").
+				contentType(MediaType.APPLICATION_JSON).content(toJson(studentUpdateApi))).andExpect(status().is2xxSuccessful()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(StudentEnum.UPDATE_OK.name());
+		
+	}
+	
+	@Test
+	public void whenUpdateErrorService() throws JsonProcessingException, Exception {
+		
+		doThrow( new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
+				StudentEnum.UPDATE_ERROR.getDescription())).when(studentService).update(Mockito.any(),Mockito.any());
+		
+		MvcResult result = mockMvc.perform(put("/school/{schoolId}/student","123").
+				contentType(MediaType.APPLICATION_JSON).content(toJson(studentUpdateApi))).andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(StudentEnum.UPDATE_ERROR.getDescription());
+		
 	}
 	
 	

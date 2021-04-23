@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.enumerator.GenderType;
+import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Adress;
@@ -38,6 +40,7 @@ public class StudentServiceTest{
 	
 	private StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
 	private StudentApi studentApi;
+	private UUID id;
 	
 	@Before
 	public void setUp() {
@@ -58,8 +61,10 @@ public class StudentServiceTest{
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
 		Mockito.when(Mapper.mapperToParent(Mockito.any())).thenReturn(new Parent());
  		Mockito.when(Mapper.mapperToStudent(studentApi)).thenReturn(student);
+ 		id = UUID.randomUUID();
+ 		Mockito.when(studentRepository.save(student)).thenReturn(student);	
+ 		Mockito.when(studentRepository.findById(id)).thenReturn(optional);		
 
- 		Mockito.when(studentRepository.save(student)).thenReturn(student);		
  		//Mockito.when(clientRepository.findById(1L)).thenReturn(optional);
 
 		//Mockito.when(clientRepository.findAll()).thenReturn(Arrays.asList(new Client(1L,"23423432","oscar",LocalDateTime.of(2020, 10, 20, 12, 12))));
@@ -85,13 +90,24 @@ public class StudentServiceTest{
 	public void whenUpdateOk() {
 		boolean hasError = false;
 		try {
-			studentServiceImpl.update(studentApi);
+			studentServiceImpl.update(id.toString(),studentApi);
 		} catch (Exception e) {
 			hasError = true;
 		}
 		assertThat(hasError).isFalse();
 	}
 	
+	@Test
+	public void whenUpdateIsError() {
+		
+		id = UUID.randomUUID();
+		assertThatExceptionOfType(TransactionException.class)
+		  .isThrownBy(() -> {
+
+				studentServiceImpl.update(id.toString(),studentApi);
+		}).withMessage(StudentEnum.UPDATE_ERROR.getDescription());
+
+	}
 	@Test
 	public void whenCreateIsError() {
 
