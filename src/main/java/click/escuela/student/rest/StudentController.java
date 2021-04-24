@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.student.api.StudentApi;
-import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
@@ -53,7 +52,7 @@ public class StudentController {
 	public ResponseEntity<?> get(
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId) throws TransactionException {
 
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.get(studentId));
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getById(studentId));
 	}
 	
 	@Operation(summary = "Get student by schoolId", responses = {
@@ -88,9 +87,9 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> update( 
-			@RequestBody @Validated StudentUpdateApi studentUpdateApi) throws TransactionException {
+			@RequestBody @Validated StudentApi studentApi) throws TransactionException {
 		
-		studentService.update(studentUpdateApi.getId(),studentUpdateApi);
+		studentService.update(studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.UPDATE_OK);
 	}
 	

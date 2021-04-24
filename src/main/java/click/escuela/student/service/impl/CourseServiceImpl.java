@@ -38,7 +38,7 @@ public class CourseServiceImpl implements ServiceGeneric<CourseApi, CourseDTO>{
 	}
 
 	@Override
-	public CourseDTO get(String id) throws TransactionException {
+	public CourseDTO getById(String id) throws TransactionException {
 		return null;
 	}
 

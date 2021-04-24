@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import click.escuela.student.api.StudentApi;
+import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
@@ -43,42 +44,44 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
-	public StudentDTO get(String id) throws TransactionException {
+	public StudentDTO getById(String id) throws TransactionException {
 
-		Optional<Student> optional = studentRepository.findById(UUID.fromString(id));
-		StudentDTO studentDto = null;
-		if (optional.isPresent()) {
-			studentDto = Mapper.mapperToStudentDTO(optional.get());
-		}
+		StudentDTO studentDto = Mapper.mapperToStudentDTO(findById(id));
 		return studentDto;
 	}
-
-	public void update(String id, StudentApi studentApi) throws TransactionException {
-		UUID idReal = UUID.fromString(id);
-
-		Student student = null;
-		Optional<Student> optional = studentRepository.findById(idReal);
+	
+	public Student findById(String id) throws TransactionException {
+		
+		Optional<Student> optional = studentRepository.findById(UUID.fromString(id));
 
 		if (optional.isPresent()) {
-			student = optional.get();
-			student.setName(studentApi.getName());
-			student.setSurname(studentApi.getSurname());
-			student.setDocument(studentApi.getDocument());
-			student.setGender(Mapper.mapperToEnum(studentApi.getGender()));
-			student.setSchool(studentApi.getSchool());
-			student.setGrade(studentApi.getGrade());
-			student.setDivision(studentApi.getDivision());
-			student.setBirthday(studentApi.getBirthday());
-			student.setAdress(Mapper.mapperToAdress(studentApi.getAdressApi()));
-			student.setCellPhone(studentApi.getCellPhone());
-			student.setEmail(studentApi.getEmail());
-			student.setParent(Mapper.mapperToParent(studentApi.getParentApi()));
-
-			studentRepository.save(student);
-		} else {
-			throw new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
-					StudentEnum.UPDATE_ERROR.getDescription());
+			return optional.get();
+		}else {
+			throw new TransactionException(StudentEnum.GET_ERROR.getCode(),
+					StudentEnum.GET_ERROR.getDescription());
 		}
+		
+	}
+
+	@Override
+	public void update(StudentApi studentApi) throws TransactionException {
+
+		Student student = findById(studentApi.getId());
+
+		student.setName(studentApi.getName());
+		student.setSurname(studentApi.getSurname());
+		student.setDocument(studentApi.getDocument());
+		student.setGender(Mapper.mapperToEnum(studentApi.getGender()));
+		student.setSchool(studentApi.getSchool());
+		student.setGrade(studentApi.getGrade());
+		student.setDivision(studentApi.getDivision());
+		student.setBirthday(studentApi.getBirthday());
+		student.setAdress(Mapper.mapperToAdress(studentApi.getAdressApi()));
+		student.setCellPhone(studentApi.getCellPhone());
+		student.setEmail(studentApi.getEmail());
+		student.setParent(Mapper.mapperToParent(studentApi.getParentApi()));
+
+		studentRepository.save(student);
 	}
 
 	public void addCourse(String idStudent, Course course) throws TransactionException {
@@ -124,17 +127,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		}
 	}
 
-	public boolean studentFindId(UUID id) {
-		Boolean exist = false;
-		Optional<Student> optional = studentRepository.findById(id);
-		if (optional.isPresent()) {
-			exist = true;
-		} else {
-			exist = false;
-		}
-		return exist;
-	}
-
 	public boolean studentExists(StudentApi student) {
 		Boolean exist = false;
 
@@ -147,11 +139,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		}
 
 		return exist;
-	}
-
-	@Override
-	public void update(StudentApi studentApi) throws TransactionException {
-
 	}
 
 	public void deleteCourse(String idStudent,Course course) throws TransactionException {

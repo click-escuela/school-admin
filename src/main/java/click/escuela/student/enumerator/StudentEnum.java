@@ -7,7 +7,8 @@ public enum StudentEnum {
 	UPDATE_OK("UPDATE_STUDENT","Se modificó el estudiante correctamente"),
 	UPDATE_ERROR("UPDATE_ERROR","No se pudo modificar el estudiante correctamente"),
 	DELETE_OK("DELETE_STUDENT","se eliminó el estudiante correctamente"),
-	STUDENT_EXIST("ESTUDENT_EXIST","Ya existe el estudiante");
+	STUDENT_EXIST("ESTUDENT_EXIST","Ya existe el estudiante"),
+	GET_ERROR("GET_ERROR","El estudiante que se busca no existe");
 
 	private String code;
 	private String description;

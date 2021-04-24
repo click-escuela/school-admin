@@ -32,7 +32,9 @@ public class StudentApi extends PersonApi{
 		this.division=division;
 		this.level=level;
 	}
-
+	@JsonProperty(value = "parent", required = false)
+	private String id;
+	
 	@JsonProperty(value = "parent", required = true)
 	@Valid
 	private ParentApi parentApi;
@@ -48,7 +50,6 @@ public class StudentApi extends PersonApi{
 	@NotBlank(message = "Division cannot be null")
 	@JsonProperty(value = "division", required = true)
 	private String division;
-	
 
 	@NotBlank(message = "Level cannot be null")
 	@JsonProperty(value = "level", required = true)
