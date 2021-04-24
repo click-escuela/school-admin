@@ -169,4 +169,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	}
 
+
+	public List<StudentDTO> getByCourse(Course course) {
+		List<Student> student = new ArrayList<>();
+		student = studentRepository.findByCourse(course);
+
+		return Mapper.mapperToStudentsDTO(student);
+	}
+
 }

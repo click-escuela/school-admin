@@ -37,6 +37,9 @@ public class Course {
 	@Column(name = "count_student", nullable = false)
 	private Integer countStudent;
 
-	@Column(name = "teacher", nullable = true)
-	private String teacher;
+	@Column(name = "teacher_id", nullable = true)
+	private String teacherId;
+	
+	/*@Column(name = "school_id", nullable = false)
+	private String schoolId;*/
 }

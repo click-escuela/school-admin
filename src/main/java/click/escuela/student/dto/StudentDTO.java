@@ -53,6 +53,6 @@ public class StudentDTO {
 	@JsonProperty(value = "parent")
 	private ParentDTO parent;
 	
-	@JsonProperty(value = "course")
-	private CourseDTO course;
+	/*@JsonProperty(value = "course")
+	private CourseDTO course;*/
 }

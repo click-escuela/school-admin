@@ -19,6 +19,8 @@ import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
+import click.escuela.student.model.Course;
+import click.escuela.student.service.impl.CourseServiceImpl;
 import click.escuela.student.service.impl.StudentServiceImpl;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +34,9 @@ public class StudentController {
 
 	@Autowired
 	private StudentServiceImpl studentService;
+	
+	@Autowired
+	private CourseServiceImpl courseService;
 
 	//Metodo de prueba
 	@Operation(summary = "Get all the students", responses = {
@@ -56,9 +61,18 @@ public class StudentController {
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> getBySchool(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId){
-
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getBySchool(schoolId));
 	}
+	
+	@Operation(summary = "Get student by courseId", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
+	@GetMapping(value = "course/{courseId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> getByCourse(
+			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId) throws TransactionException{
+		Course course=courseService.findCourseById(courseId);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getByCourse(course));
+	}
+	
 
 	@Operation(summary = "Create student", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
