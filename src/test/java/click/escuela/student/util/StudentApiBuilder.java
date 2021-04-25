@@ -21,7 +21,7 @@ public class StudentApiBuilder {
 	private String cellPhone;
 	private String email;
 	private ParentApi parentApi;
-	private String school;
+	private Integer schoolId;
 	
 	public static StudentApiBuilder getBuilder() {
 		return new StudentApiBuilder();
@@ -74,8 +74,8 @@ public class StudentApiBuilder {
 		this.parentApi = parentApi;
 		return this;
 	}
-	public StudentApiBuilder setSchool(String school) {
-		this.school = school;
+	public StudentApiBuilder setSchool(Integer schoolId) {
+		this.schoolId = schoolId;
 		return this;
 	}
 	
@@ -94,8 +94,8 @@ public class StudentApiBuilder {
 		studentApi.setName(name);
 		studentApi.setName(surname);
 		studentApi.setParentApi(parentApi);
-		studentApi.setSchool(school);
-		return new StudentApi(name, surname, document, gender, birthday, adressApi, cellPhone, email, parentApi, school, grade, division,level);
+		studentApi.setSchoolId(schoolId);
+		return new StudentApi(name, surname, document, gender, birthday, adressApi, cellPhone, email, parentApi, schoolId, grade, division,level);
 	}
 	
 	

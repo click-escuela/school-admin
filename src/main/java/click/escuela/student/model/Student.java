@@ -54,8 +54,8 @@ public class Student{
 	@Enumerated(EnumType.STRING)
 	private GenderType gender;
 	
-	@Column(name = "school", nullable = false)
-	private String school;
+	@Column(name = "school_id", nullable = false)
+	private Integer schoolId;
 	
 	@Column(name = "grade", nullable = false)
 	private String grade;

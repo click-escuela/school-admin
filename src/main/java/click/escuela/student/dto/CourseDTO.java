@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 public class CourseDTO {
 
-	@JsonProperty(value = "gradeId")
-	private String gradeId;
+	@JsonProperty(value = "id")
+	private String id;
 
 	@JsonProperty(value = "year")
 	private Integer year;
@@ -20,6 +20,5 @@ public class CourseDTO {
 
 	@JsonProperty(value = "countStudent")
 	private Integer countStudent;
-	
 
 }

@@ -19,6 +19,8 @@ import lombok.Setter;
 @JsonInclude(Include.NON_EMPTY)
 @Schema(description = "Course Api")
 public class CourseApi {
+	@JsonProperty(value = "id", required = false)
+	private String id;
 
 	@NotNull(message = "Year cannot be empty")
 	@JsonProperty(value = "year", required = true)
@@ -29,13 +31,11 @@ public class CourseApi {
 	@JsonProperty(value = "division", required = true)
 	private String division;
 
-	@NotNull(message = "CountStudent cannot be empty")
-
+	@NotNull(message = "CountStudent cannot be null")
 	@JsonProperty(value = "countStudent", required = true)
 	private Integer countStudent;
 
-	@NotBlank(message = "Teacher cannot be empty")
-	@Size(max = 50, message = "Teacher must be 50 characters")
-	@JsonProperty(value = "teacher", required = true)
-	private String teacher;
+	@NotNull(message = "School cannot be null")
+	@JsonProperty(value = "schoolId", required = true)
+	private Integer schoolId;
 }

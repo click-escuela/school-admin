@@ -18,7 +18,6 @@ import click.escuela.student.api.CourseApi;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.enumerator.CourseEnum;
 import click.escuela.student.exception.TransactionException;
-import click.escuela.student.model.Course;
 import click.escuela.student.service.impl.CourseServiceImpl;
 import click.escuela.student.service.impl.StudentServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,8 +67,7 @@ public class CourseController {
 	@PutMapping(value = "/{idCourse}/student/add/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> addStudent(@PathVariable("idCourse") String idCourse,
 			@PathVariable("idStudent") String idStudent) throws TransactionException {
-		Course course = courseService.findCourseById(idCourse);
-		studentService.addCourse(idStudent, course);
+		studentService.addCourse(idStudent, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseEnum.UPDATE_OK);
 	}
 
@@ -78,8 +76,7 @@ public class CourseController {
 	@PutMapping(value = "/{idCourse}/student/del/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> deleteStudent(@PathVariable("idCourse") String idCourse,
 			@PathVariable("idStudent") String idStudent) throws TransactionException {
-		Course course=courseService.findCourseById(idCourse);
-		studentService.deleteCourse(idStudent,course);
+		studentService.deleteCourse(idStudent,idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseEnum.UPDATE_OK);
 	}
 

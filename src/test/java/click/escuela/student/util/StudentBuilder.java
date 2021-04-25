@@ -16,7 +16,7 @@ public class StudentBuilder {
 	private String surname;
 	private String document;
 	private GenderType gender;
-	private String school;
+	private Integer school;
 	private String grade;
 	private String division;
 	private LocalDate birthday;
@@ -56,7 +56,7 @@ public class StudentBuilder {
 		return this;
 	}
 
-	public StudentBuilder setSchool(String school) {
+	public StudentBuilder setSchool(Integer school) {
 		this.school = school;
 		return this;
 	}
@@ -124,7 +124,7 @@ public class StudentBuilder {
 		student.setName(name);
 		student.setSurname(surname);
 		student.setParent(parent);
-		student.setSchool(school);
+		student.setSchoolId(school);
 		
 		return student;
 	}

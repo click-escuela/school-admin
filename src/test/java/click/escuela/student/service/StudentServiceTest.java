@@ -77,11 +77,11 @@ public class StudentServiceTest{
 		
 		student1 = StudentBuilder.getBuilder().setAdress(new Adress()).setBirthday(LocalDate.now())
 				.setCellPhone("4534543").setDocument("555555").setDivision("F").setGrade("3°").setEmail("oscar@gmail.com").setGender(Mapper.mapperToEnum("MALE"))
-				.setName("Oscar").setSurname("Umbert").setParent(new Parent()).setSchool("1234").getStudent();
+				.setName("Oscar").setSurname("Umbert").setParent(new Parent()).setSchool(1234).getStudent();
 		
 		student2 = StudentBuilder.getBuilder().setAdress(new Adress()).setBirthday(LocalDate.now())
 				.setCellPhone("4534548").setDocument("666666").setDivision("F").setGrade("3°").setEmail("tony@gmail.com").setGender(Mapper.mapperToEnum("MALE"))
-				.setName("Tony").setSurname("Liendro").setParent(new Parent()).setSchool("5678").getStudent();
+				.setName("Tony").setSurname("Liendro").setParent(new Parent()).setSchool(5678).getStudent();
 		
 		studentList.add(student1);
 		studentList.add(student2);
@@ -117,13 +117,13 @@ public class StudentServiceTest{
 	public void CreateStudent() throws TransactionException {
 		StudentApi studentTest=new StudentApi();	
 		studentTest.setName("Walter");
-		studentTest.setSchool("1234");
+		studentTest.setSchoolId(1234);
 		
 		studentService.create(studentTest);
 		
 		List<Student> studentTestList=studentRepository.findAll();
 		
-		Mockito.when(studentRepository.findBySchool("1234")).thenReturn(studentTestList);
+		Mockito.when(studentRepository.findBySchoolId(1234)).thenReturn(studentTestList);
 		
 		assertEquals("Walter",studentTestList.get(2).getName());
 	
@@ -132,7 +132,7 @@ public class StudentServiceTest{
 	
 	@Test
 	public void studentNotFoundException() {
-		when(studentRepository.findBySchool(Mockito.anyString())).thenReturn(null);
+		when(studentRepository.findBySchoolId(Mockito.anyInt())).thenReturn(null);
 		assertThrows(NullPointerException.class,
 				() -> {
 					studentService.getBySchool("1234");

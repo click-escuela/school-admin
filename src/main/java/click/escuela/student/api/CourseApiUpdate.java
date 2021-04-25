@@ -20,7 +20,7 @@ import lombok.Setter;
 public class CourseApiUpdate extends CourseApi {
 	@Valid
 	@NotNull(message = "Id cannot be null")
-	@JsonProperty(value = "gradeId", required = true)
-	private String gradeId;
+	@JsonProperty(value = "id", required = true)
+	private String id;
 
 }

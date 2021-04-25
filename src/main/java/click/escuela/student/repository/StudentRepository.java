@@ -12,7 +12,7 @@ import click.escuela.student.model.Student;
 
 public interface StudentRepository extends JpaRepository <Student, UUID> {
 
-	public List<Student> findBySchool(String school); 
+	public List<Student> findBySchoolId(Integer school); 
 	public Optional<Student> findByDocumentAndGender(String document,GenderType gender);
 	public List<Student> findByCourse(Course course); 
 }
