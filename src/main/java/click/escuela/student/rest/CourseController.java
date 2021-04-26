@@ -76,7 +76,7 @@ public class CourseController {
 	@PutMapping(value = "/{idCourse}/student/del/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> deleteStudent(@PathVariable("idCourse") String idCourse,
 			@PathVariable("idStudent") String idStudent) throws TransactionException {
-		studentService.deleteCourse(idStudent,idCourse);
+		studentService.deleteCourse(idStudent, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseEnum.UPDATE_OK);
 	}
 

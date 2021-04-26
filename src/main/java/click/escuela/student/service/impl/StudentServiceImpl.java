@@ -43,9 +43,10 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
+
 	public StudentDTO getById(String id) throws TransactionException {
 		Student student = findById(id);
-		return  Mapper.mapperToStudentDTO(student);
+		return Mapper.mapperToStudentDTO(student);
 	}
 
 	public Student findById(String id) throws TransactionException {
@@ -85,6 +86,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		Student student = findById(idStudent);
 		student.setCourse(courseService.findById(idCourse));
 		studentRepository.save(student);
+
 	}
 
 	@Override
@@ -94,6 +96,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	public List<StudentDTO> getBySchool(String school) {
 		List<Student> student = studentRepository.findBySchoolId((Integer.valueOf(school)));
+
 		return Mapper.mapperToStudentsDTO(student);
 	}
 
@@ -107,6 +110,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
 		if (studentExist.isPresent()) {
+
 			exist = true;
 		} else {
 			exist = false;
@@ -132,6 +136,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public List<StudentDTO> getByCourse(String courseId) throws TransactionException {
 		List<Student> student = studentRepository.findByCourse(courseService.findById(courseId));
 		return Mapper.mapperToStudentsDTO(student);
+
 	}
 
 }

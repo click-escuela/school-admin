@@ -10,9 +10,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import click.escuela.student.enumerator.GenderType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Getter
@@ -20,6 +24,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @NoArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
 @Schema(description = "Student Api")
+@AllArgsConstructor
+@SuperBuilder
 public class StudentApi extends PersonApi{
 
 	public StudentApi(String name, String surname, String document, String gender, LocalDate birthday, AdressApi adressApi,
@@ -42,6 +48,7 @@ public class StudentApi extends PersonApi{
 	@NotNull(message = "School cannot be null")
 	@JsonProperty(value = "schoolId", required = true)
 	private Integer schoolId;
+
 	
 	@NotBlank(message = "Grade cannot be null")
 	@JsonProperty(value = "grade", required = true)
