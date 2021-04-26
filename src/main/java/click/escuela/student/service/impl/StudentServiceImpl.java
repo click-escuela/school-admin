@@ -1,6 +1,5 @@
 package click.escuela.student.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,7 +12,6 @@ import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
-import click.escuela.student.model.Course;
 import click.escuela.student.model.Student;
 import click.escuela.student.repository.StudentRepository;
 import click.escuela.student.service.ServiceGeneric;
@@ -32,7 +30,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 		if (!exists(studentApi)) {
 			try {
-				
+
 				Student student = Mapper.mapperToStudent(studentApi);
 				studentRepository.save(student);
 			} catch (Exception e) {
@@ -46,9 +44,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Override
 	public StudentDTO getById(String id) throws TransactionException {
-
-		StudentDTO studentDto = Mapper.mapperToStudentDTO(findById(id));
-		return studentDto;
+		Student student = findById(id);
+		return  Mapper.mapperToStudentDTO(student);
 	}
 
 	public Student findById(String id) throws TransactionException {
@@ -96,8 +93,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public List<StudentDTO> getBySchool(String school) {
-		List<Student> student = new ArrayList<>();
-		student = studentRepository.findBySchoolId((Integer.valueOf(school)));
+		List<Student> student = studentRepository.findBySchoolId((Integer.valueOf(school)));
 		return Mapper.mapperToStudentsDTO(student);
 	}
 
@@ -133,10 +129,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	}
 
-	public List<StudentDTO> getByCourse(Course course) {
-		List<Student> student = new ArrayList<>();
-		student = studentRepository.findByCourse(course);
-
+	public List<StudentDTO> getByCourse(String courseId) throws TransactionException {
+		List<Student> student = studentRepository.findByCourse(courseService.findById(courseId));
 		return Mapper.mapperToStudentsDTO(student);
 	}
 
