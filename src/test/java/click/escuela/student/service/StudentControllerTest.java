@@ -2,6 +2,7 @@ package click.escuela.student.service;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ import click.escuela.student.api.AdressApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.api.StudentUpdateApi;
+import click.escuela.student.enumerator.EducationLevels;
 import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
@@ -72,11 +74,11 @@ public class StudentControllerTest {
 		adressApi = new AdressApi("Calle falsa","6458","Nogues");
 		parentApi = ParentApi.builder().adressApi(adressApi).
 				birthday(LocalDate.now()).cellPhone("3534543").document("33543534").
-				email("oscar.umnbetrqgmail.com").gender("F").name("oscar").surname("umbert").build();
+				email("oscar.umnbetrqgmail.com").gender(GenderType.FEMALE.toString()).name("oscar").surname("umbert").build();
 		
 		
 		studentApi = StudentApi.builder().adressApi(adressApi).birthday(LocalDate.now()).document("32333222")
-				.cellPhone("4534543").division("C").grade("3°").email("oscar@gmail.com").
+				.cellPhone("4534543").division("C").grade("3°").email("oscar@gmail.com").level(EducationLevels.SECUNDARIO.toString()).
 				gender(GenderType.MALE.toString()).name("oscar").surname("umbert").parentApi(parentApi).schoolId(1234).build();
 		
 		studentUpdateApi = new StudentUpdateApi(studentApi);

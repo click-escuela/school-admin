@@ -12,7 +12,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "course")
 @Entity
+@Builder
 public class Course {
 	@Id
 	@Column(name = "id", columnDefinition = "BINARY(16)")
