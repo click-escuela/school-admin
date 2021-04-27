@@ -1,5 +1,7 @@
 package click.escuela.student.rest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,7 +41,7 @@ public class CourseController {
 	@Operation(summary = "Get all the courses", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))) })
 	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> getAllCourses() {
+	public ResponseEntity<List<CourseDTO>> getAllCourses() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(courseService.findAll());
 	}
 
@@ -51,21 +53,21 @@ public class CourseController {
 	@Operation(summary = "Create Course", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> create(@RequestBody @Validated CourseApi courseApi) throws TransactionException {
+	public ResponseEntity<CourseEnum> create(@RequestBody @Validated CourseApi courseApi) throws TransactionException {
 
 		courseService.create(courseApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseEnum.CREATE_OK);
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<?> update() {
+	public ResponseEntity<String> update() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}
 
 	@Operation(summary = "Update/Add course in student", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idCourse}/student/add/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> addStudent(@PathVariable("idCourse") String idCourse,
+	public ResponseEntity<CourseEnum> addStudent(@PathVariable("idCourse") String idCourse,
 			@PathVariable("idStudent") String idStudent) throws TransactionException {
 		studentService.addCourse(idStudent, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseEnum.UPDATE_OK);
@@ -74,24 +76,24 @@ public class CourseController {
 	@Operation(summary = "Update/Delete course in student", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idCourse}/student/del/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> deleteStudent(@PathVariable("idCourse") String idCourse,
+	public ResponseEntity<CourseEnum> deleteStudent(@PathVariable("idCourse") String idCourse,
 			@PathVariable("idStudent") String idStudent) throws TransactionException {
 		studentService.deleteCourse(idStudent, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseEnum.UPDATE_OK);
 	}
 
 	@PutMapping(value = "/{id}/teacher/add/{teacher}")
-	public ResponseEntity<?> addTeacher() {
+	public ResponseEntity<String> addTeacher() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}
 
 	@PutMapping(value = "/{id}/teacher/del/{teacher}")
-	public ResponseEntity<?> deleteTeacher() {
+	public ResponseEntity<String> deleteTeacher() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<?> delete() {
+	public ResponseEntity<String> delete() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}
 }

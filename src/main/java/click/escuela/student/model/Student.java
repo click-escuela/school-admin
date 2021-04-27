@@ -42,7 +42,7 @@ public class Student {
 	private UUID id;
 
 	@Column(name = "name", nullable = false)
-	@NotBlank(message = "El nombre no puede estar vacía")
+	@NotBlank(message = "El nombre no puede estar vacío")
 	private String name;
 
 	@Column(name = "surname", nullable = false)
