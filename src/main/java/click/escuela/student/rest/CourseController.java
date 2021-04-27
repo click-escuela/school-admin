@@ -46,7 +46,7 @@ public class CourseController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<?> getCourse() {
+	public ResponseEntity<String> getCourse() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}
 
