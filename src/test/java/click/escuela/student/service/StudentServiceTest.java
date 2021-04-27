@@ -2,16 +2,8 @@ package click.escuela.student.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,7 +37,7 @@ public class StudentServiceTest {
 
 	@Mock
 	private StudentRepository studentRepository;
-	
+
 	private StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
 	private StudentApi studentApi;
 	private UUID id;
@@ -63,7 +55,8 @@ public class StudentServiceTest {
 
 		studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now()).cellPhone("4534543")
 				.division("C").grade("3°").document("435345").email("oscar@gmail.com")
-				.gender(GenderType.MALE.toString()).name("oscar").level(EducationLevels.SECUNDARIO.toString()).parentApi(parentApi).schoolId(1234).build();
+				.gender(GenderType.MALE.toString()).name("oscar").level(EducationLevels.SECUNDARIO.toString())
+				.parentApi(parentApi).schoolId(1234).build();
 		Optional<Student> optional = Optional.of(student);
 
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
