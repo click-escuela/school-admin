@@ -22,7 +22,7 @@ import click.escuela.student.model.Parent;
 import click.escuela.student.model.Student;
 
 @Component
-public class Mapper {
+public class Mapper{
 
 	private static ModelMapper modelMapper = new ModelMapper();
 
@@ -74,21 +74,20 @@ public class Mapper {
 	}
 
 	public static List<StudentDTO> mapperToStudentsDTO(List<Student> students) {
-		List<StudentDTO> studentDTOList = new ArrayList<StudentDTO>();
+		List<StudentDTO> studentDTOList = new ArrayList<>();
 		students.stream().forEach(p -> studentDTOList.add(mapperToStudentDTO(p)));
 		return studentDTOList;
 	}
 
 	public static List<Student> mapperToStudents(List<StudentDTO> students) {
-		List<Student> studentList = new ArrayList<Student>();
+		List<Student> studentList = new ArrayList<>();
 		students.stream().forEach(p -> studentList.add(mapperToStudent(p)));
 		return studentList;
 	}
 
 	// All mapper courses
 	public static Course mapperToCourse(CourseApi courseApi) {
-		Course course = modelMapper.map(courseApi, Course.class);
-		return course;
+		return modelMapper.map(courseApi, Course.class);
 	}
 
 	public static CourseDTO mapperToCourseDTO(Course course) {
@@ -96,7 +95,7 @@ public class Mapper {
 	}
 
 	public static List<CourseDTO> mapperToCoursesDTO(List<Course> courses) {
-		List<CourseDTO> courseDTOList = new ArrayList<CourseDTO>();
+		List<CourseDTO> courseDTOList = new ArrayList<>();
 		courses.stream().forEach(p -> courseDTOList.add(mapperToCourseDTO(p)));
 		return courseDTOList;
 	}
