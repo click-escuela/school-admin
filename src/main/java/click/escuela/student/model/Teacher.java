@@ -1,6 +1,5 @@
 package click.escuela.student.model;
 
-
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -25,21 +24,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "teacher")
 @Entity
-public class Teacher{
-	
+public class Teacher {
+
 	@Id
 	@Column(name = "id", columnDefinition = "BINARY(16)")
-	@GeneratedValue(generator = "uuid2") 
+	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	private UUID id;
-	
+
 	@Column(name = "name", nullable = false)
-    @NotBlank(message="El nombre no puede estar vacía")	
+	@NotBlank(message = "El nombre no puede estar vacía")
 	private String name;
-	
+
 	@Column(name = "surname", nullable = false)
-    @NotBlank(message="El apellido no puede estar vacío")	
+	@NotBlank(message = "El apellido no puede estar vacío")
 	private String surname;
-	
-	
+
 }
