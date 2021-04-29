@@ -18,6 +18,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.student.api.AdressApi;
+import click.escuela.student.api.CourseApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.enumerator.EducationLevels;
@@ -26,9 +27,13 @@ import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Adress;
+import click.escuela.student.model.Course;
 import click.escuela.student.model.Parent;
 import click.escuela.student.model.Student;
+import click.escuela.student.model.Teacher;
+import click.escuela.student.repository.CourseRepository;
 import click.escuela.student.repository.StudentRepository;
+import click.escuela.student.service.impl.CourseServiceImpl;
 import click.escuela.student.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
@@ -37,10 +42,17 @@ public class StudentServiceTest {
 
 	@Mock
 	private StudentRepository studentRepository;
-
+	
+	@Mock
+	private CourseRepository courseRepository;
+	
 	private StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
 	private StudentApi studentApi;
+	private CourseServiceImpl courseService= new CourseServiceImpl();;
+	private CourseApi courseApi;
 	private UUID id;
+	private UUID idCourse;
+
 
 	@Before
 	public void setUp() {
@@ -65,6 +77,16 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		Mockito.when(studentRepository.save(student)).thenReturn(student);
 		Mockito.when(studentRepository.findById(id)).thenReturn(optional);
+		
+		Course course = Course.builder().year(6).division("C").countStudent(20).teacher(new Teacher()).schoolId(12345)
+				.build();
+		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(45678).build();
+		Optional<Course> courseOp = Optional.of(course);
+
+		Mockito.when(Mapper.mapperToCourse(courseApi)).thenReturn(course);
+		idCourse= UUID.randomUUID();
+		Mockito.when(courseRepository.save(course)).thenReturn(course);
+		Mockito.when(courseRepository.findById(idCourse)).thenReturn(courseOp);
 
 		// Mockito.when(clientRepository.findById(1L)).thenReturn(optional);
 
@@ -75,6 +97,7 @@ public class StudentServiceTest {
 
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
+		ReflectionTestUtils.setField(courseService, "courseRepository", courseRepository);
 	}
 
 	@Test
@@ -125,6 +148,22 @@ public class StudentServiceTest {
 			studentServiceImpl.create(studentApi);
 		}).withMessage("No se pudo crear el estudiante correctamente");
 
+	}
+	
+	@Test
+	public void whenAddCourseError() throws TransactionException {
+		id = UUID.randomUUID();
+		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+			studentServiceImpl.addCourse(id.toString(), idCourse.toString());
+		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+	}
+	
+	@Test
+	public void whenDeletedCourseError() throws TransactionException {
+		id = UUID.randomUUID();
+		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+			studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
+		}).withMessage(StudentEnum.GET_ERROR.getDescription());
 	}
 
 }
