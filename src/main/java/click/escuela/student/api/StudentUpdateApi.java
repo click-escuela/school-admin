@@ -1,7 +1,5 @@
 package click.escuela.student.api;
 
-import java.time.LocalDate;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -14,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
@@ -32,6 +29,8 @@ public class StudentUpdateApi extends StudentApi {
 	public StudentUpdateApi(StudentApi studenApi) {
 		super(studenApi.getName(), studenApi.getSurname(), studenApi.getDocument(), studenApi.getGender(),
 				studenApi.getBirthday(), studenApi.getAdressApi(), studenApi.getCellPhone(), studenApi.getEmail(),
-				studenApi.getParentApi(), studenApi.getSchool(), studenApi.getGrade(), studenApi.getDivision());
+				studenApi.getParentApi(), studenApi.getSchoolId(), studenApi.getGrade(), studenApi.getDivision(),
+				studenApi.getLevel());
 	}
+
 }

@@ -2,23 +2,18 @@ package click.escuela.student.api;
 
 import java.time.LocalDate;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import click.escuela.student.enumerator.GenderType;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,7 +32,7 @@ public class PersonApi {
 	@Size(max = 50, message = "Name must be 50 characters")
 	@JsonProperty(value = "name", required = true)
 	private String name;
-	
+
 	@NotBlank(message = "Surname cannot be empty")
 	@Size(max = 50, message = "surname must be 50 characters")
 	@JsonProperty(value = "surname", required = true)
@@ -55,7 +50,8 @@ public class PersonApi {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonProperty(value = "birthday", required = true)
 	private LocalDate birthday;
-
+	
+	@NotNull(message = "Adress cannot be null")
 	@JsonProperty(value = "adress", required = true)
 	@Valid
 	private AdressApi adressApi;

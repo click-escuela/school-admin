@@ -1,12 +1,9 @@
 package click.escuela.student.api;
 
-import java.time.LocalDate;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -31,7 +28,8 @@ public class AdressApi {
 	@Valid
 	private String street;
 
-	@JsonProperty(value = "number", required = false)
+	@NotBlank(message = "Number cannot be null")
+	@JsonProperty(value = "number", required = true)
 	@Size(min = 2, max = 6, message = "Number must be between 2 and 6 characters")
 	@Valid
 	private String number;

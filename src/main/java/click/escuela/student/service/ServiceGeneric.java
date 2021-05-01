@@ -6,7 +6,7 @@ public interface ServiceGeneric <T, S>{
 
 	public void create(T entity) throws TransactionException;
 	
-	public S get(String id) throws TransactionException;
+	public S getById(String id) throws TransactionException;
 	
 	public void update(T entity) throws TransactionException;
 	
