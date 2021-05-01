@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -14,10 +16,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,18 +29,24 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.student.api.AdressApi;
+import click.escuela.student.api.CourseApi;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.api.StudentUpdateApi;
+import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.EducationLevels;
 import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
+import click.escuela.student.mapper.Mapper;
+import click.escuela.student.model.Parent;
+import click.escuela.student.model.Student;
 import click.escuela.student.rest.StudentController;
 import click.escuela.student.rest.handler.Handler;
 import click.escuela.student.service.impl.StudentServiceImpl;
@@ -58,6 +68,9 @@ public class StudentControllerTest {
 	private StudentUpdateApi studentUpdateApi;
 	private ParentApi parentApi;
 	private AdressApi adressApi;
+	private UUID idStudent;
+	private UUID idCourse;
+	private Integer idSchool;
 	private static String EMPTY = "";
 
 	@Before
@@ -68,6 +81,9 @@ public class StudentControllerTest {
 				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		ReflectionTestUtils.setField(studentController, "studentService", studentService);
 
+		idStudent = UUID.randomUUID();
+		idCourse = UUID.randomUUID();
+		idSchool = 1234;
 		adressApi = new AdressApi("Calle falsa", "6458", "Nogues");
 		parentApi = ParentApi.builder().adressApi(adressApi).birthday(LocalDate.now()).cellPhone("3534543")
 				.document("33543534").email("oscar.umnbetrqgmail.com").gender(GenderType.FEMALE.toString())
@@ -79,7 +95,7 @@ public class StudentControllerTest {
 				.surname("umbert").parentApi(parentApi).schoolId(1234).build();
 
 		studentUpdateApi = new StudentUpdateApi(studentApi);
-		studentUpdateApi.setId(UUID.randomUUID().toString());
+		studentUpdateApi.setId(idStudent.toString());
 
 		doNothing().when(studentService).create(Mockito.any());
 		// doNothing().when(studentService).update(Mockito.any());
@@ -181,7 +197,7 @@ public class StudentControllerTest {
 
 	}
 
-	// TO DO ver que no funciona el empty null
+	@Test
 	public void whenCreateAdressEmpty() throws JsonProcessingException, Exception {
 
 		studentApi.setAdressApi(null);
@@ -193,7 +209,7 @@ public class StudentControllerTest {
 
 	}
 
-	// TO DO ver que no funciona el empty null
+	@Test
 	public void whenCreateParentEmpty() throws JsonProcessingException, Exception {
 
 		studentApi.setParentApi(null);
@@ -201,7 +217,7 @@ public class StudentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().isBadRequest())
 				.andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("Adress cannot be null");
+		assertThat(response).contains("Parent cannot be null");
 
 	}
 
@@ -241,7 +257,7 @@ public class StudentControllerTest {
 
 	}
 
-	// TO DO ver que no funciona el empty null
+	@Test
 	public void whenCreateAdressNumberEmpty() throws JsonProcessingException, Exception {
 
 		adressApi.setNumber(EMPTY);
@@ -253,10 +269,10 @@ public class StudentControllerTest {
 
 	}
 
-	// TO DO ver que no funciona el empty null
+	@Test
 	public void whenCreateAdressStreetEmpty() throws JsonProcessingException, Exception {
 
-		adressApi.setNumber(EMPTY);
+		adressApi.setStreet(EMPTY);
 		MvcResult result = mockMvc.perform(post("/school/{schoolId}/student", "123")
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().isBadRequest())
 				.andReturn();
@@ -265,7 +281,7 @@ public class StudentControllerTest {
 
 	}
 
-	// TO DO ver que no funciona el empty null
+	@Test
 	public void whenCreateAdressLocalityEmpty() throws JsonProcessingException, Exception {
 
 		adressApi.setLocality(EMPTY);
@@ -273,11 +289,11 @@ public class StudentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().isBadRequest())
 				.andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("Street cannot be null");
+		assertThat(response).contains("Locality cannot be null");
 
 	}
 
-	// TO DO ver que no funciona el empty null
+	@Test
 	public void whenCreateAdressNumberGreaterCharacters() throws JsonProcessingException, Exception {
 
 		adressApi.setNumber("544546546464");
@@ -330,6 +346,106 @@ public class StudentControllerTest {
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(StudentEnum.UPDATE_ERROR.getDescription());
 
+	}
+
+	@Test
+	public void getStudentByIdIsOk() throws JsonProcessingException, Exception {
+		Student student = Student.builder().id(idStudent).absences(3).birthday(LocalDate.now()).cellPhone("535435")
+				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
+				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).build();
+		Mockito.when(studentService.getById(idStudent.toString())).thenReturn(Mapper.mapperToStudentDTO(student));
+
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders
+						.get("/school/{schoolId}/student/{idStudent}", "1234", idStudent.toString())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
+
+		StudentDTO response = mapper.readValue(result.getResponse().getContentAsString(), StudentDTO.class);
+		assertThat(response).hasFieldOrPropertyWithValue("id", idStudent.toString());
+	}
+
+	@Test
+	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
+		idStudent = UUID.randomUUID();
+		doThrow(new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription()))
+				.when(studentService).getById(idStudent.toString());
+
+		MvcResult result = mockMvc.perform(
+				MockMvcRequestBuilders.get("/school/{schoolId}/student/{idStudent}", "1234", idStudent.toString())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(StudentEnum.GET_ERROR.getDescription());
+	}
+
+	@Test
+	public void getStudentByIdSchoolIsOk() throws JsonProcessingException, Exception {
+		Student student = Student.builder().id(idStudent).absences(3).birthday(LocalDate.now()).cellPhone("535435")
+				.document("342343232").schoolId(idSchool).division("B").grade("2°").email("oscar@gmail.com")
+				.gender(GenderType.MALE).name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).build();
+
+		List<Student> students = new ArrayList<>();
+		students.add(student);
+		Mockito.when(studentService.getBySchool(idSchool.toString())).thenReturn(Mapper.mapperToStudentsDTO(students));
+
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student", idSchool.toString())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
+
+		TypeReference<List<StudentDTO>> typeReference = new TypeReference<List<StudentDTO>>() {
+		};
+		List<StudentDTO> studentResult = mapper.readValue(result.getResponse().getContentAsString(), typeReference);
+		assertThat(studentResult.get(0).getId()).contains(idStudent.toString());
+	}
+
+	@Test
+	public void getStudentByIdSchoolIsError() throws JsonProcessingException, Exception {
+		idSchool = 6666;
+		doThrow(NullPointerException.class).when(studentService).getBySchool(idSchool.toString());
+
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student", idSchool.toString())
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains("");
+	}
+
+	@Test
+	public void getStudentByIdCourseIsOk() throws JsonProcessingException, Exception {
+
+		List<StudentDTO> students = new ArrayList<>();
+		CourseApi courseApi = CourseApi.builder().id(idCourse.toString()).year(6).division("C").countStudent(20)
+				.schoolId(12345).build();
+		studentApi.setId(idStudent.toString());
+		studentApi.setCourseApi(courseApi);
+		students.add(Mapper.mapperToStudentDTO(studentApi));
+
+		Mockito.when(studentService.getByCourse(idCourse.toString())).thenReturn(students);
+
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders
+						.get("/school/{schoolId}/student/course/{courseId}", idSchool.toString(), idCourse.toString())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
+
+		TypeReference<List<StudentDTO>> typeReference = new TypeReference<List<StudentDTO>>() {
+		};
+		List<StudentDTO> studentResult = mapper.readValue(result.getResponse().getContentAsString(), typeReference);
+		assertThat(studentResult.get(0).getId()).contains(idStudent.toString());
+
+	}
+
+	@Test
+	public void getStudentByIdCourseIsError() throws JsonProcessingException, Exception {
+		idCourse = UUID.randomUUID();
+		doThrow(NullPointerException.class).when(studentService).getByCourse(idCourse.toString());
+
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+				.get("/school/{schoolId}/student/course/{courseId}", idSchool.toString(), idCourse.toString())
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains("");
 	}
 
 }

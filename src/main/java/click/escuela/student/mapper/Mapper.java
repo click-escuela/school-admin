@@ -11,6 +11,7 @@ import click.escuela.student.api.CourseApi;
 import click.escuela.student.api.CourseApiUpdate;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
+import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.EducationLevels;
@@ -45,6 +46,15 @@ public class Mapper{
 
 	public static StudentApi mapperToStudent(Student student) {
 		return modelMapper.map(student, StudentApi.class);
+	}
+	
+
+	public static StudentDTO mapperToStudentDTO(StudentUpdateApi studentUpdateApi) {
+		return modelMapper.map(studentUpdateApi, StudentDTO.class);
+	}
+	
+	public static StudentDTO mapperToStudentDTO(StudentApi studentApi) {
+		return modelMapper.map(studentApi, StudentDTO.class);
 	}
 
 	public static Parent mapperToParent(ParentApi parentApi) {
@@ -107,5 +117,8 @@ public class Mapper{
 	public static CourseApiUpdate mapperToCourseApiUpdate(Course course) {
 		return modelMapper.map(course, CourseApiUpdate.class);
 	}
+
+	
+
 
 }

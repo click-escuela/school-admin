@@ -12,6 +12,7 @@ import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
+import click.escuela.student.model.Course;
 import click.escuela.student.model.Student;
 import click.escuela.student.repository.StudentRepository;
 import click.escuela.student.service.ServiceGeneric;
@@ -43,7 +44,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
-
 	public StudentDTO getById(String id) throws TransactionException {
 		Student student = findById(id);
 		return Mapper.mapperToStudentDTO(student);
@@ -123,19 +123,25 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 		Student student = findById(idStudent);
 
-		if (student.getId() == UUID.fromString(idCourse)) {
+		if (student.getCourse().getId().toString().equals(idCourse)) {
 			student.setCourse(null);
 			studentRepository.save(student);
 		} else {
 			throw new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
 					StudentEnum.UPDATE_ERROR.getDescription());
 		}
-
 	}
 
 	public List<StudentDTO> getByCourse(String courseId) throws TransactionException {
-		List<Student> student = studentRepository.findByCourse(courseService.findById(courseId));
-		return Mapper.mapperToStudentsDTO(student);
+		Course course=new Course();
+		course.setId(UUID.fromString(courseId));
+		List<Student> student = studentRepository.findByCourse(course);
+		if(!student.isEmpty()) {
+			return Mapper.mapperToStudentsDTO(student);
+		}
+		else {
+			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
+		}
 
 	}
 

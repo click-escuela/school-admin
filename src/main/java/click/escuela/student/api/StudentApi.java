@@ -40,7 +40,8 @@ public class StudentApi extends PersonApi {
 
 	@JsonProperty(value = "id", required = false)
 	private String id;
-
+	
+	@NotNull(message = "Parent cannot be null")
 	@JsonProperty(value = "parent", required = true)
 	@Valid
 	private ParentApi parentApi;
@@ -60,5 +61,8 @@ public class StudentApi extends PersonApi {
 	@NotBlank(message = "Level cannot be null")
 	@JsonProperty(value = "level", required = true)
 	private String level;
+	
+	@JsonProperty(value = "courseApi", required = false)
+	private CourseApi courseApi;
 
 }
