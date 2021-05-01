@@ -29,17 +29,14 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	@Override
 	public void create(StudentApi studentApi) throws TransactionException {
 
-		if (!exists(studentApi)) {
-			try {
+		exists(studentApi);
+		try {
 
-				Student student = Mapper.mapperToStudent(studentApi);
-				studentRepository.save(student);
-			} catch (Exception e) {
-				throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
-						StudentEnum.CREATE_ERROR.getDescription());
-			}
-		} else {
-			throw new TransactionException(StudentEnum.EXIST.getCode(), StudentEnum.EXIST.getDescription());
+			Student student = Mapper.mapperToStudent(studentApi);
+			studentRepository.save(student);
+		} catch (Exception e) {
+			throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
+					StudentEnum.CREATE_ERROR.getDescription());
 		}
 	}
 
@@ -104,19 +101,14 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
 	}
 
-	public boolean exists(StudentApi student) {
-		Boolean exist = false;
-
+	public void exists(StudentApi student) throws TransactionException {
+		
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
 		if (studentExist.isPresent()) {
 
-			exist = true;
-		} else {
-			exist = false;
+			throw new TransactionException(StudentEnum.EXIST.getCode(), StudentEnum.EXIST.getDescription());
 		}
-
-		return exist;
 	}
 
 	public void deleteCourse(String idStudent, String idCourse) throws TransactionException {
