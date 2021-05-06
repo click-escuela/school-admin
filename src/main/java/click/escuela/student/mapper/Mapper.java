@@ -7,17 +7,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import click.escuela.student.api.AdressApi;
+import click.escuela.student.api.BillApi;
 import click.escuela.student.api.CourseApi;
 import click.escuela.student.api.CourseApiUpdate;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.api.StudentUpdateApi;
+import click.escuela.student.dto.BillDTO;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.EducationLevels;
 
 import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.model.Adress;
+import click.escuela.student.model.Bill;
 import click.escuela.student.model.Course;
 import click.escuela.student.model.Parent;
 import click.escuela.student.model.Student;
@@ -118,7 +121,18 @@ public class Mapper{
 		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
-	
+	public static Bill mapperToBill(BillApi billApi) {
+		return modelMapper.map(billApi, Bill.class);
+	}
 
+	public static BillDTO mapperToBillDTO(Bill bill) {
+		return modelMapper.map(bill, BillDTO.class);
+	}
+
+	public static List<BillDTO> mapperToBillsDTO(List<Bill> bills) {
+		List<BillDTO> billDTOList = new ArrayList<>();
+		bills.stream().forEach(p -> billDTOList.add(mapperToBillDTO(p)));
+		return billDTOList;
+	}
 
 }
