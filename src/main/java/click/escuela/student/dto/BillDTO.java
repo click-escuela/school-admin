@@ -21,9 +21,6 @@ public class BillDTO {
 
 	@JsonProperty(value = "file")
 	private String file;
-
-	@JsonProperty(value = "id_student")
-	private String studentId;
 	
 	@JsonProperty(value = "status")
 	private PaymentStatus status;

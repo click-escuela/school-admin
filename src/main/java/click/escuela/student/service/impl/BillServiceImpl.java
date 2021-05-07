@@ -11,6 +11,7 @@ import click.escuela.student.api.BillApi;
 import click.escuela.student.dto.BillDTO;
 import click.escuela.student.enumerator.BillEnum;
 import click.escuela.student.enumerator.PaymentStatus;
+import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Bill;
@@ -33,7 +34,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 			bill.setStatus(PaymentStatus.PENDING);
 			bill.setStudentId(student);
 			billRepository.save(bill);
-			studentService.addBill(bill,student);
+			studentService.addBill(bill.getId().toString(),student);
 		} catch (Exception e) {
 			throw new TransactionException(BillEnum.CREATE_ERROR.getCode(), BillEnum.CREATE_ERROR.getDescription());
 		}
@@ -41,12 +42,8 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 
 	@Override
 	public BillDTO getById(String billId) throws TransactionException {
-		Optional<Bill> optional = billRepository.findById(UUID.fromString(billId));
-		if (optional.isPresent()) {
-			return Mapper.mapperToBillDTO(optional.get());
-		} else {
-			throw new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription());
-		}
+		Bill bill=findById(billId);
+		return Mapper.mapperToBillDTO(bill);
 	}
 
 	@Override
@@ -59,14 +56,14 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 		}
 	}
 
-	public Bill findByBill(Bill bill) throws TransactionException {
-		Optional<Bill> billAdd=billRepository.findAll().stream().filter(p->p.getStatus().equals(bill.getStatus()) && p.getStudentId().equals(bill.getStudentId())).findAny();
-		if(billAdd.isPresent()) {
-			return billAdd.get();
+	public Bill findById(String billId) throws TransactionException {
+		Optional<Bill> optional = billRepository.findById(UUID.fromString(billId));
+		if (optional.isPresent()) {
+			return optional.get();
+		} else {
+			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
 		}
-		else {
-			throw new TransactionException(BillEnum.GET_ERROR.getCode(),BillEnum.GET_ERROR.getDescription());
-		}
+
 	}
 
 }

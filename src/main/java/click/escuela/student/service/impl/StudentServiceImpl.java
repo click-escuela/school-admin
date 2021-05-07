@@ -141,11 +141,10 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	}
 
-	public void addBill(Bill bill, UUID studentId) throws TransactionException {
+	public void addBill(String billId, UUID studentId) throws TransactionException {
 		Student student=findById(studentId.toString());
 		List<Bill> bills=student.getBill();
-		Bill billAdd=billService.findByBill(bill);
-		bills.add(billAdd);
+		bills.add(billService.findById(billId));
 		student.setBill(bills);
 		studentRepository.save(student);
 	}
