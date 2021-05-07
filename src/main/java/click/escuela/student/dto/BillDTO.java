@@ -2,6 +2,7 @@ package click.escuela.student.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import click.escuela.student.enumerator.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,10 @@ public class BillDTO {
 	private String file;
 
 	@JsonProperty(value = "id_student")
-	private Integer studentId;
+	private String studentId;
+	
+	@JsonProperty(value = "status")
+	private PaymentStatus status;
+
 
 }

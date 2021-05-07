@@ -4,13 +4,15 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-
+import click.escuela.student.enumerator.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,5 +43,9 @@ public class Bill {
 	private String file;
 	
 	@Column(name = "id_student", nullable = false)
-	private Integer studentId;
+	private UUID studentId;
+	
+	@Column(name = "status", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private PaymentStatus status;
 }

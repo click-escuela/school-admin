@@ -12,6 +12,7 @@ import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
+import click.escuela.student.model.Bill;
 import click.escuela.student.model.Course;
 import click.escuela.student.model.Student;
 import click.escuela.student.repository.StudentRepository;
@@ -25,6 +26,9 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Autowired
 	private CourseServiceImpl courseService;
+	
+	@Autowired
+	private BillServiceImpl billService;
 
 	@Override
 	public void create(StudentApi studentApi) throws TransactionException {
@@ -135,6 +139,15 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
 		}
 
+	}
+
+	public void addBill(Bill bill, UUID studentId) throws TransactionException {
+		Student student=findById(studentId.toString());
+		List<Bill> bills=student.getBill();
+		Bill billAdd=billService.findByBill(bill);
+		bills.add(billAdd);
+		student.setBill(bills);
+		studentRepository.save(student);
 	}
 
 }

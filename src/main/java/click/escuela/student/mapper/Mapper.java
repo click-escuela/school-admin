@@ -129,6 +129,7 @@ public class Mapper{
 		return modelMapper.map(bill, BillDTO.class);
 	}
 
+	//Mapper bill
 	public static List<BillDTO> mapperToBillsDTO(List<Bill> bills) {
 		List<BillDTO> billDTOList = new ArrayList<>();
 		bills.stream().forEach(p -> billDTOList.add(mapperToBillDTO(p)));

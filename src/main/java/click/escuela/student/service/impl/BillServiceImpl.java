@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import click.escuela.student.api.BillApi;
 import click.escuela.student.dto.BillDTO;
 import click.escuela.student.enumerator.BillEnum;
+import click.escuela.student.enumerator.PaymentStatus;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Bill;
@@ -20,11 +21,19 @@ import click.escuela.student.service.BillServiceGeneric;
 public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	@Autowired
 	private BillRepository billRepository;
+	
+	@Autowired
+	private StudentServiceImpl studentService;
 
 	@Override
-	public void create(BillApi billApi) throws TransactionException {
+	public void create(String studentId, BillApi billApi) throws TransactionException {
 		try {
-			billRepository.save(Mapper.mapperToBill(billApi));
+			UUID student=UUID.fromString(studentId);
+			Bill bill=Mapper.mapperToBill(billApi);
+			bill.setStatus(PaymentStatus.PENDING);
+			bill.setStudentId(student);
+			billRepository.save(bill);
+			studentService.addBill(bill,student);
 		} catch (Exception e) {
 			throw new TransactionException(BillEnum.CREATE_ERROR.getCode(), BillEnum.CREATE_ERROR.getDescription());
 		}
@@ -47,6 +56,16 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 			return Mapper.mapperToBillsDTO(bills);
 		} else {
 			throw new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription());
+		}
+	}
+
+	public Bill findByBill(Bill bill) throws TransactionException {
+		Optional<Bill> billAdd=billRepository.findAll().stream().filter(p->p.getStatus().equals(bill.getStatus()) && p.getStudentId().equals(bill.getStudentId())).findAny();
+		if(billAdd.isPresent()) {
+			return billAdd.get();
+		}
+		else {
+			throw new TransactionException(BillEnum.GET_ERROR.getCode(),BillEnum.GET_ERROR.getDescription());
 		}
 	}
 

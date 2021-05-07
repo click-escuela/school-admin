@@ -1,5 +1,6 @@
 package click.escuela.student.api;
 
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,8 +35,5 @@ public class BillApi {
 	@Size(max = 10, message = "File must be 50 characters")
 	@JsonProperty(value = "file", required = true)
 	private String file;
-
-	@NotNull(message = "Student Id cannot be null")
-	@JsonProperty(value = "studentId", required = true)
-	private Integer studentId;
+	
 }

@@ -7,4 +7,5 @@ import click.escuela.student.model.Bill;
 
 public interface BillRepository extends JpaRepository<Bill, UUID>{
 
+
 }
