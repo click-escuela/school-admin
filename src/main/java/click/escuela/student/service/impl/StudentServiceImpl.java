@@ -101,7 +101,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 
-	public List<?> getBySchool(String school, Boolean fullDetail) {
+	public List<StudentDTO> getBySchool(String school, Boolean fullDetail) {
 		if(fullDetail.equals(false)) {
 			return Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
 		}
@@ -138,7 +138,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		}
 	}
 
-	public List<?> getByCourse(String courseId, Boolean fullDetail) throws TransactionException {
+	public List<StudentDTO> getByCourse(String courseId, Boolean fullDetail) throws TransactionException {
 		Course course=new Course();
 		course.setId(UUID.fromString(courseId));
 		List<Student> student = studentRepository.findByCourse(course);

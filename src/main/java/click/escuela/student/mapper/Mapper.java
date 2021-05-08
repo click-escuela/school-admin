@@ -105,8 +105,8 @@ public class Mapper{
 		return studentFull;
 	}
 
-	public static List<StudentFullDTO> mapperToStudentsFullDTO(List<Student> students) {
-		List<StudentFullDTO> studentFullList = new ArrayList<>();
+	public static List<StudentDTO> mapperToStudentsFullDTO(List<Student> students) {
+		List<StudentDTO> studentFullList = new ArrayList<>();
 		students.stream().forEach(p -> studentFullList.add(mapperToStudentFullDTO(p)));
 		return studentFullList;
 	}
