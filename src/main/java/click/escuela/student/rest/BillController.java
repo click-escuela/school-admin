@@ -52,8 +52,10 @@ public class BillController {
 	@Operation(summary = "Create Bill", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BillEnum> create(@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,@RequestBody @Validated BillApi billApi) throws TransactionException {
-		
+	public ResponseEntity<BillEnum> create(
+			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
+			@RequestBody @Validated BillApi billApi) throws TransactionException {
+
 		billService.create(studentId, billApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.CREATE_OK);
 	}

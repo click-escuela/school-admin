@@ -22,19 +22,19 @@ import click.escuela.student.service.BillServiceGeneric;
 public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	@Autowired
 	private BillRepository billRepository;
-	
+
 	@Autowired
 	private StudentServiceImpl studentService;
 
 	@Override
 	public void create(String studentId, BillApi billApi) throws TransactionException {
 		try {
-			UUID student=UUID.fromString(studentId);
-			Bill bill=Mapper.mapperToBill(billApi);
+			UUID student = UUID.fromString(studentId);
+			Bill bill = Mapper.mapperToBill(billApi);
 			bill.setStatus(PaymentStatus.PENDING);
 			bill.setStudentId(student);
 			billRepository.save(bill);
-			studentService.addBill(bill.getId().toString(),student);
+			studentService.addBill(bill.getId().toString(), student);
 		} catch (Exception e) {
 			throw new TransactionException(BillEnum.CREATE_ERROR.getCode(), BillEnum.CREATE_ERROR.getDescription());
 		}
@@ -42,7 +42,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 
 	@Override
 	public BillDTO getById(String billId) throws TransactionException {
-		Bill bill=findById(billId);
+		Bill bill = findById(billId);
 		return Mapper.mapperToBillDTO(bill);
 	}
 
