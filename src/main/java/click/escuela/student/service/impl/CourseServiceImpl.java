@@ -14,10 +14,10 @@ import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Course;
 import click.escuela.student.repository.CourseRepository;
-import click.escuela.student.service.ServiceGeneric;
+import click.escuela.student.service.CourseServiceGeneric;
 
 @Service
-public class CourseServiceImpl implements ServiceGeneric<CourseApi, CourseDTO> {
+public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, CourseDTO> {
 	@Autowired
 	private CourseRepository courseRepository;
 

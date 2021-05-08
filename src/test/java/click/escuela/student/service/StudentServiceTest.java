@@ -203,7 +203,7 @@ public class StudentServiceTest {
 	public void whenGetByIdIsOK() throws TransactionException {
 		boolean hasError = false;
 		try {
-			studentServiceImpl.getById(id.toString());
+			studentServiceImpl.getById(id.toString(),false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -214,7 +214,7 @@ public class StudentServiceTest {
 	public void whenGetByIdIsError() throws TransactionException {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
-			studentServiceImpl.getById(id.toString());
+			studentServiceImpl.getById(id.toString(),false);
 		}).withMessage(StudentEnum.GET_ERROR.getDescription());
 	}
 
@@ -222,7 +222,7 @@ public class StudentServiceTest {
 	public void whenGetBySchoolIsOK() throws TransactionException {
 		boolean hasError = false;
 		try {
-			studentServiceImpl.getBySchool(idSchool.toString());
+			studentServiceImpl.getBySchool(idSchool.toString(),false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -235,7 +235,7 @@ public class StudentServiceTest {
 		boolean hasError = false;
 
 		try {
-			studentServiceImpl.getBySchool(null);
+			studentServiceImpl.getBySchool(null,false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -251,7 +251,7 @@ public class StudentServiceTest {
 
 		boolean hasError = false;
 		try {
-			studentServiceImpl.getByCourse(idCourse.toString());
+			studentServiceImpl.getByCourse(idCourse.toString(),false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -261,7 +261,7 @@ public class StudentServiceTest {
 	@Test
 	public void whenGetByIdCourseIsError() throws TransactionException {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
-			studentServiceImpl.getByCourse(UUID.randomUUID().toString());
+			studentServiceImpl.getByCourse(UUID.randomUUID().toString(),false);
 		}).withMessage(StudentEnum.GET_ERROR.getDescription());
 	}
 

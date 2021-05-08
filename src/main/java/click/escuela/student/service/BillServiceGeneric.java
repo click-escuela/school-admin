@@ -2,7 +2,6 @@ package click.escuela.student.service;
 
 import java.util.List;
 
-import click.escuela.student.api.BillApi;
 import click.escuela.student.exception.TransactionException;
 
 public interface BillServiceGeneric <T, S>{

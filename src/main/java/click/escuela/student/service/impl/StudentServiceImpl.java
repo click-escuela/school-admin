@@ -45,9 +45,15 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
-	public StudentDTO getById(String id) throws TransactionException {
+	public StudentDTO getById(String id, Boolean fullDetail) throws TransactionException {
+		
 		Student student = findById(id);
-		return Mapper.mapperToStudentDTO(student);
+		if(fullDetail.equals(true)) {
+			return Mapper.mapperToStudentFullDTO(student);
+		}
+		else {
+			return Mapper.mapperToStudentDTO(student);
+		}
 	}
 
 	public Student findById(String id) throws TransactionException {
@@ -95,10 +101,14 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 
-	public List<StudentDTO> getBySchool(String school) {
-		List<Student> student = studentRepository.findBySchoolId((Integer.valueOf(school)));
-
-		return Mapper.mapperToStudentsDTO(student);
+	public List<?> getBySchool(String school, Boolean fullDetail) {
+		if(fullDetail.equals(false)) {
+			return Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
+		}
+		else {
+			return Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
+		}
+		
 	}
 
 	public List<StudentDTO> findAll() {
@@ -128,17 +138,21 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		}
 	}
 
-	public List<StudentDTO> getByCourse(String courseId) throws TransactionException {
+	public List<?> getByCourse(String courseId, Boolean fullDetail) throws TransactionException {
 		Course course=new Course();
 		course.setId(UUID.fromString(courseId));
 		List<Student> student = studentRepository.findByCourse(course);
 		if(!student.isEmpty()) {
-			return Mapper.mapperToStudentsDTO(student);
+			if(fullDetail.equals(false)) {
+				return Mapper.mapperToStudentsDTO(student);
+			}
+			else {
+				return Mapper.mapperToStudentsFullDTO(student);
+			}
 		}
 		else {
 			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
 		}
-
 	}
 
 	public void addBill(String billId, UUID studentId) throws TransactionException {
