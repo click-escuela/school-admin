@@ -36,7 +36,7 @@ public class BillController {
 	@Operation(summary = "Get all the bills", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BillDTO.class))) })
 	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<List<BillDTO>> getAllCourses() throws TransactionException {
+	public ResponseEntity<List<BillDTO>> getAllCourses() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.findAll());
 	}
 

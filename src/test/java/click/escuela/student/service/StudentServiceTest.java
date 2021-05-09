@@ -93,7 +93,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.save(student)).thenReturn(student);
 		Mockito.when(studentRepository.findById(id)).thenReturn(optional);
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
-		Mockito.when(studentRepository.findByCourse(course)).thenReturn(students);
+		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(course);
 
@@ -246,7 +246,7 @@ public class StudentServiceTest {
 
 		Course course = new Course();
 		course.setId(idCourse);
-		Mockito.when(studentRepository.findByCourse(Mockito.any())).thenReturn(students);
+		Mockito.when(studentRepository.findByCourseId(Mockito.any())).thenReturn(students);
 
 		boolean hasError = false;
 		try {
@@ -259,9 +259,14 @@ public class StudentServiceTest {
 
 	@Test
 	public void whenGetByIdCourseIsError() throws TransactionException {
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
-			studentServiceImpl.getByCourse(UUID.randomUUID().toString(), false);
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		boolean hasError = false;
+
+		try {
+			studentServiceImpl.getByCourse(null, false);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isTrue();
 	}
 
 }
