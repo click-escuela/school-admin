@@ -11,7 +11,6 @@ import click.escuela.student.api.BillApi;
 import click.escuela.student.dto.BillDTO;
 import click.escuela.student.enumerator.BillEnum;
 import click.escuela.student.enumerator.PaymentStatus;
-import click.escuela.student.enumerator.StudentEnum;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Bill;
@@ -27,14 +26,14 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	private StudentServiceImpl studentService;
 
 	@Override
-	public void create(String studentId, BillApi billApi) throws TransactionException {
+	public void create(String id, BillApi billApi) throws TransactionException {
 		try {
-			UUID student = UUID.fromString(studentId);
+			UUID studentId = UUID.fromString(id);
 			Bill bill = Mapper.mapperToBill(billApi);
 			bill.setStatus(PaymentStatus.PENDING);
-			bill.setStudentId(student);
+			bill.setStudentId(studentId);
 			billRepository.save(bill);
-			studentService.addBill(bill.getId().toString(), student);
+			studentService.addBill(bill, studentId);
 		} catch (Exception e) {
 			throw new TransactionException(BillEnum.CREATE_ERROR.getCode(), BillEnum.CREATE_ERROR.getDescription());
 		}
@@ -42,18 +41,12 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 
 	@Override
 	public BillDTO getById(String billId) throws TransactionException {
-		Bill bill = findById(billId);
-		return Mapper.mapperToBillDTO(bill);
+		return Mapper.mapperToBillDTO(findById(billId));
 	}
 
 	@Override
-	public List<BillDTO> findAll() throws TransactionException {
-		List<Bill> bills = billRepository.findAll();
-		if (!bills.isEmpty()) {
-			return Mapper.mapperToBillsDTO(bills);
-		} else {
-			throw new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription());
-		}
+	public List<BillDTO> findAll() {
+		return Mapper.mapperToBillsDTO(billRepository.findAll());
 	}
 
 	public Bill findById(String billId) throws TransactionException {
@@ -61,7 +54,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 		if (optional.isPresent()) {
 			return optional.get();
 		} else {
-			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
+			throw new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription());
 		}
 
 	}

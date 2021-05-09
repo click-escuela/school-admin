@@ -358,7 +358,7 @@ public class StudentControllerTest {
 
 		MvcResult result = mockMvc
 				.perform(MockMvcRequestBuilders
-						.get("/school/{schoolId}/student/{idStudent}/{fullDetail}", "1234", idStudent.toString(), false)
+						.get("/school/{schoolId}/student/{idStudent}?fullDetail=false", "1234", idStudent.toString())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
@@ -373,7 +373,7 @@ public class StudentControllerTest {
 				.when(studentService).getById(idStudent.toString(), false);
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-				.get("/school/{schoolId}/student/{idStudent}/{fullDetail}", "1234", idStudent.toString(), false)
+				.get("/school/{schoolId}/student/{idStudent}?fullDetail=false", "1234", idStudent.toString())
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(StudentEnum.GET_ERROR.getDescription());
@@ -392,7 +392,7 @@ public class StudentControllerTest {
 
 		MvcResult result = mockMvc
 				.perform(MockMvcRequestBuilders
-						.get("/school/{schoolId}/student/{fullDetail}", idSchool.toString(), false)
+						.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
@@ -408,7 +408,7 @@ public class StudentControllerTest {
 		doThrow(NullPointerException.class).when(studentService).getBySchool(idSchool.toString(), false);
 
 		MvcResult result = mockMvc.perform(
-				MockMvcRequestBuilders.get("/school/{schoolId}/student/{fullDetail}", idSchool.toString(), false)
+				MockMvcRequestBuilders.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
@@ -428,8 +428,8 @@ public class StudentControllerTest {
 		Mockito.when(studentService.getByCourse(idCourse.toString(), false)).thenReturn(students);
 
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}/{fullDetail}",
-						idSchool.toString(), idCourse.toString(), false).contentType(MediaType.APPLICATION_JSON))
+				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
+						idSchool.toString(), idCourse.toString()).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
 		TypeReference<List<StudentDTO>> typeReference = new TypeReference<List<StudentDTO>>() {
@@ -445,8 +445,8 @@ public class StudentControllerTest {
 		doThrow(NullPointerException.class).when(studentService).getByCourse(idCourse.toString(), false);
 
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}/{fullDetail}",
-						idSchool.toString(), idCourse.toString(), false).contentType(MediaType.APPLICATION_JSON))
+				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
+						idSchool.toString(), idCourse.toString()).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("");

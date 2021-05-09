@@ -97,6 +97,6 @@ public class Student {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_bill", nullable = true)
-	private List<Bill> bill;
+	private List<Bill> bills;
 
 }

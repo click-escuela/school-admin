@@ -26,9 +26,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Autowired
 	private CourseServiceImpl courseService;
-	
-	@Autowired
-	private BillServiceImpl billService;
 
 	@Override
 	public void create(StudentApi studentApi) throws TransactionException {
@@ -46,12 +43,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Override
 	public StudentDTO getById(String id, Boolean fullDetail) throws TransactionException {
-		
+
 		Student student = findById(id);
-		if(fullDetail.equals(true)) {
+
+		if (Boolean.TRUE.equals(fullDetail)) {
 			return Mapper.mapperToStudentFullDTO(student);
-		}
-		else {
+		} else {
 			return Mapper.mapperToStudentDTO(student);
 		}
 	}
@@ -102,13 +99,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public List<StudentDTO> getBySchool(String school, Boolean fullDetail) {
-		if(fullDetail.equals(false)) {
+		if (Boolean.TRUE.equals(fullDetail)) {
+			return Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
+		} else {
 			return Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
 		}
-		else {
-			return Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
-		}
-		
+
 	}
 
 	public List<StudentDTO> findAll() {
@@ -116,7 +112,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public void exists(StudentApi student) throws TransactionException {
-		
+
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
 		if (studentExist.isPresent()) {
@@ -139,27 +135,26 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public List<StudentDTO> getByCourse(String courseId, Boolean fullDetail) throws TransactionException {
-		Course course=new Course();
+		Course course = new Course();
 		course.setId(UUID.fromString(courseId));
 		List<Student> student = studentRepository.findByCourse(course);
-		if(!student.isEmpty()) {
-			if(fullDetail.equals(false)) {
-				return Mapper.mapperToStudentsDTO(student);
-			}
-			else {
+		if (!student.isEmpty()) {
+			if (Boolean.TRUE.equals(fullDetail)) {
 				return Mapper.mapperToStudentsFullDTO(student);
+			} else {
+				return Mapper.mapperToStudentsDTO(student);
+
 			}
-		}
-		else {
+		} else {
 			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
 		}
 	}
 
-	public void addBill(String billId, UUID studentId) throws TransactionException {
-		Student student=findById(studentId.toString());
-		List<Bill> bills=student.getBill();
-		bills.add(billService.findById(billId));
-		student.setBill(bills);
+	public void addBill(Bill bill, UUID studentId) throws TransactionException {
+		Student student = findById(studentId.toString());
+		List<Bill> bills = student.getBills();
+		bills.add(bill);
+		student.setBills(bills);
 		studentRepository.save(student);
 	}
 

@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 public class StudentFullDTO extends StudentDTO{
 
-	@JsonProperty(value = "bill")
-	private List<BillDTO> bill;
+	@JsonProperty(value = "bills")
+	private List<BillDTO> bills;
 }

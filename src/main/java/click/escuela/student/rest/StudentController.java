@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.student.api.StudentApi;
@@ -44,9 +45,9 @@ public class StudentController {
 
 	@Operation(summary = "Get student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
-	@GetMapping(value = "/{studentId}/{fullDetail}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentDTO> getById(
-			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,@Parameter(name = "Full detail", required = true) @PathVariable("fullDetail") Boolean fullDetail)
+			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId, @RequestParam("fullDetail") Boolean fullDetail)
 			throws TransactionException {
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getById(studentId,fullDetail));
@@ -54,17 +55,17 @@ public class StudentController {
 
 	@Operation(summary = "Get student by schoolId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
-	@GetMapping(value = "/{fullDetail}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<StudentDTO>> getBySchool(
-			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,@Parameter(name = "Full detail", required = true) @PathVariable("fullDetail") Boolean fullDetail) {
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,@RequestParam("fullDetail") Boolean fullDetail) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getBySchool(schoolId,fullDetail));
 	}
 
 	@Operation(summary = "Get student by courseId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
-	@GetMapping(value = "course/{courseId}/{fullDetail}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "course/{courseId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<StudentDTO>> getByCourse(
-			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId,@Parameter(name = "Full detail", required = true) @PathVariable("fullDetail") Boolean fullDetail)
+			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId,@RequestParam("fullDetail") Boolean fullDetail)
 			throws TransactionException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getByCourse(courseId,fullDetail));
 	}

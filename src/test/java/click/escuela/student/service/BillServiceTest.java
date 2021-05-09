@@ -59,7 +59,7 @@ public class BillServiceTest {
 		Mockito.when(billRepository.save(bill)).thenReturn(bill);
 		Mockito.when(billRepository.findById(id)).thenReturn(optional);
 
-		doNothing().when(studentService).addBill(id.toString(), studentId);
+		doNothing().when(studentService).addBill(bill, studentId);
 
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(billServiceImpl, "billRepository", billRepository);
