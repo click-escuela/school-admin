@@ -16,7 +16,6 @@ import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.BillDTO;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.dto.StudentDTO;
-import click.escuela.student.dto.StudentFullDTO;
 import click.escuela.student.enumerator.EducationLevels;
 
 import click.escuela.student.enumerator.GenderType;
@@ -41,7 +40,9 @@ public class Mapper{
 	}
 
 	public static StudentDTO mapperToStudentDTO(Student student) {
-		return modelMapper.map(student, StudentDTO.class);
+		StudentDTO studentDTO=modelMapper.map(student, StudentDTO.class);
+		studentDTO.setBills(null);
+		return studentDTO;
 	}
 
 	public static Student mapperToStudent(StudentDTO studentdto) {
@@ -99,8 +100,8 @@ public class Mapper{
 		return studentList;
 	}
 	
-	public static StudentFullDTO mapperToStudentFullDTO(Student student) {
-		StudentFullDTO studentFull=modelMapper.map(student, StudentFullDTO.class);
+	public static StudentDTO mapperToStudentFullDTO(Student student) {
+		StudentDTO studentFull=modelMapper.map(student, StudentDTO.class);
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
 	}
