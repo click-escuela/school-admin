@@ -7,17 +7,21 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import click.escuela.student.api.AdressApi;
+import click.escuela.student.api.BillApi;
 import click.escuela.student.api.CourseApi;
 import click.escuela.student.api.CourseApiUpdate;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.api.StudentUpdateApi;
+import click.escuela.student.dto.BillDTO;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.dto.StudentDTO;
+import click.escuela.student.dto.StudentFullDTO;
 import click.escuela.student.enumerator.EducationLevels;
 
 import click.escuela.student.enumerator.GenderType;
 import click.escuela.student.model.Adress;
+import click.escuela.student.model.Bill;
 import click.escuela.student.model.Course;
 import click.escuela.student.model.Parent;
 import click.escuela.student.model.Student;
@@ -94,6 +98,18 @@ public class Mapper{
 		students.stream().forEach(p -> studentList.add(mapperToStudent(p)));
 		return studentList;
 	}
+	
+	public static StudentFullDTO mapperToStudentFullDTO(Student student) {
+		StudentFullDTO studentFull=modelMapper.map(student, StudentFullDTO.class);
+		studentFull.setBills(mapperToBillsDTO(student.getBills()));
+		return studentFull;
+	}
+
+	public static List<StudentDTO> mapperToStudentsFullDTO(List<Student> students) {
+		List<StudentDTO> studentFullList = new ArrayList<>();
+		students.stream().forEach(p -> studentFullList.add(mapperToStudentFullDTO(p)));
+		return studentFullList;
+	}
 
 	// All mapper courses
 	public static Course mapperToCourse(CourseApi courseApi) {
@@ -118,7 +134,19 @@ public class Mapper{
 		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
-	
+	public static Bill mapperToBill(BillApi billApi) {
+		return modelMapper.map(billApi, Bill.class);
+	}
 
+	public static BillDTO mapperToBillDTO(Bill bill) {
+		return modelMapper.map(bill, BillDTO.class);
+	}
+
+	//Mapper bill
+	public static List<BillDTO> mapperToBillsDTO(List<Bill> bills) {
+		List<BillDTO> billDTOList = new ArrayList<>();
+		bills.stream().forEach(p -> billDTOList.add(mapperToBillDTO(p)));
+		return billDTOList;
+	}
 
 }

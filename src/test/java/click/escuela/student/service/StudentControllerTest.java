@@ -353,11 +353,12 @@ public class StudentControllerTest {
 		Student student = Student.builder().id(idStudent).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).build();
-		Mockito.when(studentService.getById(idStudent.toString())).thenReturn(Mapper.mapperToStudentDTO(student));
+		Mockito.when(studentService.getById(idStudent.toString(), false))
+				.thenReturn(Mapper.mapperToStudentDTO(student));
 
 		MvcResult result = mockMvc
 				.perform(MockMvcRequestBuilders
-						.get("/school/{schoolId}/student/{idStudent}", "1234", idStudent.toString())
+						.get("/school/{schoolId}/student/{idStudent}?fullDetail=false", "1234", idStudent.toString())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
@@ -369,12 +370,11 @@ public class StudentControllerTest {
 	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
 		idStudent = UUID.randomUUID();
 		doThrow(new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription()))
-				.when(studentService).getById(idStudent.toString());
+				.when(studentService).getById(idStudent.toString(), false);
 
-		MvcResult result = mockMvc.perform(
-				MockMvcRequestBuilders.get("/school/{schoolId}/student/{idStudent}", "1234", idStudent.toString())
-						.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andReturn();
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+				.get("/school/{schoolId}/student/{idStudent}?fullDetail=false", "1234", idStudent.toString())
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(StudentEnum.GET_ERROR.getDescription());
 	}
@@ -387,10 +387,12 @@ public class StudentControllerTest {
 
 		List<Student> students = new ArrayList<>();
 		students.add(student);
-		Mockito.when(studentService.getBySchool(idSchool.toString())).thenReturn(Mapper.mapperToStudentsDTO(students));
+		Mockito.when(studentService.getBySchool(idSchool.toString(), false))
+				.thenReturn(Mapper.mapperToStudentsDTO(students));
 
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student", idSchool.toString())
+				.perform(MockMvcRequestBuilders
+						.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
@@ -403,10 +405,12 @@ public class StudentControllerTest {
 	@Test
 	public void getStudentByIdSchoolIsError() throws JsonProcessingException, Exception {
 		idSchool = 6666;
-		doThrow(NullPointerException.class).when(studentService).getBySchool(idSchool.toString());
+		doThrow(NullPointerException.class).when(studentService).getBySchool(idSchool.toString(), false);
 
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student", idSchool.toString())
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
+		MvcResult result = mockMvc.perform(
+				MockMvcRequestBuilders.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("");
 	}
@@ -421,12 +425,11 @@ public class StudentControllerTest {
 		studentApi.setCourseApi(courseApi);
 		students.add(Mapper.mapperToStudentDTO(studentApi));
 
-		Mockito.when(studentService.getByCourse(idCourse.toString())).thenReturn(students);
+		Mockito.when(studentService.getByCourse(idCourse.toString(), false)).thenReturn(students);
 
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders
-						.get("/school/{schoolId}/student/course/{courseId}", idSchool.toString(), idCourse.toString())
-						.contentType(MediaType.APPLICATION_JSON))
+				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
+						idSchool.toString(), idCourse.toString()).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
 		TypeReference<List<StudentDTO>> typeReference = new TypeReference<List<StudentDTO>>() {
@@ -439,11 +442,12 @@ public class StudentControllerTest {
 	@Test
 	public void getStudentByIdCourseIsError() throws JsonProcessingException, Exception {
 		idCourse = UUID.randomUUID();
-		doThrow(NullPointerException.class).when(studentService).getByCourse(idCourse.toString());
+		doThrow(NullPointerException.class).when(studentService).getByCourse(idCourse.toString(), false);
 
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-				.get("/school/{schoolId}/student/course/{courseId}", idSchool.toString(), idCourse.toString())
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
+						idSchool.toString(), idCourse.toString()).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("");
 	}

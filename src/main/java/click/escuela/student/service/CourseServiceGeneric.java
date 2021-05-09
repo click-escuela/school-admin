@@ -2,11 +2,11 @@ package click.escuela.student.service;
 
 import click.escuela.student.exception.TransactionException;
 
-public interface ServiceGeneric <T, S>{
+public interface CourseServiceGeneric <T, S>{
 
 	public void create(T entity) throws TransactionException;
 	
-	public S getById(String id, Boolean detail) throws TransactionException;
+	public S getById(String id) throws TransactionException;
 	
 	public void update(T entity) throws TransactionException;
 	

@@ -56,7 +56,7 @@ public class StudentServiceTest {
 	private Integer idSchool;
 	private List<Student> students;
 	private Student student;
-	
+
 	@Before
 	public void setUp() throws TransactionException {
 
@@ -67,10 +67,10 @@ public class StudentServiceTest {
 		idCourse = UUID.randomUUID();
 		Course course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).teacher(new Teacher())
 				.schoolId(12345).build();
-		
-		student = Student.builder().absences(3).birthday(LocalDate.now()).cellPhone("535435")
-				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
-				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();
+
+		student = Student.builder().absences(3).birthday(LocalDate.now()).cellPhone("535435").document("342343232")
+				.division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE).name("oscar")
+				.level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();
 
 		ParentApi parentApi = new ParentApi();
 		parentApi.setAdressApi(new AdressApi());
@@ -93,12 +93,9 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.save(student)).thenReturn(student);
 		Mockito.when(studentRepository.findById(id)).thenReturn(optional);
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
-		Mockito.when(studentRepository.findByCourse(course)).thenReturn(students);
-		
+		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
+
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(course);
-
-
-		
 
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
@@ -109,7 +106,8 @@ public class StudentServiceTest {
 	@Test
 	public void whenCreateIsOk() {
 		Optional<Student> optional = Optional.empty();
-		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any())).thenReturn(optional);
+		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any()))
+				.thenReturn(optional);
 
 		boolean hasError = false;
 		try {
@@ -147,11 +145,12 @@ public class StudentServiceTest {
 	public void whenCreateIsError() {
 
 		Optional<Student> optional = Optional.of(student);
-		
+
 		StudentApi studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now())
 				.cellPhone("4534543").document("55555").division("F").grade("3°").email("oscar@gmail.com")
 				.gender(GenderType.MALE.toString()).name("oscar").parentApi(new ParentApi()).schoolId(1234).build();
-		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any())).thenReturn(optional);
+		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any()))
+				.thenReturn(optional);
 
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 
@@ -203,7 +202,7 @@ public class StudentServiceTest {
 	public void whenGetByIdIsOK() throws TransactionException {
 		boolean hasError = false;
 		try {
-			studentServiceImpl.getById(id.toString());
+			studentServiceImpl.getById(id.toString(), false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -214,7 +213,7 @@ public class StudentServiceTest {
 	public void whenGetByIdIsError() throws TransactionException {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
-			studentServiceImpl.getById(id.toString());
+			studentServiceImpl.getById(id.toString(), false);
 		}).withMessage(StudentEnum.GET_ERROR.getDescription());
 	}
 
@@ -222,7 +221,7 @@ public class StudentServiceTest {
 	public void whenGetBySchoolIsOK() throws TransactionException {
 		boolean hasError = false;
 		try {
-			studentServiceImpl.getBySchool(idSchool.toString());
+			studentServiceImpl.getBySchool(idSchool.toString(), false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -235,7 +234,7 @@ public class StudentServiceTest {
 		boolean hasError = false;
 
 		try {
-			studentServiceImpl.getBySchool(null);
+			studentServiceImpl.getBySchool(null, false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -247,11 +246,11 @@ public class StudentServiceTest {
 
 		Course course = new Course();
 		course.setId(idCourse);
-		Mockito.when(studentRepository.findByCourse(Mockito.any())).thenReturn(students);
+		Mockito.when(studentRepository.findByCourseId(Mockito.any())).thenReturn(students);
 
 		boolean hasError = false;
 		try {
-			studentServiceImpl.getByCourse(idCourse.toString());
+			studentServiceImpl.getByCourse(idCourse.toString(), false);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -260,9 +259,14 @@ public class StudentServiceTest {
 
 	@Test
 	public void whenGetByIdCourseIsError() throws TransactionException {
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
-			studentServiceImpl.getByCourse(UUID.randomUUID().toString());
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		boolean hasError = false;
+
+		try {
+			studentServiceImpl.getByCourse(null, false);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isTrue();
 	}
 
 }
