@@ -65,8 +65,7 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "course/{courseId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<StudentDTO>> getByCourse(
-			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId,@RequestParam("fullDetail") Boolean fullDetail)
-			throws TransactionException {
+			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId,@RequestParam("fullDetail") Boolean fullDetail){
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getByCourse(courseId,fullDetail));
 	}
 
