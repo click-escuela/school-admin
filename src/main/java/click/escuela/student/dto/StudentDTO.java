@@ -1,7 +1,9 @@
 package click.escuela.student.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.student.enumerator.EducationLevels;
@@ -11,6 +13,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDTO {
 
 	@JsonProperty(value = "id")
@@ -51,4 +54,7 @@ public class StudentDTO {
 
 	@JsonProperty(value = "parent")
 	private ParentDTO parent;
+	
+	@JsonProperty(value = "bills")
+	private List<BillDTO> bills;
 }
