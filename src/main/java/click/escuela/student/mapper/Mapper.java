@@ -16,7 +16,6 @@ import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.BillDTO;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.dto.StudentDTO;
-import click.escuela.student.dto.StudentFullDTO;
 import click.escuela.student.enumerator.EducationLevels;
 
 import click.escuela.student.enumerator.GenderType;
