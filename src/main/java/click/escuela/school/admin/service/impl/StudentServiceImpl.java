@@ -43,45 +43,48 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	@Override
 	public StudentDTO getById(String id, Boolean fullDetail) throws TransactionException {
 
-		Student student = findById(id);
+		Student student = findById(id).get();
 
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
 
 	}
 
-	public Student findById(String id) throws TransactionException {
+	public Optional<Student> findById(String id) throws TransactionException {
 
-		return studentRepository.findById(UUID.fromString(id))
+		return Optional.of(studentRepository.findById(UUID.fromString(id))
 				.orElseThrow(() -> new TransactionException(StudentEnum.GET_ERROR.getCode(),
-						StudentEnum.GET_ERROR.getDescription()));
+						StudentEnum.GET_ERROR.getDescription())));
 
 	}
 
 	@Override
 	public void update(StudentApi studentApi) throws TransactionException {
 
-		Student student = findById(studentApi.getId());
+		findById(studentApi.getId()).ifPresent(student -> {
+			
+			student.setName(studentApi.getName());
+			student.setSurname(studentApi.getSurname());
+			student.setDocument(studentApi.getDocument());
+			student.setGender(Mapper.mapperToEnum(studentApi.getGender()));
+			student.setSchoolId(studentApi.getSchoolId());
+			student.setGrade(studentApi.getGrade());
+			student.setDivision(studentApi.getDivision());
+			student.setBirthday(studentApi.getBirthday());
+			student.setAdress(Mapper.mapperToAdress(studentApi.getAdressApi()));
+			student.setCellPhone(studentApi.getCellPhone());
+			student.setEmail(studentApi.getEmail());
+			student.setParent(Mapper.mapperToParent(studentApi.getParentApi()));
 
-		student.setName(studentApi.getName());
-		student.setSurname(studentApi.getSurname());
-		student.setDocument(studentApi.getDocument());
-		student.setGender(Mapper.mapperToEnum(studentApi.getGender()));
-		student.setSchoolId(studentApi.getSchoolId());
-		student.setGrade(studentApi.getGrade());
-		student.setDivision(studentApi.getDivision());
-		student.setBirthday(studentApi.getBirthday());
-		student.setAdress(Mapper.mapperToAdress(studentApi.getAdressApi()));
-		student.setCellPhone(studentApi.getCellPhone());
-		student.setEmail(studentApi.getEmail());
-		student.setParent(Mapper.mapperToParent(studentApi.getParentApi()));
+			studentRepository.save(student);
+		});
 
-		studentRepository.save(student);
+	
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws TransactionException {
 
-		Student student = findById(idStudent);
+		Student student = findById(idStudent).get();
 		student.setCourse(courseService.findById(idCourse));
 
 		studentRepository.save(student);
@@ -125,24 +128,25 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	public void deleteCourse(String idStudent, String idCourse) throws TransactionException {
 
-		Student student = findById(idStudent);
+		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
+				.orElseThrow(() -> new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
+						StudentEnum.UPDATE_ERROR.getDescription()));
 
-		if (student.getCourse().getId().toString().equals(idCourse)) {
-			student.setCourse(null);
-			studentRepository.save(student);
-		} else {
-			throw new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
-					StudentEnum.UPDATE_ERROR.getDescription());
-		}
+		student.setCourse(null);
+		studentRepository.save(student);
+
 	}
-
+	
 	public void addBill(Bill bill, UUID studentId) throws TransactionException {
 
-		Student student = findById(studentId.toString());
-		List<Bill> bills = student.getBills();
-		bills.add(bill);
-		student.setBills(bills);
+		findById(studentId.toString()).ifPresent(student -> {
 
-		studentRepository.save(student);
+			List<Bill> bills = student.getBills();
+			bills.add(bill);
+			student.setBills(bills);
+
+			studentRepository.save(student);
+		});
+
 	}
 }
