@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>click.escuela.school.admin</groupId>
-	<artifactId>school.admin</artifactId>
+	<artifactId>school-admin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>school-admin</name>
 	<description>Demo project for Spring Boot</description>
