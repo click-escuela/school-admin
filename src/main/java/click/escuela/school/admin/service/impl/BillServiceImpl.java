@@ -50,12 +50,8 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	}
 
 	public Bill findById(String billId) throws TransactionException {
-		Optional<Bill> optional = billRepository.findById(UUID.fromString(billId));
-		if (optional.isPresent()) {
-			return optional.get();
-		} else {
-			throw new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription());
-		}
+		return billRepository.findById(UUID.fromString(billId)).orElseThrow(
+				() -> new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription()));
 
 	}
 

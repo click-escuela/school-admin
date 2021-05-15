@@ -45,22 +45,17 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 		Student student = findById(id);
 
-		if (Boolean.TRUE.equals(fullDetail)) {
-			return Mapper.mapperToStudentFullDTO(student);
-		} else {
-			return Mapper.mapperToStudentDTO(student);
-		}
+		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
+				: Mapper.mapperToStudentDTO(student);
+
 	}
 
 	public Student findById(String id) throws TransactionException {
 
-		Optional<Student> optional = studentRepository.findById(UUID.fromString(id));
+		return studentRepository.findById(UUID.fromString(id))
+				.orElseThrow(() -> new TransactionException(StudentEnum.GET_ERROR.getCode(),
+						StudentEnum.GET_ERROR.getDescription()));
 
-		if (optional.isPresent()) {
-			return optional.get();
-		} else {
-			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
-		}
 	}
 
 	@Override
@@ -100,20 +95,17 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	public List<StudentDTO> getBySchool(String school, Boolean fullDetail) {
 
-		if (Boolean.TRUE.equals(fullDetail)) {
-			return Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
-		} else {
-			return Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
-		}
+		return Boolean.TRUE.equals(fullDetail)
+				? Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))))
+				: Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
+
 	}
 
 	public List<StudentDTO> getByCourse(String courseId, Boolean fullDetail) {
 
-		if (Boolean.TRUE.equals(fullDetail)) {
-			return Mapper.mapperToStudentsFullDTO(studentRepository.findByCourseId(UUID.fromString(courseId)));
-		} else {
-			return Mapper.mapperToStudentsDTO(studentRepository.findByCourseId(UUID.fromString(courseId)));
-		}
+		return Boolean.TRUE.equals(fullDetail)
+				? Mapper.mapperToStudentsFullDTO(studentRepository.findByCourseId(UUID.fromString(courseId)))
+				: Mapper.mapperToStudentsDTO(studentRepository.findByCourseId(UUID.fromString(courseId)));
 	}
 
 	public List<StudentDTO> findAll() {
@@ -125,6 +117,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
+		
 		if (studentExist.isPresent()) {
 			throw new TransactionException(StudentEnum.EXIST.getCode(), StudentEnum.EXIST.getDescription());
 		}

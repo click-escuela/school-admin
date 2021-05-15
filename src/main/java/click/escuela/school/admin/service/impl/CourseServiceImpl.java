@@ -53,12 +53,11 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 	}
 
 	public Course findById(String idCourse) throws TransactionException {
-		Optional<Course> optional = courseRepository.findById(UUID.fromString(idCourse));
-		if (optional.isPresent()) {
-			return optional.get();
-		} else {
-			throw new TransactionException(CourseEnum.UPDATE_ERROR.getCode(), CourseEnum.UPDATE_ERROR.getDescription());
-		}
+
+		return courseRepository.findById(UUID.fromString(idCourse))
+				.orElseThrow(() -> new TransactionException(CourseEnum.UPDATE_ERROR.getCode(),
+						CourseEnum.UPDATE_ERROR.getDescription()));
+
 	}
 
 }
