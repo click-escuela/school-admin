@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import click.escuela.student.enumerator.DocumentType;
 import click.escuela.student.enumerator.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,27 +47,31 @@ public class Teacher {
 	@Column(name = "surname", nullable = false)
 	@NotBlank(message = "El apellido no puede estar vacío")
 	private String surname;
-	
+
+	@Column(name = "type", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private DocumentType documentType;
+
 	@Column(name = "document", nullable = false)
 	private String document;
-	
+
 	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private GenderType gender;
-	
+
 	@Column(name = "birthday", nullable = false, columnDefinition = "DATETIME")
 	private LocalDate birthday;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_adress", nullable = false)
 	private Adress adress;
-	
+
 	@Column(name = "cell_phone", nullable = false)
 	private String cellPhone;
 
 	@Column(name = "email", nullable = false)
 	private String email;
-	
+
 	@Column(name = "course_id", nullable = false)
 	private UUID courseId;
 

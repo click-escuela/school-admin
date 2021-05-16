@@ -1,17 +1,17 @@
 package click.escuela.student.enumerator;
 
-public enum CourseEnum {
+public enum CourseMessage {
 
 	CREATE_OK("CREATED_STUDENT","Se creó el curso correctamente"),
 	CREATE_ERROR("CREATE_ERROR","No se pudo crear el curso correctamente"),
 	UPDATE_OK("UPDATE_STUDENT","Se modificó el curso correctamente"),
 	UPDATE_ERROR("UPDATE_ERROR","No se pudo modificar el curso correctamente"),
-	DELETE_OK("DELETE_STUDENT","se eliminó el curso correctamente");
+	GET_ERROR("GET_ERROR","No se pudo encontrar el curso");
 
 	private String code;
 	private String description;
 	
-	CourseEnum(String code, String description) {
+	CourseMessage(String code, String description) {
 		this.code = code;
 		this.description = description;
 	}

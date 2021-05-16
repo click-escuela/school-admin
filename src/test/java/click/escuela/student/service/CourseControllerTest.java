@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.student.api.CourseApi;
-import click.escuela.student.enumerator.CourseEnum;
+import click.escuela.student.enumerator.CourseMessage;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.rest.CourseController;
 import click.escuela.student.rest.handler.Handler;
@@ -74,7 +74,7 @@ public class CourseControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(courseApi)))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.CREATE_OK.name());
+		assertThat(response).contains(CourseMessage.CREATE_OK.name());
 
 	}
 
@@ -135,7 +135,7 @@ public class CourseControllerTest {
 								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.UPDATE_OK.name());
+		assertThat(response).contains(CourseMessage.UPDATE_OK.name());
 
 	}
 
@@ -171,7 +171,7 @@ public class CourseControllerTest {
 								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.UPDATE_OK.name());
+		assertThat(response).contains(CourseMessage.UPDATE_OK.name());
 
 	}
 

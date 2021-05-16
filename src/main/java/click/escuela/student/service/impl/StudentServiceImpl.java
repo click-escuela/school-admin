@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.dto.StudentDTO;
-import click.escuela.student.enumerator.StudentEnum;
+import click.escuela.student.enumerator.StudentMessage;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Course;
@@ -35,8 +35,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			Student student = Mapper.mapperToStudent(studentApi);
 			studentRepository.save(student);
 		} catch (Exception e) {
-			throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
-					StudentEnum.CREATE_ERROR.getDescription());
+			throw new TransactionException(StudentMessage.CREATE_ERROR.getCode(),
+					StudentMessage.CREATE_ERROR.getDescription());
 		}
 	}
 
@@ -53,7 +53,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		if (optional.isPresent()) {
 			return optional.get();
 		} else {
-			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
+			throw new TransactionException(StudentMessage.GET_ERROR.getCode(), StudentMessage.GET_ERROR.getDescription());
 		}
 
 	}
@@ -107,7 +107,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				Mapper.mapperToEnum(student.getGender()));
 		if (studentExist.isPresent()) {
 
-			throw new TransactionException(StudentEnum.EXIST.getCode(), StudentEnum.EXIST.getDescription());
+			throw new TransactionException(StudentMessage.EXIST.getCode(), StudentMessage.EXIST.getDescription());
 		}
 	}
 
@@ -119,8 +119,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			student.setCourse(null);
 			studentRepository.save(student);
 		} else {
-			throw new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
-					StudentEnum.UPDATE_ERROR.getDescription());
+			throw new TransactionException(StudentMessage.UPDATE_ERROR.getCode(),
+					StudentMessage.UPDATE_ERROR.getDescription());
 		}
 	}
 
@@ -132,7 +132,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			return Mapper.mapperToStudentsDTO(student);
 		}
 		else {
-			throw new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription());
+			throw new TransactionException(StudentMessage.GET_ERROR.getCode(), StudentMessage.GET_ERROR.getDescription());
 		}
 
 	}

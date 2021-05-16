@@ -25,7 +25,7 @@ import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.enumerator.EducationLevels;
 import click.escuela.student.enumerator.GenderType;
-import click.escuela.student.enumerator.StudentEnum;
+import click.escuela.student.enumerator.StudentMessage;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Adress;
@@ -139,7 +139,7 @@ public class StudentServiceTest {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentApi.setId(id.toString());
 			studentServiceImpl.update(studentApi);
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 
 	}
 
@@ -156,7 +156,7 @@ public class StudentServiceTest {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 
 			studentServiceImpl.create(studentApi);
-		}).withMessage(StudentEnum.EXIST.getDescription());
+		}).withMessage(StudentMessage.EXIST.getDescription());
 
 	}
 
@@ -176,7 +176,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentServiceImpl.addCourse(id.toString(), idCourse.toString());
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
@@ -196,7 +196,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
@@ -215,7 +215,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentServiceImpl.getById(id.toString());
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
@@ -262,7 +262,7 @@ public class StudentServiceTest {
 	public void whenGetByIdCourseIsError() throws TransactionException {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentServiceImpl.getByCourse(UUID.randomUUID().toString());
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 }

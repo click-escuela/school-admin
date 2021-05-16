@@ -42,7 +42,7 @@ import click.escuela.student.api.StudentUpdateApi;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.enumerator.EducationLevels;
 import click.escuela.student.enumerator.GenderType;
-import click.escuela.student.enumerator.StudentEnum;
+import click.escuela.student.enumerator.StudentMessage;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.mapper.Mapper;
 import click.escuela.student.model.Parent;
@@ -109,7 +109,7 @@ public class StudentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi)))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(StudentEnum.CREATE_OK.name());
+		assertThat(response).contains(StudentMessage.CREATE_OK.name());
 
 	}
 
@@ -308,14 +308,14 @@ public class StudentControllerTest {
 	@Test
 	public void whenCreateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new TransactionException(StudentEnum.CREATE_ERROR.getCode(), StudentEnum.CREATE_ERROR.getDescription()))
+		doThrow(new TransactionException(StudentMessage.CREATE_ERROR.getCode(), StudentMessage.CREATE_ERROR.getDescription()))
 				.when(studentService).create(Mockito.any());
 
 		MvcResult result = mockMvc.perform(post("/school/{schoolId}/student", "123")
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().isBadRequest())
 				.andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(StudentEnum.CREATE_ERROR.getDescription());
+		assertThat(response).contains(StudentMessage.CREATE_ERROR.getDescription());
 
 	}
 
@@ -330,21 +330,21 @@ public class StudentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentUpdateApi)))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(StudentEnum.UPDATE_OK.name());
+		assertThat(response).contains(StudentMessage.UPDATE_OK.name());
 
 	}
 
 	@Test
 	public void whenUpdateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new TransactionException(StudentEnum.UPDATE_ERROR.getCode(), StudentEnum.UPDATE_ERROR.getDescription()))
+		doThrow(new TransactionException(StudentMessage.UPDATE_ERROR.getCode(), StudentMessage.UPDATE_ERROR.getDescription()))
 				.when(studentService).update(Mockito.any());
 
 		MvcResult result = mockMvc.perform(put("/school/{schoolId}/student", "123")
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentUpdateApi)))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(StudentEnum.UPDATE_ERROR.getDescription());
+		assertThat(response).contains(StudentMessage.UPDATE_ERROR.getDescription());
 
 	}
 
@@ -368,7 +368,7 @@ public class StudentControllerTest {
 	@Test
 	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
 		idStudent = UUID.randomUUID();
-		doThrow(new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription()))
+		doThrow(new TransactionException(StudentMessage.GET_ERROR.getCode(), StudentMessage.GET_ERROR.getDescription()))
 				.when(studentService).getById(idStudent.toString());
 
 		MvcResult result = mockMvc.perform(
@@ -376,7 +376,7 @@ public class StudentControllerTest {
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(StudentEnum.GET_ERROR.getDescription());
+		assertThat(response).contains(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test

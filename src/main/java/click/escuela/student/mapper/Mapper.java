@@ -17,6 +17,7 @@ import click.escuela.student.api.TeacherApi;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.dto.StudentDTO;
 import click.escuela.student.dto.TeacherDTO;
+import click.escuela.student.enumerator.DocumentType;
 import click.escuela.student.enumerator.EducationLevels;
 
 import click.escuela.student.enumerator.GenderType;
@@ -27,7 +28,7 @@ import click.escuela.student.model.Student;
 import click.escuela.student.model.Teacher;
 
 @Component
-public class Mapper{
+public class Mapper {
 
 	private static ModelMapper modelMapper = new ModelMapper();
 
@@ -51,12 +52,11 @@ public class Mapper{
 	public static StudentApi mapperToStudent(Student student) {
 		return modelMapper.map(student, StudentApi.class);
 	}
-	
 
 	public static StudentDTO mapperToStudentDTO(StudentUpdateApi studentUpdateApi) {
 		return modelMapper.map(studentUpdateApi, StudentDTO.class);
 	}
-	
+
 	public static StudentDTO mapperToStudentDTO(StudentApi studentApi) {
 		return modelMapper.map(studentApi, StudentDTO.class);
 	}
@@ -81,6 +81,10 @@ public class Mapper{
 
 	public static GenderType mapperToEnum(String string) {
 		return modelMapper.map(GenderType.valueOf(string), GenderType.class);
+	}
+
+	public static DocumentType mapperToEnumDocument(String string) {
+		return modelMapper.map(DocumentType.valueOf(string), DocumentType.class);
 	}
 
 	public static EducationLevels mapperToEnumLevel(String string) {
@@ -127,9 +131,10 @@ public class Mapper{
 		teacher.setAdress(mapperToAdress(teacherApi.getAdressApi()));
 		teacher.setCourseId(UUID.fromString(teacherApi.getCourseId()));
 		teacher.setGender(mapperToEnum(teacherApi.getGender()));
+		teacher.setDocumentType(mapperToEnumDocument(teacherApi.getDocumentType()));
 		return teacher;
 	}
-	
+
 	private static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
 		return modelMapper.map(teacher, TeacherDTO.class);
 	}
@@ -140,4 +145,4 @@ public class Mapper{
 		return teachersDTO;
 	}
 
-}	
+}

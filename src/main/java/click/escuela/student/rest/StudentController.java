@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.dto.StudentDTO;
-import click.escuela.student.enumerator.StudentEnum;
+import click.escuela.student.enumerator.StudentMessage;
 import click.escuela.student.exception.TransactionException;
 import click.escuela.student.service.impl.StudentServiceImpl;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,27 +72,27 @@ public class StudentController {
 	@Operation(summary = "Create student", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentEnum> create(@RequestBody @Validated StudentApi studentApi) throws TransactionException {
+	public ResponseEntity<StudentMessage> create(@RequestBody @Validated StudentApi studentApi) throws TransactionException {
 
 		studentService.create(studentApi);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.CREATE_OK);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.CREATE_OK);
 	}
 
 	@Operation(summary = "Update student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentEnum> update(@RequestBody @Validated StudentApi studentApi) throws TransactionException {
+	public ResponseEntity<StudentMessage> update(@RequestBody @Validated StudentApi studentApi) throws TransactionException {
 		studentService.update(studentApi);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.UPDATE_OK);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.UPDATE_OK);
 	}
 
 	@Operation(summary = "Delete student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentEnum> delete(
+	public ResponseEntity<StudentMessage> delete(
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId)
 			throws TransactionException {
 		studentService.delete(studentId);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentEnum.DELETE_OK);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.DELETE_OK);
 	}
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import click.escuela.student.enumerator.DocumentType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,9 @@ public class TeacherDTO {
 
 	@JsonProperty(value = "surname")
 	private String surname;
+	
+	@JsonProperty(value = "documentType")
+	private DocumentType documentType;
 
 	@JsonProperty(value = "document")
 	private String document;

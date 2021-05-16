@@ -15,16 +15,22 @@ import click.escuela.student.repository.TeacherRepository;
 
 @Service
 public class TeacherServiceImpl {
-	
+
 	@Autowired
 	private TeacherRepository teacherRepository;
 
+	@Autowired
+	private CourseServiceImpl courseService;
+
 	public void create(TeacherApi teacherApi) throws TransactionException {
+		courseService.findById(teacherApi.getCourseId());
+
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);
 			teacherRepository.save(teacher);
 		} catch (Exception e) {
-			throw new TransactionException(TeacherMessage.CREATE_ERROR.getCode(), TeacherMessage.CREATE_ERROR.getDescription());
+			throw new TransactionException(TeacherMessage.CREATE_ERROR.getCode(),
+					TeacherMessage.CREATE_ERROR.getDescription());
 		}
 	}
 
