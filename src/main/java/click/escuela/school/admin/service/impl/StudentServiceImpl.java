@@ -43,7 +43,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	@Override
 	public StudentDTO getById(String id, Boolean fullDetail) throws TransactionException {
 
-		Student student = findById(id).get();
+		Student student = findById(id).orElseThrow(() -> new TransactionException(StudentEnum.GET_ERROR.getCode(),
+				StudentEnum.GET_ERROR.getDescription()));
 
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
@@ -61,16 +62,17 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	@Override
 	public void update(StudentApi studentApi) throws TransactionException {
 
-		findById(studentApi.getId()).ifPresent(student -> {
-			studentRepository.save(Mapper.mapperToStudent(studentApi));
-		});
+		findById(studentApi.getId()).ifPresent(student -> 
+			studentRepository.save(Mapper.mapperToStudent(studentApi))
+		);
 
 	
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws TransactionException {
 
-		Student student = findById(idStudent).get();
+		Student student = findById(idStudent).orElseThrow(() -> new TransactionException(StudentEnum.GET_ERROR.getCode(),
+				StudentEnum.GET_ERROR.getDescription()));
 		student.setCourse(courseService.findById(idCourse));
 
 		studentRepository.save(student);
