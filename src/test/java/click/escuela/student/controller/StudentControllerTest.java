@@ -1,4 +1,4 @@
-package click.escuela.student.service;
+package click.escuela.student.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
