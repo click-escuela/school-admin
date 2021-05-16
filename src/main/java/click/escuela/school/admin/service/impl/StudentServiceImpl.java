@@ -62,21 +62,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public void update(StudentApi studentApi) throws TransactionException {
 
 		findById(studentApi.getId()).ifPresent(student -> {
-			
-			student.setName(studentApi.getName());
-			student.setSurname(studentApi.getSurname());
-			student.setDocument(studentApi.getDocument());
-			student.setGender(Mapper.mapperToEnum(studentApi.getGender()));
-			student.setSchoolId(studentApi.getSchoolId());
-			student.setGrade(studentApi.getGrade());
-			student.setDivision(studentApi.getDivision());
-			student.setBirthday(studentApi.getBirthday());
-			student.setAdress(Mapper.mapperToAdress(studentApi.getAdressApi()));
-			student.setCellPhone(studentApi.getCellPhone());
-			student.setEmail(studentApi.getEmail());
-			student.setParent(Mapper.mapperToParent(studentApi.getParentApi()));
-
-			studentRepository.save(student);
+			studentRepository.save(Mapper.mapperToStudent(studentApi));
 		});
 
 	
@@ -120,10 +106,11 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
-		
+
 		if (studentExist.isPresent()) {
 			throw new TransactionException(StudentEnum.EXIST.getCode(), StudentEnum.EXIST.getDescription());
 		}
+
 	}
 
 	public void deleteCourse(String idStudent, String idCourse) throws TransactionException {
