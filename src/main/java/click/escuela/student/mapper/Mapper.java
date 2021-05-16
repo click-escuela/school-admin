@@ -2,6 +2,7 @@ package click.escuela.student.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,10 @@ import click.escuela.student.api.CourseApiUpdate;
 import click.escuela.student.api.ParentApi;
 import click.escuela.student.api.StudentApi;
 import click.escuela.student.api.StudentUpdateApi;
+import click.escuela.student.api.TeacherApi;
 import click.escuela.student.dto.CourseDTO;
 import click.escuela.student.dto.StudentDTO;
+import click.escuela.student.dto.TeacherDTO;
 import click.escuela.student.enumerator.EducationLevels;
 
 import click.escuela.student.enumerator.GenderType;
@@ -21,6 +24,7 @@ import click.escuela.student.model.Adress;
 import click.escuela.student.model.Course;
 import click.escuela.student.model.Parent;
 import click.escuela.student.model.Student;
+import click.escuela.student.model.Teacher;
 
 @Component
 public class Mapper{
@@ -118,7 +122,22 @@ public class Mapper{
 		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
+	public static Teacher mapperToTeacher(TeacherApi teacherApi) {
+		Teacher teacher = modelMapper.map(teacherApi, Teacher.class);
+		teacher.setAdress(mapperToAdress(teacherApi.getAdressApi()));
+		teacher.setCourseId(UUID.fromString(teacherApi.getCourseId()));
+		teacher.setGender(mapperToEnum(teacherApi.getGender()));
+		return teacher;
+	}
 	
+	private static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
+		return modelMapper.map(teacher, TeacherDTO.class);
+	}
 
+	public static List<TeacherDTO> mapperToTeachersDTO(List<Teacher> teachers) {
+		List<TeacherDTO> teachersDTO = new ArrayList<>();
+		teachers.stream().forEach(p -> teachersDTO.add(mapperToTeacherDTO(p)));
+		return teachersDTO;
+	}
 
-}
+}	

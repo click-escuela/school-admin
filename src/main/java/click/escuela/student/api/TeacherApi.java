@@ -1,15 +1,37 @@
 package click.escuela.student.api;
 
+import java.time.LocalDate;
+
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @JsonInclude(Include.NON_EMPTY)
 @Schema(description = "Teacher Api")
-public class TeacherApi {
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class TeacherApi extends PersonApi {
 
+	public TeacherApi(String name, String surname, String document, String gender, LocalDate birthday,
+			AdressApi adressApi, String cellPhone, String email, String courseId) {
+
+		super(name, surname, document, gender, birthday, adressApi, cellPhone, email);
+		this.courseId = courseId;
+	}
+
+	@NotBlank(message = "Course cannot be empty")
+	@JsonProperty(value = "courseId", required = true)
+	private String courseId;
 }
