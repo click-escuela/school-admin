@@ -24,8 +24,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TeacherApi extends PersonApi {
 
-	public TeacherApi(String name, String surname, String documentType, String document, String gender,
-			LocalDate birthday, AdressApi adressApi, String cellPhone, String email, String courseId) {
+	public TeacherApi(String name, String surname, String document, String gender,
+			LocalDate birthday, AdressApi adressApi, String cellPhone, String email, String documentType, String courseId) {
 
 		super(name, surname, document, gender, birthday, adressApi, cellPhone, email);
 		this.documentType = documentType;

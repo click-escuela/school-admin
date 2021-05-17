@@ -72,7 +72,7 @@ public class Teacher {
 	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column(name = "course_id", nullable = false)
+	@Column(name = "course_id", nullable = true)
 	private UUID courseId;
 
 }
