@@ -371,15 +371,9 @@ public class StudentControllerTest {
 	@Test
 	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
 		idStudent = UUID.randomUUID();
-<<<<<<< HEAD:src/test/java/click/escuela/student/service/StudentControllerTest.java
-		doThrow(new TransactionException(StudentEnum.GET_ERROR.getCode(), StudentEnum.GET_ERROR.getDescription()))
-				.when(studentService).getById(idStudent.toString(), false);
-
-=======
 		doThrow(new TransactionException(StudentMessage.GET_ERROR.getCode(), StudentMessage.GET_ERROR.getDescription()))
 				.when(studentService).getById(idStudent.toString(), false);
 		
->>>>>>> develop:src/test/java/click/escuela/school/admin/controller/StudentControllerTest.java
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
 				.get("/school/{schoolId}/student/{idStudent}?fullDetail=false", "1234", idStudent.toString())
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();

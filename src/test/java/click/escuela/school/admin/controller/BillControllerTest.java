@@ -1,4 +1,4 @@
-package click.escuela.student.service;
+package click.escuela.school.admin.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,13 +25,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import click.escuela.student.api.BillApi;
-import click.escuela.student.enumerator.BillEnum;
-import click.escuela.student.enumerator.CourseEnum;
-import click.escuela.student.exception.TransactionException;
-import click.escuela.student.rest.BillController;
-import click.escuela.student.rest.handler.Handler;
-import click.escuela.student.service.impl.BillServiceImpl;
+import click.escuela.school.admin.api.BillApi;
+import click.escuela.school.admin.enumerator.BillEnum;
+import click.escuela.school.admin.enumerator.CourseMessage;
+import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.rest.BillController;
+import click.escuela.school.admin.rest.handler.Handler;
+import click.escuela.school.admin.service.impl.BillServiceImpl;
 
 @EnableWebMvc
 @RunWith(MockitoJUnitRunner.class)
@@ -70,7 +70,7 @@ public class BillControllerTest {
 						.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.CREATE_OK.name());
+		assertThat(response).contains(CourseMessage.CREATE_OK.name());
 
 	}
 
