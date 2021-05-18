@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseDTO;
-import click.escuela.school.admin.enumerator.CourseEnum;
+import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.CourseServiceGeneric;
+
 
 @Service
 public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, CourseDTO> {
@@ -28,7 +29,7 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 			Course course = Mapper.mapperToCourse(courserApi);
 			courseRepository.save(course);
 		} catch (Exception e) {
-			throw new TransactionException(CourseEnum.CREATE_ERROR.getCode(), CourseEnum.CREATE_ERROR.getDescription());
+			throw new TransactionException(CourseMessage.CREATE_ERROR.getCode(), CourseMessage.CREATE_ERROR.getDescription());
 		}
 	}
 
@@ -57,7 +58,7 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 		if (optional.isPresent()) {
 			return optional.get();
 		} else {
-			throw new TransactionException(CourseEnum.UPDATE_ERROR.getCode(), CourseEnum.UPDATE_ERROR.getDescription());
+			throw new TransactionException(CourseMessage.GET_ERROR.getCode(), CourseMessage.GET_ERROR.getDescription());
 		}
 	}
 
