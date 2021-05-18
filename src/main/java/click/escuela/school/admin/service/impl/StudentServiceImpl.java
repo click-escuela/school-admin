@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.StudentDTO;
-import click.escuela.school.admin.enumerator.StudentEnum;
+import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
@@ -35,16 +35,16 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			Student student = Mapper.mapperToStudent(studentApi);
 			studentRepository.save(student);
 		} catch (Exception e) {
-			throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
-					StudentEnum.CREATE_ERROR.getDescription());
+			throw new TransactionException(StudentMessage.CREATE_ERROR.getCode(),
+					StudentMessage.CREATE_ERROR.getDescription());
 		}
 	}
 
 	@Override
 	public StudentDTO getById(String id, Boolean fullDetail) throws TransactionException {
 
-		Student student = findById(id).orElseThrow(() -> new TransactionException(StudentEnum.GET_ERROR.getCode(),
-				StudentEnum.GET_ERROR.getDescription()));
+		Student student = findById(id).orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
+				StudentMessage.GET_ERROR.getDescription()));
 
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
@@ -54,8 +54,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public Optional<Student> findById(String id) throws TransactionException {
 
 		return Optional.of(studentRepository.findById(UUID.fromString(id))
-				.orElseThrow(() -> new TransactionException(StudentEnum.GET_ERROR.getCode(),
-						StudentEnum.GET_ERROR.getDescription())));
+				.orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
+						StudentMessage.GET_ERROR.getDescription())));
 
 	}
 
@@ -71,8 +71,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	public void addCourse(String idStudent, String idCourse) throws TransactionException {
 
-		Student student = findById(idStudent).orElseThrow(() -> new TransactionException(StudentEnum.GET_ERROR.getCode(),
-				StudentEnum.GET_ERROR.getDescription()));
+		Student student = findById(idStudent).orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
+				StudentMessage.GET_ERROR.getDescription()));
 		student.setCourse(courseService.findById(idCourse));
 
 		studentRepository.save(student);
@@ -110,7 +110,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				Mapper.mapperToEnum(student.getGender()));
 
 		if (studentExist.isPresent()) {
-			throw new TransactionException(StudentEnum.EXIST.getCode(), StudentEnum.EXIST.getDescription());
+			throw new TransactionException(StudentMessage.EXIST.getCode(), StudentMessage.EXIST.getDescription());
 		}
 
 	}
@@ -118,11 +118,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public void deleteCourse(String idStudent, String idCourse) throws TransactionException {
 
 		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
-				.orElseThrow(() -> new TransactionException(StudentEnum.UPDATE_ERROR.getCode(),
-						StudentEnum.UPDATE_ERROR.getDescription()));
+				.orElseThrow(() -> new TransactionException(StudentMessage.UPDATE_ERROR.getCode(),
+						StudentMessage.UPDATE_ERROR.getDescription()));
 
 		student.setCourse(null);
 		studentRepository.save(student);
+
 
 	}
 	

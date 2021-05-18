@@ -1,4 +1,4 @@
-package click.escuela.school.admin.service;
+package click.escuela.school.admin.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.enumerator.BillEnum;
-import click.escuela.school.admin.enumerator.CourseEnum;
+import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.rest.BillController;
 import click.escuela.school.admin.rest.handler.Handler;
@@ -70,7 +70,7 @@ public class BillControllerTest {
 						.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.CREATE_OK.name());
+		assertThat(response).contains(CourseMessage.CREATE_OK.name());
 
 	}
 

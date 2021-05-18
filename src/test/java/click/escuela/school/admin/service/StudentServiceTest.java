@@ -25,7 +25,7 @@ import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
-import click.escuela.school.admin.enumerator.StudentEnum;
+import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
@@ -137,7 +137,7 @@ public class StudentServiceTest {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentApi.setId(id.toString());
 			studentServiceImpl.update(studentApi);
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 
 	}
 
@@ -155,7 +155,7 @@ public class StudentServiceTest {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 
 			studentServiceImpl.create(studentApi);
-		}).withMessage(StudentEnum.EXIST.getDescription());
+		}).withMessage(StudentMessage.EXIST.getDescription());
 
 	}
 
@@ -175,7 +175,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentServiceImpl.addCourse(id.toString(), idCourse.toString());
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
@@ -195,7 +195,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			studentServiceImpl.getById(id.toString(), false);
-		}).withMessage(StudentEnum.GET_ERROR.getDescription());
+		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
