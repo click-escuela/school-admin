@@ -1,7 +1,6 @@
 package click.escuela.school.admin.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +53,12 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 	}
 
 	public Course findById(String idCourse) throws TransactionException {
-		Optional<Course> optional = courseRepository.findById(UUID.fromString(idCourse));
-		if (optional.isPresent()) {
-			return optional.get();
-		} else {
-			throw new TransactionException(CourseMessage.GET_ERROR.getCode(), CourseMessage.GET_ERROR.getDescription());
-		}
+
+		return courseRepository.findById(UUID.fromString(idCourse))
+				.orElseThrow(() -> new TransactionException(CourseMessage.UPDATE_ERROR.getCode(),
+						CourseMessage.UPDATE_ERROR.getDescription()));
+
+
 	}
 
 }
