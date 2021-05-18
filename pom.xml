@@ -9,10 +9,10 @@
 		<version>2.4.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>click.escuela.student</groupId>
-	<artifactId>student</artifactId>
+	<groupId>click.escuela.school.admin</groupId>
+	<artifactId>school-admin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>student</name>
+	<name>school-admin</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 	 	<sonar.projectKey>click-escuela_school-admin</sonar.projectKey>
@@ -20,6 +20,7 @@
   		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
   		<java.version>1.8</java.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
