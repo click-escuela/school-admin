@@ -57,6 +57,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				.orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
 						StudentMessage.GET_ERROR.getDescription())));
 
+
 	}
 
 	@Override
@@ -123,7 +124,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 		student.setCourse(null);
 		studentRepository.save(student);
-
 
 	}
 	
