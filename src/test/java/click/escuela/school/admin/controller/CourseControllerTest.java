@@ -1,4 +1,4 @@
-package click.escuela.school.admin.service;
+package click.escuela.school.admin.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.school.admin.api.CourseApi;
-import click.escuela.school.admin.enumerator.CourseEnum;
+import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.rest.CourseController;
 import click.escuela.school.admin.rest.handler.Handler;
@@ -74,7 +74,7 @@ public class CourseControllerTest {
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(courseApi)))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.CREATE_OK.name());
+		assertThat(response).contains(CourseMessage.CREATE_OK.name());
 
 	}
 
@@ -135,7 +135,7 @@ public class CourseControllerTest {
 								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.UPDATE_OK.name());
+		assertThat(response).contains(CourseMessage.UPDATE_OK.name());
 
 	}
 
@@ -171,7 +171,7 @@ public class CourseControllerTest {
 								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseEnum.UPDATE_OK.name());
+		assertThat(response).contains(CourseMessage.UPDATE_OK.name());
 
 	}
 

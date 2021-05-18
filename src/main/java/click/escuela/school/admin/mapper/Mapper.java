@@ -2,6 +2,7 @@ package click.escuela.school.admin.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -13,9 +14,12 @@ import click.escuela.school.admin.api.CourseApiUpdate;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.api.StudentUpdateApi;
+import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.TeacherDTO;
+import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.model.Adress;
@@ -23,9 +27,10 @@ import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
+import click.escuela.school.admin.model.Teacher;
 
 @Component
-public class Mapper{
+public class Mapper {
 
 	private static ModelMapper modelMapper = new ModelMapper();
 
@@ -39,7 +44,7 @@ public class Mapper{
 	}
 
 	public static StudentDTO mapperToStudentDTO(Student student) {
-		StudentDTO studentDTO=modelMapper.map(student, StudentDTO.class);
+		StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
 		studentDTO.setBills(null);
 		return studentDTO;
 	}
@@ -51,12 +56,11 @@ public class Mapper{
 	public static StudentApi mapperToStudent(Student student) {
 		return modelMapper.map(student, StudentApi.class);
 	}
-	
 
 	public static StudentDTO mapperToStudentDTO(StudentUpdateApi studentUpdateApi) {
 		return modelMapper.map(studentUpdateApi, StudentDTO.class);
 	}
-	
+
 	public static StudentDTO mapperToStudentDTO(StudentApi studentApi) {
 		return modelMapper.map(studentApi, StudentDTO.class);
 	}
@@ -83,6 +87,10 @@ public class Mapper{
 		return modelMapper.map(GenderType.valueOf(string), GenderType.class);
 	}
 
+	public static DocumentType mapperToEnumDocument(String string) {
+		return modelMapper.map(DocumentType.valueOf(string), DocumentType.class);
+	}
+
 	public static EducationLevels mapperToEnumLevel(String string) {
 		return modelMapper.map(EducationLevels.valueOf(string), EducationLevels.class);
 	}
@@ -98,9 +106,9 @@ public class Mapper{
 		students.stream().forEach(p -> studentList.add(mapperToStudent(p)));
 		return studentList;
 	}
-	
+
 	public static StudentDTO mapperToStudentFullDTO(Student student) {
-		StudentDTO studentFull=modelMapper.map(student, StudentDTO.class);
+		StudentDTO studentFull = modelMapper.map(student, StudentDTO.class);
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
 	}
@@ -134,19 +142,39 @@ public class Mapper{
 		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
+	//Mapper Teacher
+	public static Teacher mapperToTeacher(TeacherApi teacherApi) {
+		Teacher teacher = modelMapper.map(teacherApi, Teacher.class);
+		teacher.setAdress(mapperToAdress(teacherApi.getAdressApi()));
+		teacher.setCourseId(UUID.fromString(teacherApi.getCourseId()));
+		teacher.setGender(mapperToEnum(teacherApi.getGender()));
+		teacher.setDocumentType(mapperToEnumDocument(teacherApi.getDocumentType()));
+		return teacher;
+	}
+
+	private static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
+		return modelMapper.map(teacher, TeacherDTO.class);
+	}
+
+	public static List<TeacherDTO> mapperToTeachersDTO(List<Teacher> teachers) {
+		List<TeacherDTO> teachersDTO = new ArrayList<>();
+		teachers.stream().forEach(p -> teachersDTO.add(mapperToTeacherDTO(p)));
+		return teachersDTO;
+	}
+
+	// Mapper bill
+	public static List<BillDTO> mapperToBillsDTO(List<Bill> bills) {
+		List<BillDTO> billDTOList = new ArrayList<>();
+		bills.stream().forEach(p -> billDTOList.add(mapperToBillDTO(p)));
+		return billDTOList;
+	}
+	
 	public static Bill mapperToBill(BillApi billApi) {
 		return modelMapper.map(billApi, Bill.class);
 	}
 
 	public static BillDTO mapperToBillDTO(Bill bill) {
 		return modelMapper.map(bill, BillDTO.class);
-	}
-
-	//Mapper bill
-	public static List<BillDTO> mapperToBillsDTO(List<Bill> bills) {
-		List<BillDTO> billDTOList = new ArrayList<>();
-		bills.stream().forEach(p -> billDTOList.add(mapperToBillDTO(p)));
-		return billDTOList;
 	}
 
 }

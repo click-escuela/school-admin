@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.StudentDTO;
-import click.escuela.school.admin.enumerator.StudentEnum;
+import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
@@ -35,8 +35,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			Student student = Mapper.mapperToStudent(studentApi);
 			studentRepository.save(student);
 		} catch (Exception e) {
-			throw new TransactionException(StudentEnum.CREATE_ERROR.getCode(),
-					StudentEnum.CREATE_ERROR.getDescription());
+			throw new TransactionException(StudentMessage.CREATE_ERROR.getCode(),
+					StudentMessage.CREATE_ERROR.getDescription());
 		}
 	}
 
@@ -110,7 +110,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				Mapper.mapperToEnum(student.getGender()));
 
 		if (studentExist.isPresent()) {
-			throw new TransactionException(StudentEnum.EXIST.getCode(), StudentEnum.EXIST.getDescription());
+			throw new TransactionException(StudentMessage.EXIST.getCode(), StudentMessage.EXIST.getDescription());
 		}
 
 	}
