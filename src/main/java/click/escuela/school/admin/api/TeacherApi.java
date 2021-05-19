@@ -31,6 +31,9 @@ public class TeacherApi extends PersonApi {
 		this.documentType = documentType;
 		this.courseId = courseId;
 	}
+	
+	@JsonProperty(value = "id", required = false)
+	private String id;
 
 	@NotBlank(message = "Document type cannot be empty")
 	@JsonProperty(value = "documentType", required = true)

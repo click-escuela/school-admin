@@ -13,6 +13,7 @@ import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
+import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.StudentRepository;
 import click.escuela.school.admin.service.ServiceGeneric;
@@ -56,26 +57,24 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return Optional.of(studentRepository.findById(UUID.fromString(id))
 				.orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
 						StudentMessage.GET_ERROR.getDescription())));
-
-
 	}
 
 	@Override
 	public void update(StudentApi studentApi) throws TransactionException {
 
-		findById(studentApi.getId()).ifPresent(student -> 
-			studentRepository.save(Mapper.mapperToStudent(studentApi))
-		);
+		findById(studentApi.getId()).ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi)));
 
-	
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws TransactionException {
 
-		Student student = findById(idStudent).orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
-				StudentMessage.GET_ERROR.getDescription()));
-		student.setCourse(courseService.findById(idCourse));
-
+		Student student = findById(idStudent)
+				.orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
+						StudentMessage.GET_ERROR.getDescription()));
+		Optional<Course> optional = courseService.findById(idCourse);
+		if (optional.isPresent()) {
+			student.setCourse(optional.get());
+		}
 		studentRepository.save(student);
 	}
 
@@ -126,7 +125,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		studentRepository.save(student);
 
 	}
-	
+
 	public void addBill(Bill bill, UUID studentId) throws TransactionException {
 
 		findById(studentId.toString()).ifPresent(student -> {
