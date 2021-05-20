@@ -80,6 +80,7 @@ public class StudentServiceTest {
 				.gender(GenderType.MALE.toString()).name("oscar").level(EducationLevels.SECUNDARIO.toString())
 				.parentApi(parentApi).schoolId(1234).build();
 		Optional<Student> optional = Optional.of(student);
+		Optional<Course> optionalCourse=Optional.of(course);
 		students = new ArrayList<>();
 		students.add(student);
 
@@ -95,7 +96,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 
-		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(course);
+		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);

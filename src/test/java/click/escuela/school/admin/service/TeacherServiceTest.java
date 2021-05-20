@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -40,6 +41,7 @@ public class TeacherServiceTest {
 
 	private TeacherServiceImpl teacherServiceImpl = new TeacherServiceImpl();
 	private TeacherApi teacherApi;
+	private Teacher teacher;
 	private UUID id;
 	private UUID courseId;
 
@@ -49,14 +51,16 @@ public class TeacherServiceTest {
 
 		id = UUID.randomUUID();
 		courseId = UUID.randomUUID();
-		Teacher teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
+		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").cellPhone("1589632485").email("mariAna@gmail.com")
 				.courseId(courseId).adress(new Adress()).build();
 		
 		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("25897863").cellPhone("1589632485").email("mariAna@gmail.com")
 				.courseId(courseId.toString()).adressApi(new AdressApi()).build();
+		Optional<Teacher> optional=Optional.of(teacher);
 		
+		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi)).thenReturn(teacher);
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
 		
@@ -90,5 +94,28 @@ public class TeacherServiceTest {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			teacherServiceImpl.create(teacherApi);
 		}).withMessage(TeacherMessage.CREATE_ERROR.getDescription());
+	}
+	
+	@Test
+	public void whenUpdateIsOk() throws TransactionException{
+	
+		boolean hasError = false;
+		try {
+			teacherApi.setId(id.toString());
+			teacherServiceImpl.update(teacherApi);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isFalse();
+	}
+	
+	@Test
+	public void whenUpdateIsError() throws TransactionException{
+		
+		id=UUID.randomUUID();
+		assertThatExceptionOfType(TransactionException.class).isThrownBy(()-> {
+			teacherApi.setId(id.toString());
+			teacherServiceImpl.update(teacherApi);
+		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 }

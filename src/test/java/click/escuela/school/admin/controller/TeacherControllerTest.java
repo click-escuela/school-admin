@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -261,6 +262,31 @@ public class TeacherControllerTest {
 				.andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(TeacherMessage.CREATE_ERROR.getDescription());
+
+	}
+
+	@Test
+	public void whenUpdateOk() throws JsonProcessingException, Exception {
+
+		MvcResult result = mockMvc.perform(put("/school/{schoolId}/teacher", "123")
+				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi)))
+				.andExpect(status().is2xxSuccessful()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(TeacherMessage.UPDATE_OK.name());
+
+	}
+
+	@Test
+	public void whenUpdateErrorService() throws JsonProcessingException, Exception {
+
+		doThrow(new TransactionException(TeacherMessage.UPDATE_ERROR.getCode(),
+				TeacherMessage.UPDATE_ERROR.getDescription())).when(teacherService).update(Mockito.any());
+
+		MvcResult result = mockMvc.perform(put("/school/{schoolId}/teacher", "123")
+				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi))).andExpect(status().isBadRequest())
+				.andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(TeacherMessage.UPDATE_ERROR.getDescription());
 
 	}
 

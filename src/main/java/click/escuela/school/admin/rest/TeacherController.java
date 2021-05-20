@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,9 +44,17 @@ public class TeacherController {
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<TeacherMessage> create(@RequestBody @Validated TeacherApi teacherApi)
 			throws TransactionException {
-
 		teacherService.create(teacherApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.CREATE_OK);
+	}
+
+	@Operation(summary = "Update Teacher", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
+	@PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<TeacherMessage> update(@RequestBody @Validated TeacherApi teacherApi)
+			throws TransactionException {
+		teacherService.update(teacherApi);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
 
 }
