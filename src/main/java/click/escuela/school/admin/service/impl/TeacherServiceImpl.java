@@ -21,11 +21,7 @@ public class TeacherServiceImpl {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
-	@Autowired
-	private CourseServiceImpl courseService;
-
 	public void create(TeacherApi teacherApi) throws TransactionException {
-		courseService.findById(teacherApi.getCourseId());
 
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);

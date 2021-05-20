@@ -74,5 +74,8 @@ public class Teacher {
 
 	@Column(name = "course_id", nullable = true)
 	private UUID courseId;
+	
+	@Column(name = "school_id", nullable = false)
+	private Integer schoolId;
 
 }

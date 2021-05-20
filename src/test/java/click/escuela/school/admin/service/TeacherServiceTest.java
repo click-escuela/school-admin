@@ -26,7 +26,6 @@ import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
 import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.TeacherRepository;
-import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 
 @RunWith(PowerMockRunner.class)
@@ -35,9 +34,6 @@ public class TeacherServiceTest {
 
 	@Mock
 	private TeacherRepository teacherRepository;
-	
-	@Mock
-	private CourseServiceImpl courseService;
 
 	private TeacherServiceImpl teacherServiceImpl = new TeacherServiceImpl();
 	private TeacherApi teacherApi;
@@ -67,13 +63,10 @@ public class TeacherServiceTest {
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
 		
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
-		
-		ReflectionTestUtils.setField(teacherServiceImpl, "courseService", courseService);
 	}
 	
 	@Test
 	public void whenCreateIsOk() throws TransactionException{
-		Mockito.when(courseService.findById(courseId.toString())).thenReturn(Mockito.any());
 		boolean hasError = false;
 		try {
 			teacherServiceImpl.create(teacherApi);

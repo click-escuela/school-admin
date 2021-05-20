@@ -3,6 +3,7 @@ package click.escuela.school.admin.api;
 import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,7 +40,10 @@ public class TeacherApi extends PersonApi {
 	@JsonProperty(value = "documentType", required = true)
 	private String documentType;
 
-	@NotBlank(message = "Course cannot be empty")
-	@JsonProperty(value = "courseId", required = true)
+	@NotNull(message = "School ID cannot be null")
+	@JsonProperty(value = "schoolId", required = true)
+	private Integer schoolId;
+
+	@JsonProperty(value = "courseId", required = false)
 	private String courseId;
 }
