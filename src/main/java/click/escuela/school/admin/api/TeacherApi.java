@@ -30,7 +30,6 @@ public class TeacherApi extends PersonApi {
 
 		super(name, surname, document, gender, birthday, adressApi, cellPhone, email);
 		this.documentType = documentType;
-		this.courseId = courseId;
 	}
 	
 	@JsonProperty(value = "id", required = false)
@@ -43,7 +42,4 @@ public class TeacherApi extends PersonApi {
 	@NotNull(message = "School ID cannot be null")
 	@JsonProperty(value = "schoolId", required = true)
 	private Integer schoolId;
-
-	@JsonProperty(value = "courseId", required = false)
-	private String courseId;
 }

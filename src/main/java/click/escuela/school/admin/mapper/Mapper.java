@@ -2,7 +2,6 @@ package click.escuela.school.admin.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -146,7 +145,6 @@ public class Mapper {
 	public static Teacher mapperToTeacher(TeacherApi teacherApi) {
 		Teacher teacher = modelMapper.map(teacherApi, Teacher.class);
 		teacher.setAdress(mapperToAdress(teacherApi.getAdressApi()));
-		teacher.setCourseId(UUID.fromString(teacherApi.getCourseId()));
 		teacher.setGender(mapperToEnum(teacherApi.getGender()));
 		teacher.setDocumentType(mapperToEnumDocument(teacherApi.getDocumentType()));
 		return teacher;
