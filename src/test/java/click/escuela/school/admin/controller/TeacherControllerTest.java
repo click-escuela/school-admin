@@ -1,7 +1,6 @@
 package click.escuela.school.admin.controller;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -67,7 +66,7 @@ public class TeacherControllerTest {
 
 		teacherApi = TeacherApi.builder().gender(GenderType.FEMALE.toString()).name("Mariana").surname("Lopez")
 				.birthday(LocalDate.now()).documentType("DNI").document("25897863").cellPhone("1589632485")
-				.email("mariAna@gmail.com").schoolId(1234).courseId(UUID.randomUUID().toString()).adressApi(adressApi).build();
+				.email("mariAna@gmail.com").schoolId(1234).adressApi(adressApi).build();
 
 		doNothing().when(teacherService).create(Mockito.any());
 	}

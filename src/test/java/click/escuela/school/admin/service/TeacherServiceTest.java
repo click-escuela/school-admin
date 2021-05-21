@@ -53,7 +53,7 @@ public class TeacherServiceTest {
 		
 		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("25897863").cellPhone("1589632485").email("mariAna@gmail.com")
-				.courseId(courseId.toString()).adressApi(new AdressApi()).build();
+				.adressApi(new AdressApi()).build();
 		Optional<Teacher> optional=Optional.of(teacher);
 		
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
@@ -80,7 +80,7 @@ public class TeacherServiceTest {
 	public void whenCreateIsError() {
 		teacherApi = TeacherApi.builder().name("Ana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("25896354").cellPhone("1589632485").email("ana@gmail.com")
-				.courseId(UUID.randomUUID().toString()).adressApi(new AdressApi()).build();
+				.adressApi(new AdressApi()).build();
 		
 		Mockito.when(teacherRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		
