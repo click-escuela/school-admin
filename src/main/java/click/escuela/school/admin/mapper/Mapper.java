@@ -42,6 +42,17 @@ public class Mapper {
 		return student;
 	}
 
+	public static Student mapperToStudent(StudentApi studentApi, Student student) {
+		
+		modelMapper.map(studentApi, student);
+		
+		student.setGender(mapperToEnum(studentApi.getGender()));
+		student.setLevel(mapperToEnumLevel(studentApi.getLevel()));
+		student.setAdress(mapperToAdress(studentApi.getAdressApi()));
+		student.setParent(mapperToParent(studentApi.getParentApi()));
+		return student;
+	}
+
 	public static StudentDTO mapperToStudentDTO(Student student) {
 		StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
 		studentDTO.setBills(null);

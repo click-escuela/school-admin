@@ -62,7 +62,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	@Override
 	public void update(StudentApi studentApi) throws TransactionException {
 
-		findById(studentApi.getId()).ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi)));
+		findById(studentApi.getId()).ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi,student)));
 
 	}
 
