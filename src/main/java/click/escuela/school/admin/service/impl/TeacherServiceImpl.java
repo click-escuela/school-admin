@@ -33,7 +33,8 @@ public class TeacherServiceImpl {
 	}
 
 	public void update(TeacherApi teacherApi) throws TransactionException {
-		findById(teacherApi.getId()).ifPresent(teacher -> teacherRepository.save(Mapper.mapperToTeacher(teacherApi)));
+		findById(teacherApi.getId())
+				.ifPresent(teacher -> teacherRepository.save(Mapper.mapperToTeacher(teacherApi, teacher)));
 	}
 
 	public List<TeacherDTO> findAll() {
