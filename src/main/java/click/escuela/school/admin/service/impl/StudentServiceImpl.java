@@ -61,9 +61,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Override
 	public void update(StudentApi studentApi) throws TransactionException {
-
-		findById(studentApi.getId()).ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi)));
-
+		Student newStudent=Mapper.mapperToStudent(studentApi);
+		findById(studentApi.getId()).ifPresent(student -> studentRepository.save(newStudent));
+		/*
+    MYPOCO pocoDesc= dbContext.DD_POCO.SingleOrDefault(m => m.Id == 123);
+    pocoDesc = AutoMapper.Mapper.Map<Customer, MYPOCO>(customerSrc, pocoDesc);
+*/
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws TransactionException {
