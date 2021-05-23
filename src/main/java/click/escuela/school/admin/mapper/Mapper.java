@@ -2,7 +2,6 @@ package click.escuela.school.admin.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -36,6 +35,17 @@ public class Mapper {
 
 	public static Student mapperToStudent(StudentApi studentApi) {
 		Student student = modelMapper.map(studentApi, Student.class);
+		student.setGender(mapperToEnum(studentApi.getGender()));
+		student.setLevel(mapperToEnumLevel(studentApi.getLevel()));
+		student.setAdress(mapperToAdress(studentApi.getAdressApi()));
+		student.setParent(mapperToParent(studentApi.getParentApi()));
+		return student;
+	}
+
+	public static Student mapperToStudent(StudentApi studentApi, Student student) {
+
+		modelMapper.map(studentApi, student);
+
 		student.setGender(mapperToEnum(studentApi.getGender()));
 		student.setLevel(mapperToEnumLevel(studentApi.getLevel()));
 		student.setAdress(mapperToAdress(studentApi.getAdressApi()));
@@ -142,11 +152,18 @@ public class Mapper {
 		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
-	//Mapper Teacher
+	// Mapper Teacher
 	public static Teacher mapperToTeacher(TeacherApi teacherApi) {
 		Teacher teacher = modelMapper.map(teacherApi, Teacher.class);
 		teacher.setAdress(mapperToAdress(teacherApi.getAdressApi()));
-		teacher.setCourseId(UUID.fromString(teacherApi.getCourseId()));
+		teacher.setGender(mapperToEnum(teacherApi.getGender()));
+		teacher.setDocumentType(mapperToEnumDocument(teacherApi.getDocumentType()));
+		return teacher;
+	}
+
+	public static Teacher mapperToTeacher(TeacherApi teacherApi, Teacher teacher) {
+		modelMapper.map(teacherApi, teacher);
+		teacher.setAdress(mapperToAdress(teacherApi.getAdressApi()));
 		teacher.setGender(mapperToEnum(teacherApi.getGender()));
 		teacher.setDocumentType(mapperToEnumDocument(teacherApi.getDocumentType()));
 		return teacher;
@@ -168,7 +185,7 @@ public class Mapper {
 		bills.stream().forEach(p -> billDTOList.add(mapperToBillDTO(p)));
 		return billDTOList;
 	}
-	
+
 	public static Bill mapperToBill(BillApi billApi) {
 		return modelMapper.map(billApi, Bill.class);
 	}

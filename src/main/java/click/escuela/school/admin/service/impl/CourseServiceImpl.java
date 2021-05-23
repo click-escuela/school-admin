@@ -1,6 +1,7 @@
 package click.escuela.school.admin.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,9 @@ import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
+import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.CourseServiceGeneric;
-
 
 @Service
 public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, CourseDTO> {
@@ -28,7 +29,8 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 			Course course = Mapper.mapperToCourse(courserApi);
 			courseRepository.save(course);
 		} catch (Exception e) {
-			throw new TransactionException(CourseMessage.CREATE_ERROR.getCode(), CourseMessage.CREATE_ERROR.getDescription());
+			throw new TransactionException(CourseMessage.CREATE_ERROR.getCode(),
+					CourseMessage.CREATE_ERROR.getDescription());
 		}
 	}
 
@@ -37,28 +39,25 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 		return null;
 	}
 
-	@Override
-	public void update(CourseApi entity) throws TransactionException {
-		 // Metodo no implentado.
-	}
-
-	@Override
-	public void delete(String id) throws TransactionException {
-		// Metodo no implentado.
-	}
-
 	public List<CourseDTO> findAll() {
 		List<Course> listCourses = courseRepository.findAll();
 		return Mapper.mapperToCoursesDTO(listCourses);
 	}
 
-	public Course findById(String idCourse) throws TransactionException {
+	public Optional<Course> findById(String idCourse) throws TransactionException {
 
-		return courseRepository.findById(UUID.fromString(idCourse))
-				.orElseThrow(() -> new TransactionException(CourseMessage.UPDATE_ERROR.getCode(),
-						CourseMessage.UPDATE_ERROR.getDescription()));
+		return Optional.of(courseRepository.findById(UUID.fromString(idCourse))
+				.orElseThrow(() -> new TransactionException(CourseMessage.GET_ERROR.getCode(),
+						CourseMessage.GET_ERROR.getDescription())));
+	}
 
+	public void addTeacher(Teacher teacher, String idCourse) throws TransactionException {
 
+		Course course = findById(idCourse).orElseThrow(() -> new TransactionException(CourseMessage.GET_ERROR.getCode(),
+				CourseMessage.GET_ERROR.getDescription()));
+		course.setTeacher(teacher);
+
+		courseRepository.save(course);
 	}
 
 }

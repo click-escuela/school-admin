@@ -1,7 +1,6 @@
 package click.escuela.school.admin.controller;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,7 +66,7 @@ public class TeacherControllerTest {
 
 		teacherApi = TeacherApi.builder().gender(GenderType.FEMALE.toString()).name("Mariana").surname("Lopez")
 				.birthday(LocalDate.now()).documentType("DNI").document("25897863").cellPhone("1589632485")
-				.email("mariAna@gmail.com").courseId(UUID.randomUUID().toString()).adressApi(adressApi).build();
+				.email("mariAna@gmail.com").schoolId(1234).adressApi(adressApi).build();
 
 		doNothing().when(teacherService).create(Mockito.any());
 	}
@@ -117,6 +117,18 @@ public class TeacherControllerTest {
 		assertThat(response).contains("Document cannot be empty");
 
 	}
+	
+	@Test
+	public void whenCreateSchoolNull() throws JsonProcessingException, Exception {
+
+		teacherApi.setSchoolId(null);;
+		MvcResult result = mockMvc.perform(post("/school/{schoolId}/teacher", "123")
+				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi))).andExpect(status().isBadRequest())
+				.andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains("School ID cannot be null");
+
+	}
 
 	@Test
 	public void whenCreateDocumentGreaterCharacters() throws JsonProcessingException, Exception {
@@ -151,18 +163,6 @@ public class TeacherControllerTest {
 				.andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("Document type cannot be empty");
-
-	}
-
-	@Test
-	public void whenCreateCourseIdEmpty() throws JsonProcessingException, Exception {
-
-		teacherApi.setCourseId(EMPTY);
-		MvcResult result = mockMvc.perform(post("/school/{schoolId}/teacher", "123")
-				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi))).andExpect(status().isBadRequest())
-				.andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("Course cannot be empty");
 
 	}
 
@@ -261,6 +261,31 @@ public class TeacherControllerTest {
 				.andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(TeacherMessage.CREATE_ERROR.getDescription());
+
+	}
+
+	@Test
+	public void whenUpdateOk() throws JsonProcessingException, Exception {
+
+		MvcResult result = mockMvc.perform(put("/school/{schoolId}/teacher", "123")
+				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi)))
+				.andExpect(status().is2xxSuccessful()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(TeacherMessage.UPDATE_OK.name());
+
+	}
+
+	@Test
+	public void whenUpdateErrorService() throws JsonProcessingException, Exception {
+
+		doThrow(new TransactionException(TeacherMessage.UPDATE_ERROR.getCode(),
+				TeacherMessage.UPDATE_ERROR.getDescription())).when(teacherService).update(Mockito.any());
+
+		MvcResult result = mockMvc.perform(put("/school/{schoolId}/teacher", "123")
+				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi))).andExpect(status().isBadRequest())
+				.andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(TeacherMessage.UPDATE_ERROR.getDescription());
 
 	}
 
