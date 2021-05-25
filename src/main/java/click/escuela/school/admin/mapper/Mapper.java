@@ -169,7 +169,7 @@ public class Mapper {
 		return teacher;
 	}
 
-	private static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
+	public static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
 		return modelMapper.map(teacher, TeacherDTO.class);
 	}
 

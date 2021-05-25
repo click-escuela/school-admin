@@ -48,4 +48,18 @@ public class TeacherServiceImpl {
 						TeacherMessage.GET_ERROR.getDescription())));
 	}
 
+	public TeacherDTO getById(String id) throws TransactionException {
+		Teacher teacher = findById(id).orElseThrow(() -> new TransactionException(TeacherMessage.GET_ERROR.getCode(),
+				TeacherMessage.GET_ERROR.getDescription()));
+		return Mapper.mapperToTeacherDTO(teacher);
+	}
+
+	public List<TeacherDTO> getBySchoolId(String schoolId) {
+		return Mapper.mapperToTeachersDTO(teacherRepository.findBySchoolId(Integer.valueOf(schoolId)));
+	}
+
+	public List<TeacherDTO> getByCourseId(String courseId) {
+		return Mapper.mapperToTeachersDTO(teacherRepository.findByCourseId(UUID.fromString(courseId)));
+	}
+
 }
