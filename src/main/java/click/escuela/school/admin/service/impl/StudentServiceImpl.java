@@ -137,4 +137,13 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		});
 
 	}
+	public boolean pruebaCoverage(String name) {
+		boolean result = false;
+		if(name.isEmpty()) {
+			result = true;
+		}
+		return result;
+			
+	}
+	
 }

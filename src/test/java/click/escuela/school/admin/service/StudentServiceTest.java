@@ -80,7 +80,7 @@ public class StudentServiceTest {
 				.gender(GenderType.MALE.toString()).name("oscar").level(EducationLevels.SECUNDARIO.toString())
 				.parentApi(parentApi).schoolId(1234).build();
 		Optional<Student> optional = Optional.of(student);
-		Optional<Course> optionalCourse=Optional.of(course);
+		Optional<Course> optionalCourse = Optional.of(course);
 		students = new ArrayList<>();
 		students.add(student);
 
@@ -268,6 +268,12 @@ public class StudentServiceTest {
 			hasError = true;
 		}
 		assertThat(hasError).isTrue();
+	}
+
+	@Test
+	public void whenNameIsEmpty() throws TransactionException {
+
+		assertThat(studentServiceImpl.pruebaCoverage("")).isTrue();
 	}
 
 }
