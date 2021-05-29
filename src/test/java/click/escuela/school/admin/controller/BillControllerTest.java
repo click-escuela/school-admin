@@ -57,7 +57,7 @@ public class BillControllerTest {
 				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		ReflectionTestUtils.setField(billController, "billService", billService);
 
-		billApi = BillApi.builder().period(2021).file("Mayo").amount((double) 12000).build();
+		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
 
 		doNothing().when(billService).create(Mockito.anyString(), Mockito.any());
 	}
@@ -75,15 +75,54 @@ public class BillControllerTest {
 	}
 
 	@Test
-	public void whenCreatePeriodEmpty() throws JsonProcessingException, Exception {
+	public void whenCreateYearNull() throws JsonProcessingException, Exception {
 
-		billApi.setPeriod(null);
+		billApi.setYear(null);
 		MvcResult result = mockMvc
 				.perform(post("/school/{schoolId}/bill/{studentId}", "123", "212121")
 						.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("Period cannot be empty");
+		assertThat(response).contains("Year cannot be empty");
+
+	}
+	
+	@Test
+	public void whenCreateMonthLess() throws JsonProcessingException, Exception {
+
+		billApi.setMonth(0);
+		MvcResult result = mockMvc
+				.perform(post("/school/{schoolId}/bill/{studentId}", "123", "212121")
+						.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
+				.andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains("Month should not be less than 1");
+
+	}
+	
+	@Test
+	public void whenCreateMonthGreater() throws JsonProcessingException, Exception {
+
+		billApi.setMonth(13);
+		MvcResult result = mockMvc
+				.perform(post("/school/{schoolId}/bill/{studentId}", "123", "212121")
+						.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
+				.andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains("Month should not be greater than 12");
+
+	}
+	
+	@Test
+	public void whenCreateMonthNull() throws JsonProcessingException, Exception {
+
+		billApi.setMonth(null);
+		MvcResult result = mockMvc
+				.perform(post("/school/{schoolId}/bill/{studentId}", "123", "212121")
+						.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
+				.andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains("Month cannot be empty");
 
 	}
 

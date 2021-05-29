@@ -47,10 +47,10 @@ public class BillServiceTest {
 		studentId = UUID.randomUUID();
 		id = UUID.randomUUID();
 
-		Bill bill = Bill.builder().id(id).period(2021).status(PaymentStatus.PENDING).studentId(studentId).file("Mayo")
+		Bill bill = Bill.builder().id(id).year(2021).month(6).status(PaymentStatus.PENDING).studentId(studentId).file("Mayo")
 				.amount((double) 12000).build();
 
-		billApi = BillApi.builder().period(2021).file("Mayo").amount((double) 12000).build();
+		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
 
 		Optional<Bill> optional = Optional.of(bill);
 

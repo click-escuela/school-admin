@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import click.escuela.school.admin.model.Bill;
 
-public interface BillRepository extends JpaRepository<Bill, UUID>{
-
+public interface BillRepository extends JpaRepository<Bill, UUID> {
 
 }

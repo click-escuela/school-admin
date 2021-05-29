@@ -18,6 +18,7 @@ import click.escuela.school.admin.service.BillServiceGeneric;
 
 @Service
 public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
+	
 	@Autowired
 	private BillRepository billRepository;
 
@@ -51,7 +52,6 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	public Bill findById(String billId) throws TransactionException {
 		return billRepository.findById(UUID.fromString(billId)).orElseThrow(
 				() -> new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription()));
-
 	}
 
 }
