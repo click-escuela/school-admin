@@ -1,6 +1,5 @@
 package click.escuela.school.admin.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,16 +56,12 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	}
 
 	public List<BillDTO> findBills(BillSearchApi bill, String studentId, Boolean fullDetail) throws TransactionException {
-		List<BillDTO> bills = new ArrayList<>();
-		try {
-			if(Boolean.TRUE.equals(fullDetail)) {
-				bills = getBills(bill,studentId);
-			}
+		if(Boolean.TRUE.equals(fullDetail)) {
+			return getBills(bill,studentId);
 		}
-		catch (Exception e) {
+		else {
 			throw new TransactionException(BillEnum.BAD_BOOLEAN.getCode(), BillEnum.BAD_BOOLEAN.getDescription());
 		}
-		return bills;
 	}
 	
 	private List<BillDTO> getBills(BillSearchApi bill, String studentId) {
@@ -74,43 +69,22 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 		if (bill.getYear() != null && bill.getMonth() != null && bill.getStatus() != null) {
 			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndYearAndStatus(id, bill.getMonth(),
 					bill.getYear(), Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
-		} else if (bill.getStatus() == null) {
-			return findBillsByMonthOrByYear(id, bill.getMonth(), bill.getYear());
-		} else if (bill.getYear() == null) {
-			return findBillsByMonthOrByStatus(id, bill.getMonth(), bill.getStatus());
-		} else {
-			return findBillsByYearOrByStatus(id, bill.getYear(), bill.getStatus());
-		}
-	}
-
-	private List<BillDTO> findBillsByYearOrByStatus(UUID id, Integer year, String status) {
-		if (year != null && status != null) {
+		} else if (bill.getStatus() == null && bill.getMonth() != null && bill.getYear() != null) {
 			return Mapper.mapperToBillsDTO(
-					billRepository.findByStudentIdAndYearAndStatus(id, year, Mapper.mapperToEnumPaymentStatus(status)));
+					billRepository.findByStudentIdAndMonthAndYear(id, bill.getMonth(), bill.getYear()));
+		} else if (bill.getStatus() != null && bill.getMonth() != null && bill.getYear() == null) {
+			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndStatus(id, bill.getMonth(),
+					Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
+		} else if (bill.getStatus() != null && bill.getMonth() == null && bill.getYear() != null) {
+			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYearAndStatus(id, bill.getYear(),
+					Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
+		} else if (bill.getStatus() == null && bill.getYear() == null) {
+			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonth(id, bill.getMonth()));
 		} else {
-			return (status == null) ? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYear(id, year))
-					: Mapper.mapperToBillsDTO(
-							billRepository.findByStudentIdAndStatus(id, Mapper.mapperToEnumPaymentStatus(status)));
-		}
-	}
-
-	private List<BillDTO> findBillsByMonthOrByStatus(UUID id, Integer month, String status) {
-		if (month != null && status != null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndStatus(id, month,
-					Mapper.mapperToEnumPaymentStatus(status)));
-		} else {
-			return (status == null) ? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonth(id, month))
-					: Mapper.mapperToBillsDTO(
-							billRepository.findByStudentIdAndStatus(id, Mapper.mapperToEnumPaymentStatus(status)));
-		}
-	}
-
-	private List<BillDTO> findBillsByMonthOrByYear(UUID id, Integer month, Integer year) {
-		if (year != null && month != null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndYear(id, month, year));
-		} else {
-			return (year == null) ? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonth(id, month))
-					: Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYear(id, year));
+			return (bill.getMonth() == null && bill.getStatus() == null)
+					? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYear(id, bill.getYear()))
+					: Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndStatus(id,
+							Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
 		}
 	}
 
