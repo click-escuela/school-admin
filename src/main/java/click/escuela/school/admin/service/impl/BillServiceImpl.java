@@ -2,7 +2,15 @@ package click.escuela.school.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +31,9 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 
 	@Autowired
 	private BillRepository billRepository;
+
+	@PersistenceContext
+	private EntityManager entityManager;	
 
 	@Autowired
 	private StudentServiceImpl studentService;
@@ -71,47 +82,31 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	
 	private List<BillDTO> getBills(BillSearchApi bill, String studentId) {
 		UUID id = UUID.fromString(studentId);
-		if (bill.getYear() != null && bill.getMonth() != null && bill.getStatus() != null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndYearAndStatus(id, bill.getMonth(),
-					bill.getYear(), Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
-		} else if (bill.getStatus() == null) {
-			return findBillsByMonthOrByYear(id, bill.getMonth(), bill.getYear());
-		} else if (bill.getYear() == null) {
-			return findBillsByMonthOrByStatus(id, bill.getMonth(), bill.getStatus());
-		} else {
-			return findBillsByYearOrByStatus(id, bill.getYear(), bill.getStatus());
-		}
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Bill> query= criteriaBuilder.createQuery(Bill.class);
+		Root<Bill> root = query.from(Bill.class);
+		
+		List<Predicate> predicates = new ArrayList<>();
+		
+		
+		addField("year", bill.getYear(), predicates,criteriaBuilder, root);
+		addField("month", bill.getMonth(), predicates, criteriaBuilder, root);
+		addField("status", PaymentStatus.valueOf(bill.getStatus()), predicates, criteriaBuilder, root);
+
+		query.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+		
+		return Mapper.mapperToBillsDTO(entityManager.createQuery(query).getResultList()); 		
+
+	}
+	
+	private void addField(String fieldName, Object value, List<Predicate> predicates,
+			CriteriaBuilder criteriaBuilder,Root<Bill> root ) {
+		
+		if(Optional.ofNullable(value).isPresent())
+			predicates.add(criteriaBuilder.equal (root.get(fieldName), value));
 	}
 
-	private List<BillDTO> findBillsByYearOrByStatus(UUID id, Integer year, String status) {
-		if (year != null && status != null) {
-			return Mapper.mapperToBillsDTO(
-					billRepository.findByStudentIdAndYearAndStatus(id, year, Mapper.mapperToEnumPaymentStatus(status)));
-		} else {
-			return (status == null) ? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYear(id, year))
-					: Mapper.mapperToBillsDTO(
-							billRepository.findByStudentIdAndStatus(id, Mapper.mapperToEnumPaymentStatus(status)));
-		}
-	}
 
-	private List<BillDTO> findBillsByMonthOrByStatus(UUID id, Integer month, String status) {
-		if (month != null && status != null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndStatus(id, month,
-					Mapper.mapperToEnumPaymentStatus(status)));
-		} else {
-			return (status == null) ? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonth(id, month))
-					: Mapper.mapperToBillsDTO(
-							billRepository.findByStudentIdAndStatus(id, Mapper.mapperToEnumPaymentStatus(status)));
-		}
-	}
-
-	private List<BillDTO> findBillsByMonthOrByYear(UUID id, Integer month, Integer year) {
-		if (year != null && month != null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndYear(id, month, year));
-		} else {
-			return (year == null) ? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonth(id, month))
-					: Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYear(id, year));
-		}
-	}
 
 }
