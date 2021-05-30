@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.BillApi;
+import click.escuela.school.admin.api.BillSearchApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.exception.TransactionException;
@@ -47,6 +49,16 @@ public class BillController {
 			@Parameter(name = "Bill id", required = true) @PathVariable("billId") String billId)
 			throws TransactionException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.getById(billId));
+	}
+
+	@Operation(summary = "Get bill by studentId", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BillDTO.class))) })
+	@GetMapping(value = "student/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<BillDTO>> getByStudentId(
+			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
+			@RequestBody @Validated BillSearchApi billApi, @RequestParam("fullDetail") Boolean fullDetail)
+			throws TransactionException {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.findBills(billApi, studentId, fullDetail));
 	}
 
 	@Operation(summary = "Create Bill", responses = {
