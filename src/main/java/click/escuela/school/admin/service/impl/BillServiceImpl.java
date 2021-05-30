@@ -1,7 +1,16 @@
 package click.escuela.school.admin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +31,9 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 
 	@Autowired
 	private BillRepository billRepository;
+
+	@PersistenceContext
+	private EntityManager entityManager;	
 
 	@Autowired
 	private StudentServiceImpl studentService;
@@ -66,26 +78,32 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	
 	private List<BillDTO> getBills(BillSearchApi bill, String studentId) {
 		UUID id = UUID.fromString(studentId);
-		if (bill.getYear() != null && bill.getMonth() != null && bill.getStatus() != null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndYearAndStatus(id, bill.getMonth(),
-					bill.getYear(), Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
-		} else if (bill.getStatus() == null && bill.getMonth() != null && bill.getYear() != null) {
-			return Mapper.mapperToBillsDTO(
-					billRepository.findByStudentIdAndMonthAndYear(id, bill.getMonth(), bill.getYear()));
-		} else if (bill.getStatus() != null && bill.getMonth() != null && bill.getYear() == null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonthAndStatus(id, bill.getMonth(),
-					Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
-		} else if (bill.getStatus() != null && bill.getMonth() == null && bill.getYear() != null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYearAndStatus(id, bill.getYear(),
-					Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
-		} else if (bill.getStatus() == null && bill.getYear() == null) {
-			return Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndMonth(id, bill.getMonth()));
-		} else {
-			return (bill.getMonth() == null && bill.getStatus() == null)
-					? Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndYear(id, bill.getYear()))
-					: Mapper.mapperToBillsDTO(billRepository.findByStudentIdAndStatus(id,
-							Mapper.mapperToEnumPaymentStatus(bill.getStatus())));
-		}
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Bill> query= criteriaBuilder.createQuery(Bill.class);
+		Root<Bill> root = query.from(Bill.class);
+		
+		List<Predicate> predicates = new ArrayList<>();
+		
+		
+		addField("year", bill.getYear(), predicates,criteriaBuilder, root);
+		addField("month", bill.getMonth(), predicates, criteriaBuilder, root);
+		addField("status", PaymentStatus.valueOf(bill.getStatus()), predicates, criteriaBuilder, root);
+
+		query.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+		
+		return Mapper.mapperToBillsDTO(entityManager.createQuery(query).getResultList()); 		
+
 	}
+	
+	private void addField(String fieldName, Object value, List<Predicate> predicates,
+			CriteriaBuilder criteriaBuilder,Root<Bill> root ) {
+		
+		if(Optional.ofNullable(value).isPresent())
+			predicates.add(criteriaBuilder.equal (root.get(fieldName), value));
+	}
+	
+
+
 
 }
