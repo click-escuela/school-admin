@@ -72,7 +72,7 @@ public class BillServiceTest {
 	public void whenCreateIsOk() {
 		boolean hasError = false;
 		try {
-			billServiceImpl.create(studentId.toString(), billApi);
+			billServiceImpl.create("1234",studentId.toString(), billApi);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -86,7 +86,7 @@ public class BillServiceTest {
 
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 
-			billServiceImpl.create(idStudentOther.toString(), Mockito.any());
+			billServiceImpl.create("1234",idStudentOther.toString(), Mockito.any());
 		}).withMessage("No se pudo crear la factura correctamente");
 
 	}

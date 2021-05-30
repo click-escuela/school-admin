@@ -59,7 +59,7 @@ public class BillControllerTest {
 
 		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
 
-		doNothing().when(billService).create(Mockito.anyString(), Mockito.any());
+		doNothing().when(billService).create(Mockito.anyString(),Mockito.anyString(), Mockito.any());
 	}
 
 	@Test
@@ -156,7 +156,7 @@ public class BillControllerTest {
 	public void whenCreateError() throws JsonProcessingException, Exception {
 
 		doThrow(new TransactionException(BillEnum.CREATE_ERROR.getCode(), BillEnum.CREATE_ERROR.getDescription()))
-				.when(billService).create(Mockito.anyString(), Mockito.any());
+				.when(billService).create(Mockito.anyString(), Mockito.anyString(), Mockito.any());
 
 		MvcResult result = mockMvc
 				.perform(post("/school/{schoolId}/bill/{studentId}", "123", "212121")

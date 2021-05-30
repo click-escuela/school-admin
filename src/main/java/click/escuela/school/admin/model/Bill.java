@@ -33,6 +33,9 @@ public class Bill {
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	private UUID id;
 
+	@Column(name = "id_school", nullable = false)
+	private Integer schoolId;
+	
 	@Column(name = "month", nullable = false)
 	private Integer month;
 	
