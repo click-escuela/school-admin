@@ -59,8 +59,7 @@ public class BillController {
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
 			@RequestBody @Validated BillSearchApi billApi, @RequestParam(required = false, value = "status") String status,
 			@RequestParam(required = false, value = "month") Integer month,
-			@RequestParam(required = false, value ="year") Integer year)
-			throws TransactionException {
+			@RequestParam(required = false, value ="year") Integer year){
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.findBills(schoolId, studentId, status, month, year));
 	}
 

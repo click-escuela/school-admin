@@ -3,11 +3,13 @@ package click.escuela.school.admin.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.PaymentStatus;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class BillDTO {
 
 	@JsonProperty(value = "id")
