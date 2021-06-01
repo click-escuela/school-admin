@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,33 +42,41 @@ public class TeacherServiceTest {
 	private Teacher teacher;
 	private UUID id;
 	private UUID courseId;
+	private Integer schoolId;
+	private List<Teacher> teachers;
 
 	@Before
 	public void setUp() {
 		PowerMockito.mockStatic(Mapper.class);
 
 		id = UUID.randomUUID();
+		schoolId = 1234;
 		courseId = UUID.randomUUID();
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").cellPhone("1589632485").email("mariAna@gmail.com")
-				.courseId(courseId).adress(new Adress()).build();
-		
-		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now())
-				.documentType("DNI").document("25897863").cellPhone("1589632485").email("mariAna@gmail.com")
+				.courseId(courseId).schoolId(schoolId).adress(new Adress()).build();
+
+		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now()).documentType("DNI")
+				.document("25897863").schoolId(schoolId).cellPhone("1589632485").email("mariAna@gmail.com")
 				.adressApi(new AdressApi()).build();
-		Optional<Teacher> optional=Optional.of(teacher);
-		
+		Optional<Teacher> optional = Optional.of(teacher);
+		teachers = new ArrayList<>();
+		teachers.add(teacher);
+
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi)).thenReturn(teacher);
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
-		
+
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
-		
+		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
+		Mockito.when(teacherRepository.findBySchoolId(schoolId)).thenReturn(teachers);
+		Mockito.when(teacherRepository.findByCourseId(courseId)).thenReturn(teachers);
+
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 	}
-	
+
 	@Test
-	public void whenCreateIsOk() throws TransactionException{
+	public void whenCreateIsOk() throws TransactionException {
 		boolean hasError = false;
 		try {
 			teacherServiceImpl.create(teacherApi);
@@ -75,23 +85,22 @@ public class TeacherServiceTest {
 		}
 		assertThat(hasError).isFalse();
 	}
-	
+
 	@Test
 	public void whenCreateIsError() {
-		teacherApi = TeacherApi.builder().name("Ana").surname("Lopez").birthday(LocalDate.now())
-				.documentType("DNI").document("25896354").cellPhone("1589632485").email("ana@gmail.com")
-				.adressApi(new AdressApi()).build();
-		
+		teacherApi = TeacherApi.builder().name("Ana").surname("Lopez").birthday(LocalDate.now()).documentType("DNI")
+				.document("25896354").cellPhone("1589632485").email("ana@gmail.com").adressApi(new AdressApi()).build();
+
 		Mockito.when(teacherRepository.save(null)).thenThrow(IllegalArgumentException.class);
-		
+
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			teacherServiceImpl.create(teacherApi);
 		}).withMessage(TeacherMessage.CREATE_ERROR.getDescription());
 	}
-	
+
 	@Test
-	public void whenUpdateIsOk() throws TransactionException{
-	
+	public void whenUpdateIsOk() throws TransactionException {
+
 		boolean hasError = false;
 		try {
 			teacherApi.setId(id.toString());
@@ -101,14 +110,76 @@ public class TeacherServiceTest {
 		}
 		assertThat(hasError).isFalse();
 	}
-	
+
 	@Test
-	public void whenUpdateIsError() throws TransactionException{
-		
-		id=UUID.randomUUID();
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(()-> {
+	public void whenUpdateIsError() throws TransactionException {
+
+		id = UUID.randomUUID();
+		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			teacherApi.setId(id.toString());
 			teacherServiceImpl.update(teacherApi);
 		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
+	}
+
+	@Test
+	public void whenGetByIsOk() {
+		boolean hasError = false;
+		try {
+			teacherServiceImpl.getById(id.toString());
+		} catch (Exception e) {
+			assertThat(hasError).isFalse();
+		}
+	}
+
+	@Test
+	public void whenGetByIdIsError() throws TransactionException {
+		id = UUID.randomUUID();
+		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+			teacherServiceImpl.getById(id.toString());
+		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
+	}
+
+	@Test
+	public void whenGetBySchoolIsOk() {
+		boolean hasError = false;
+		try {
+			teacherServiceImpl.getBySchoolId(schoolId.toString());
+		} catch (Exception e) {
+			assertThat(hasError).isFalse();
+		}
+	}
+
+	@Test
+	public void whenGetBySchoolIsEmpty() {
+		boolean hasEmpty = false;
+		schoolId = 6666;
+		try {
+			if (teacherServiceImpl.getBySchoolId(schoolId.toString()).isEmpty())
+				;
+		} catch (Exception e) {
+			assertThat(hasEmpty).isFalse();
+		}
+	}
+
+	@Test
+	public void whenGetByCourseIsOk() {
+		boolean hasError = false;
+		try {
+			teacherServiceImpl.getByCourseId(courseId.toString());
+		} catch (Exception e) {
+			assertThat(hasError).isFalse();
+		}
+	}
+
+	@Test
+	public void whenGetByCourseIsEmpty() {
+		boolean hasEmpty = false;
+		courseId = UUID.randomUUID();
+		try {
+			if (teacherServiceImpl.getByCourseId(courseId.toString()).isEmpty())
+				;
+		} catch (Exception e) {
+			assertThat(hasEmpty).isFalse();
+		}
 	}
 }
