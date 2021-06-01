@@ -3,12 +3,16 @@ package click.escuela.school.admin.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.PaymentStatus;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BillDTO {
 
