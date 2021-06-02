@@ -3,6 +3,7 @@ package click.escuela.school.admin.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,14 +111,13 @@ public class BillServiceTest {
 	}
 
 	@Test
-	public void whenCreateIsOk() {
-		boolean hasError = false;
-		try {
-			billServiceImpl.create("1234", studentId.toString(), billApi);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+	public void whenCreateIsOk() throws TransactionException {
+
+		billServiceImpl.create("1234", studentId.toString(), billApi);
+
+		verify(billRepository).save(bill);
+		verify(studentService).addBill(bill, studentId);
+
 	}
 
 	@Test
