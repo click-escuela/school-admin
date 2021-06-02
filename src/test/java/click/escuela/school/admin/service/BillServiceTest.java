@@ -105,6 +105,8 @@ public class BillServiceTest {
 
 		// inyecta en el servicio Bill el servicio Student
 		ReflectionTestUtils.setField(billServiceImpl, "studentService", studentService);
+		ReflectionTestUtils.setField(billServiceImpl, "entityManager", entityManager);
+
 	}
 
 	@Test
@@ -142,7 +144,6 @@ public class BillServiceTest {
 		// List<Predicate> predicates = new ArrayList<>();
 		// predicates.add(criteriaBuilder.equal(root.get("2021"), 2021));
 
-		Mockito.when(entityManager.createQuery(query).getResultList()).thenReturn(bills);
 		boolean hasError = false;
 		try {
 			billServiceImpl.findBills("1234", studentId.toString(), PaymentStatus.PENDING.toString(), 2, 2021);
