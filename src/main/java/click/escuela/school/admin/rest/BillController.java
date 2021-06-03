@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.BillApi;
-import click.escuela.school.admin.api.BillSearchApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.exception.TransactionException;
@@ -57,7 +56,7 @@ public class BillController {
 	public ResponseEntity<List<BillDTO>> getByStudentId(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
-			@RequestBody @Validated BillSearchApi billApi, @RequestParam(required = false, value = "status") String status,
+			@RequestParam(required = false, value = "status") String status,
 			@RequestParam(required = false, value = "month") Integer month,
 			@RequestParam(required = false, value ="year") Integer year){
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.findBills(schoolId, studentId, status, month, year));

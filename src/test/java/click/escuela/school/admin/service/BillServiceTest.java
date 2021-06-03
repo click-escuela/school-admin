@@ -72,8 +72,6 @@ public class BillServiceTest {
 	private UUID studentId;
 	private List<Bill> bills;
 
-	// private Predicate predicate;
-
 	@Before
 	public void setUp() throws TransactionException {
 		PowerMockito.mockStatic(Mapper.class);
@@ -98,7 +96,6 @@ public class BillServiceTest {
 		Mockito.when(Mapper.mapperToBillsDTO(bills)).thenReturn(billsDTO);
 		Mockito.when(billRepository.save(bill)).thenReturn(bill);
 		Mockito.when(billRepository.findById(id)).thenReturn(optional);
-		// Mockito.when(root.get(Mockito.anyString()));
 		doNothing().when(studentService).addBill(bill, studentId);
 
 		// inyecta en el servicio el objeto repository
@@ -112,7 +109,6 @@ public class BillServiceTest {
 
 	@Test
 	public void whenCreateIsOk() throws TransactionException {
-
 		billServiceImpl.create("1234", studentId.toString(), billApi);
 
 		verify(billRepository).save(bill);
@@ -126,23 +122,18 @@ public class BillServiceTest {
 		Mockito.when(billRepository.save(null)).thenThrow(IllegalArgumentException.class);
 
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
-
 			billServiceImpl.create("1234", idStudentOther.toString(), Mockito.any());
 		}).withMessage("No se pudo crear la factura correctamente");
-
 	}
 
 	@Test
 	public void whenFindBillsIsOk() {
-
 		Mockito.when(information.getJavaType()).thenReturn(Bill.class);
 		Mockito.when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
 		Mockito.when(criteriaBuilder.createQuery(Bill.class)).thenReturn(query);
 		Mockito.when(entityManager.createQuery(query)).thenReturn(typedQuery);
 		Mockito.when(query.from(Bill.class)).thenReturn(root);
 		Mockito.when(query.select(root)).thenReturn(query);
-		// List<Predicate> predicates = new ArrayList<>();
-		// predicates.add(criteriaBuilder.equal(root.get("2021"), 2021));
 
 		boolean hasError = false;
 		try {
@@ -153,4 +144,15 @@ public class BillServiceTest {
 		assertThat(hasError).isFalse();
 	}
 
+	@Test
+	public void whenFindBillsIsError() {
+		boolean hasError = false;
+
+		try {
+			billServiceImpl.findBills(null, null, null, null, null);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isTrue();
+	}
 }

@@ -38,6 +38,7 @@ import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.rest.BillController;
 import click.escuela.school.admin.rest.handler.Handler;
@@ -75,15 +76,15 @@ public class BillControllerTest {
 		studentId = UUID.randomUUID();
 		id = UUID.randomUUID();
 		schoolId = 1234;
-		bill = Bill.builder().id(id).year(2021).month(6).status(PaymentStatus.PENDING).studentId(studentId).file("Mayo")
-				.amount((double) 12000).build();
+		bill = Bill.builder().id(id).schoolId(schoolId).year(2021).month(6).status(PaymentStatus.PENDING)
+				.studentId(studentId).file("Mayo").amount((double) 12000).build();
 		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
 		bills = new ArrayList<>();
 		bills.add(bill);
-		
-		
-		
-		doNothing().when(billService).create(Mockito.anyString(),Mockito.anyString(), Mockito.any());
+		Mockito.when(billService.findBills(schoolId.toString(), studentId.toString(), PaymentStatus.PENDING.toString(),
+				6, 2021)).thenReturn(Mapper.mapperToBillsDTO(bills));
+
+		doNothing().when(billService).create(Mockito.anyString(), Mockito.anyString(), Mockito.any());
 	}
 
 	@Test
@@ -110,7 +111,7 @@ public class BillControllerTest {
 		assertThat(response).contains("Year cannot be empty");
 
 	}
-	
+
 	@Test
 	public void whenCreateMonthLess() throws JsonProcessingException, Exception {
 
@@ -123,7 +124,7 @@ public class BillControllerTest {
 		assertThat(response).contains("Month should not be less than 1");
 
 	}
-	
+
 	@Test
 	public void whenCreateMonthGreater() throws JsonProcessingException, Exception {
 
@@ -136,7 +137,7 @@ public class BillControllerTest {
 		assertThat(response).contains("Month should not be greater than 12");
 
 	}
-	
+
 	@Test
 	public void whenCreateMonthNull() throws JsonProcessingException, Exception {
 
@@ -190,18 +191,15 @@ public class BillControllerTest {
 		assertThat(response).contains(BillEnum.CREATE_ERROR.getDescription());
 
 	}
-	
+
 	@Test
 	public void getBillByStudentIdIsOk() throws Exception {
-		BillDTO billDTO = BillDTO.builder().id(id.toString()).year(2021).month(6).status(PaymentStatus.PENDING)
-				.file("Mayo").amount((double) 12000).build();
-		List<BillDTO> billsDTO = new ArrayList<>();
-		billsDTO.add(billDTO);
-		Mockito.when(billService.findBills(schoolId.toString(), studentId.toString(),PaymentStatus.PENDING.toString(), 6, 2021)).thenReturn(billsDTO);
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders
-						.get("/school/{schoolId}/bill/student/{studentId}?month=6&year=2021&status=PENDING", schoolId.toString(),studentId.toString())
-						.contentType(MediaType.APPLICATION_JSON))
+				.perform(
+						MockMvcRequestBuilders
+								.get("/school/{schoolId}/bill/student/{studentId}?month=6&year=2021&status=PENDING",
+										schoolId.toString(), studentId.toString())
+								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
 		TypeReference<List<BillDTO>> typeReference = new TypeReference<List<BillDTO>>() {
@@ -209,21 +207,24 @@ public class BillControllerTest {
 		List<BillDTO> studentResult = mapper.readValue(result.getResponse().getContentAsString(), typeReference);
 		assertThat(studentResult.get(0).getId()).contains(id.toString());
 	}
-	
-	@Test
-	public void getBillsByStudentIdIsEmpty() throws Exception{
-		schoolId = 6666;
-		studentId= UUID.randomUUID();
-		doThrow(NullPointerException.class).when(billService).findBills(schoolId.toString(), studentId.toString(),PaymentStatus.PENDING.toString(), 6, 2021);
 
-		MvcResult result = mockMvc.perform(
-				MockMvcRequestBuilders.get("/school/{schoolId}/bill/student/{studentId}?month=6&year=2021&status=PENDING", schoolId.toString(),studentId.toString())
-						.contentType(MediaType.APPLICATION_JSON))
+	@Test
+	public void getBillsByStudentIdIsEmpty() throws Exception {
+		schoolId = 6666;
+		studentId = UUID.randomUUID();
+		doThrow(NullPointerException.class).when(billService).findBills(schoolId.toString(), studentId.toString(),
+				PaymentStatus.PENDING.toString(), 6, 2021);
+
+		MvcResult result = mockMvc
+				.perform(
+						MockMvcRequestBuilders
+								.get("/school/{schoolId}/bill/student/{studentId}?month=6&year=2021&status=PENDING",
+										schoolId.toString(), studentId.toString())
+								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("");
 	}
-	
 
 	private String toJson(final Object obj) throws JsonProcessingException {
 		return mapper.writeValueAsString(obj);
