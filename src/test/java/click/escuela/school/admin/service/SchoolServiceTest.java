@@ -59,7 +59,6 @@ public class SchoolServiceTest {
 		Mockito.when(schoolRepository.save(school)).thenReturn(school);
 		Mockito.when(schoolRepository.findAll()).thenReturn(schools);
 
-		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(schoolServiceImpl, "schoolRepository", schoolRepository);
 	}
 
