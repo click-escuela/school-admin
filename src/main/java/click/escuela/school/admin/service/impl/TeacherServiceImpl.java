@@ -22,7 +22,6 @@ public class TeacherServiceImpl {
 	private TeacherRepository teacherRepository;
 
 	public void create(TeacherApi teacherApi) throws TransactionException {
-
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);
 			teacherRepository.save(teacher);
@@ -60,6 +59,31 @@ public class TeacherServiceImpl {
 
 	public List<TeacherDTO> getByCourseId(String courseId) {
 		return Mapper.mapperToTeachersDTO(teacherRepository.findByCourseId(UUID.fromString(courseId)));
+	}
+
+	public void exists(TeacherApi teacherApi) throws TransactionException {
+		Optional<Teacher> teacherExist = teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
+				Mapper.mapperToEnum(teacherApi.getGender()));
+		if (teacherExist.isPresent()) {
+			throw new TransactionException(TeacherMessage.EXIST.getCode(), TeacherMessage.EXIST.getDescription());
+		}
+	}
+
+	public Teacher addCourseId(String idTeacher, String idCourse) throws TransactionException {
+		Teacher teacher = findById(idTeacher)
+				.orElseThrow(() -> new TransactionException(TeacherMessage.GET_ERROR.getCode(),
+						TeacherMessage.GET_ERROR.getDescription()));
+		teacher.setCourseId(UUID.fromString(idCourse));
+		teacherRepository.save(teacher);
+		return teacher;
+	}
+
+	public void deleteCourseId(String teacherId, String courseId) throws TransactionException {
+		Teacher teacher = findById(teacherId)
+				.orElseThrow(() -> new TransactionException(TeacherMessage.GET_ERROR.getCode(),
+						TeacherMessage.GET_ERROR.getDescription()));
+		teacher.setCourseId(null);
+		teacherRepository.save(teacher);
 	}
 
 }

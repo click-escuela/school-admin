@@ -42,4 +42,7 @@ public class TeacherApi extends PersonApi {
 	@NotNull(message = "School ID cannot be null")
 	@JsonProperty(value = "schoolId", required = true)
 	private Integer schoolId;
+	
+	@JsonProperty(value = "courseId", required = false)
+	private String courseId;
 }

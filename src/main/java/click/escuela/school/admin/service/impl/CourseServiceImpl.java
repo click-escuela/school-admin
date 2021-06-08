@@ -13,7 +13,6 @@ import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
-import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.CourseServiceGeneric;
 
@@ -22,10 +21,12 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 	@Autowired
 	private CourseRepository courseRepository;
 
+	@Autowired
+	private TeacherServiceImpl teacherService;
+
 	@Override
 	public void create(CourseApi courserApi) throws TransactionException {
 		try {
-
 			Course course = Mapper.mapperToCourse(courserApi);
 			courseRepository.save(course);
 		} catch (Exception e) {
@@ -45,18 +46,23 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 	}
 
 	public Optional<Course> findById(String idCourse) throws TransactionException {
-
 		return Optional.of(courseRepository.findById(UUID.fromString(idCourse))
 				.orElseThrow(() -> new TransactionException(CourseMessage.GET_ERROR.getCode(),
 						CourseMessage.GET_ERROR.getDescription())));
 	}
 
-	public void addTeacher(Teacher teacher, String idCourse) throws TransactionException {
-
-		Course course = findById(idCourse).orElseThrow(() -> new TransactionException(CourseMessage.GET_ERROR.getCode(),
+	public void addTeacher(String teacherId, String courseId) throws TransactionException {
+		Course course = findById(courseId).orElseThrow(() -> new TransactionException(CourseMessage.GET_ERROR.getCode(),
 				CourseMessage.GET_ERROR.getDescription()));
-		course.setTeacher(teacher);
+		course.setTeacher(teacherService.addCourseId(teacherId, courseId));
+		courseRepository.save(course);
+	}
 
+	public void deleteTeacher(String teacherId, String courseId) throws TransactionException {
+		Course course = findById(courseId).orElseThrow(() -> new TransactionException(CourseMessage.GET_ERROR.getCode(),
+				CourseMessage.GET_ERROR.getDescription()));
+		teacherService.deleteCourseId(teacherId, courseId);
+		course.setTeacher(null);
 		courseRepository.save(course);
 	}
 
