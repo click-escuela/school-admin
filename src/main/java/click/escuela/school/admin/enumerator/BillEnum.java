@@ -4,7 +4,8 @@ public enum BillEnum {
 
 	CREATE_OK("CREATED_BILL", "Se creó la factura correctamente"),
 	CREATE_ERROR("CREATE_ERROR", "No se pudo crear la factura correctamente"), 
-	GET_ERROR("GET_ERROR", "No se encontró la factura");
+	GET_ERROR("GET_ERROR", "No se encontró la factura"),
+	BAD_BOOLEAN("BAD_BOOLEAN", "No se pueden mostrar las facturas");
 
 	private String code;
 	private String description;
