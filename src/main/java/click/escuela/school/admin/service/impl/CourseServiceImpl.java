@@ -61,7 +61,7 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 	public void deleteTeacher(String teacherId, String courseId) throws TransactionException {
 		Course course = findById(courseId).orElseThrow(() -> new TransactionException(CourseMessage.GET_ERROR.getCode(),
 				CourseMessage.GET_ERROR.getDescription()));
-		teacherService.deleteCourseId(teacherId, courseId);
+		teacherService.deleteCourseId(teacherId);
 		course.setTeacher(null);
 		courseRepository.save(course);
 	}
