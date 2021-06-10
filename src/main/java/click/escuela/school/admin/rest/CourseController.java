@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
-import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;

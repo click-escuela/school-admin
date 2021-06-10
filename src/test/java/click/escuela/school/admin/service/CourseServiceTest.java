@@ -105,7 +105,7 @@ public class CourseServiceTest {
 
 	@Test
 	public void whenDeleteTeacherIsOk() throws TransactionException {
-		doNothing().when(teacherService).deleteCourseId(teacherId.toString(), id.toString());
+		doNothing().when(teacherService).deleteCourseId(teacherId.toString());
 		courseServiceImpl.deleteTeacher(teacherId.toString(), id.toString());
 		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
 	}

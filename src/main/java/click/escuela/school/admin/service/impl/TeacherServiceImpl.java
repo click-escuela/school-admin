@@ -78,7 +78,7 @@ public class TeacherServiceImpl {
 		return teacher;
 	}
 
-	public void deleteCourseId(String teacherId, String courseId) throws TransactionException {
+	public void deleteCourseId(String teacherId) throws TransactionException {
 		Teacher teacher = findById(teacherId)
 				.orElseThrow(() -> new TransactionException(TeacherMessage.GET_ERROR.getCode(),
 						TeacherMessage.GET_ERROR.getDescription()));
