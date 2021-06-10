@@ -35,11 +35,6 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 		}
 	}
 
-	@Override
-	public CourseDTO getById(String id) throws TransactionException {
-		return null;
-	}
-
 	public List<CourseDTO> findAll() {
 		List<Course> listCourses = courseRepository.findAll();
 		return Mapper.mapperToCoursesDTO(listCourses);

@@ -6,6 +6,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,10 +61,14 @@ public class CourseServiceTest {
 		Optional<Course> optional = Optional.of(course);
 		id = UUID.randomUUID();
 		teacherId = UUID.randomUUID();
+		
+		List<Course> courses= new ArrayList<>();
+		courses.add(course);
 
 		Mockito.when(Mapper.mapperToCourse(courseApi)).thenReturn(course);
 		Mockito.when(courseRepository.save(course)).thenReturn(course);
 		Mockito.when(courseRepository.findById(id)).thenReturn(optional);
+		Mockito.when(courseRepository.findAll()).thenReturn(courses);
 
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(courseServiceImpl, "courseRepository", courseRepository);
@@ -119,5 +125,11 @@ public class CourseServiceTest {
 			hasError = true;
 		}
 		assertThat(hasError).isTrue();
+	}
+	
+	@Test
+	public void whenFindAllIsOk() {
+		courseServiceImpl.findAll();
+		verify(courseRepository).findAll();
 	}
 }
