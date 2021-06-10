@@ -19,7 +19,7 @@ import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.enumerator.PaymentStatus;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.BillException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.repository.BillRepository;
@@ -38,7 +38,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	private StudentServiceImpl studentService;
 
 	@Override
-	public void create(String schoolId, String id, BillApi billApi) throws TransactionException {
+	public void create(String schoolId, String id, BillApi billApi) throws BillException {
 		try {
 			UUID studentId = UUID.fromString(id);
 			Bill bill = Mapper.mapperToBill(billApi);
@@ -48,12 +48,12 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 			billRepository.save(bill);
 			studentService.addBill(bill, studentId);
 		} catch (Exception e) {
-			throw new TransactionException(BillEnum.CREATE_ERROR.getCode(), BillEnum.CREATE_ERROR.getDescription());
+			throw new BillException(BillEnum.CREATE_ERROR);
 		}
 	}
 
 	@Override
-	public BillDTO getById(String billId) throws TransactionException {
+	public BillDTO getById(String billId) throws BillException {
 		return Mapper.mapperToBillDTO(findById(billId));
 	}
 
@@ -62,9 +62,9 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 		return Mapper.mapperToBillsDTO(billRepository.findAll());
 	}
 
-	public Bill findById(String billId) throws TransactionException {
+	public Bill findById(String billId) throws BillException {
 		return billRepository.findById(UUID.fromString(billId)).orElseThrow(
-				() -> new TransactionException(BillEnum.GET_ERROR.getCode(), BillEnum.GET_ERROR.getDescription()));
+				() -> new BillException(BillEnum.GET_ERROR));
 	}
 
 	public List<BillDTO> findBills( String schoolId, String studentId, String status, Integer month, Integer year){

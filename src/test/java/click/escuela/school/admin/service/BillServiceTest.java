@@ -30,6 +30,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.PaymentStatus;
+import click.escuela.school.admin.exception.BillException;
+import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
@@ -73,7 +75,7 @@ public class BillServiceTest {
 	private List<Bill> bills;
 
 	@Before
-	public void setUp() throws TransactionException {
+	public void setUp() throws TransactionException, StudentException {
 		PowerMockito.mockStatic(Mapper.class);
 		studentId = UUID.randomUUID();
 		id = UUID.randomUUID();
@@ -108,7 +110,7 @@ public class BillServiceTest {
 	}
 
 	@Test
-	public void whenCreateIsOk() throws TransactionException {
+	public void whenCreateIsOk() throws BillException, StudentException {
 		billServiceImpl.create("1234", studentId.toString(), billApi);
 
 		verify(billRepository).save(bill);
@@ -121,7 +123,7 @@ public class BillServiceTest {
 		UUID idStudentOther = UUID.randomUUID();
 		Mockito.when(billRepository.save(null)).thenThrow(IllegalArgumentException.class);
 
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(BillException.class).isThrownBy(() -> {
 			billServiceImpl.create("1234", idStudentOther.toString(), Mockito.any());
 		}).withMessage("No se pudo crear la factura correctamente");
 	}

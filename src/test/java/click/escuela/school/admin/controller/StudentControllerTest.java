@@ -44,6 +44,7 @@ import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.StudentMessage;
+import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Parent;
@@ -76,7 +77,7 @@ public class StudentControllerTest {
 	private static String EMPTY = "";
 
 	@Before
-	public void setup() throws TransactionException {
+	public void setup() throws TransactionException, StudentException {
 		mockMvc = MockMvcBuilders.standaloneSetup(studentController).setControllerAdvice(new Handler()).build();
 		mapper = new ObjectMapper().findAndRegisterModules().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 				.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false)
@@ -310,7 +311,7 @@ public class StudentControllerTest {
 	@Test
 	public void whenCreateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new TransactionException(StudentMessage.CREATE_ERROR.getCode(), StudentMessage.CREATE_ERROR.getDescription()))
+		doThrow(new StudentException(StudentMessage.CREATE_ERROR))
 				.when(studentService).create(Mockito.any());
 
 		MvcResult result = mockMvc.perform(post("/school/{schoolId}/student", "123")
@@ -339,7 +340,7 @@ public class StudentControllerTest {
 	@Test
 	public void whenUpdateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new TransactionException(StudentMessage.UPDATE_ERROR.getCode(), StudentMessage.UPDATE_ERROR.getDescription()))
+		doThrow(new StudentException(StudentMessage.UPDATE_ERROR))
 				.when(studentService).update(Mockito.any());
 
 		MvcResult result = mockMvc.perform(put("/school/{schoolId}/student", "123")
@@ -371,7 +372,7 @@ public class StudentControllerTest {
 	@Test
 	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
 		idStudent = UUID.randomUUID();
-		doThrow(new TransactionException(StudentMessage.GET_ERROR.getCode(), StudentMessage.GET_ERROR.getDescription()))
+		doThrow(new StudentException(StudentMessage.GET_ERROR))
 				.when(studentService).getById(idStudent.toString(), false);
 		
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders

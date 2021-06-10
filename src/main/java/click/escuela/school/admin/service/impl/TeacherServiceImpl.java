@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Teacher;
@@ -21,18 +22,17 @@ public class TeacherServiceImpl {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
-	public void create(TeacherApi teacherApi) throws TransactionException {
+	public void create(TeacherApi teacherApi) throws TeacherException {
 
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);
 			teacherRepository.save(teacher);
 		} catch (Exception e) {
-			throw new TransactionException(TeacherMessage.CREATE_ERROR.getCode(),
-					TeacherMessage.CREATE_ERROR.getDescription());
+			throw new TeacherException(TeacherMessage.CREATE_ERROR);
 		}
 	}
 
-	public void update(TeacherApi teacherApi) throws TransactionException {
+	public void update(TeacherApi teacherApi) throws TeacherException {
 		findById(teacherApi.getId())
 				.ifPresent(teacher -> teacherRepository.save(Mapper.mapperToTeacher(teacherApi, teacher)));
 	}
@@ -42,15 +42,13 @@ public class TeacherServiceImpl {
 		return Mapper.mapperToTeachersDTO(teachers);
 	}
 
-	public Optional<Teacher> findById(String idTeacher) throws TransactionException {
+	public Optional<Teacher> findById(String idTeacher) throws TeacherException {
 		return Optional.of(teacherRepository.findById(UUID.fromString(idTeacher))
-				.orElseThrow(() -> new TransactionException(TeacherMessage.GET_ERROR.getCode(),
-						TeacherMessage.GET_ERROR.getDescription())));
+				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR)));
 	}
 
-	public TeacherDTO getById(String id) throws TransactionException {
-		Teacher teacher = findById(id).orElseThrow(() -> new TransactionException(TeacherMessage.GET_ERROR.getCode(),
-				TeacherMessage.GET_ERROR.getDescription()));
+	public TeacherDTO getById(String id) throws TeacherException {
+		Teacher teacher = findById(id).orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
 		return Mapper.mapperToTeacherDTO(teacher);
 	}
 

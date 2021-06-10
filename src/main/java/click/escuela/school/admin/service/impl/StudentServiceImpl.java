@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
+import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
@@ -28,7 +30,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	private CourseServiceImpl courseService;
 
 	@Override
-	public void create(StudentApi studentApi) throws TransactionException {
+	public void create(StudentApi studentApi) throws StudentException {
 
 		exists(studentApi);
 		try {
@@ -36,40 +38,36 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			Student student = Mapper.mapperToStudent(studentApi);
 			studentRepository.save(student);
 		} catch (Exception e) {
-			throw new TransactionException(StudentMessage.CREATE_ERROR.getCode(),
-					StudentMessage.CREATE_ERROR.getDescription());
+			throw new StudentException(StudentMessage.CREATE_ERROR);
 		}
 	}
 
 	@Override
-	public StudentDTO getById(String id, Boolean fullDetail) throws TransactionException {
+	public StudentDTO getById(String id, Boolean fullDetail) throws StudentException {
 
-		Student student = findById(id).orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
-				StudentMessage.GET_ERROR.getDescription()));
+		Student student = findById(id).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
 
 	}
 
-	public Optional<Student> findById(String id) throws TransactionException {
+	public Optional<Student> findById(String id) throws StudentException {
 
 		return Optional.of(studentRepository.findById(UUID.fromString(id))
-				.orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
-						StudentMessage.GET_ERROR.getDescription())));
+				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
 	}
 
 	@Override
-	public void update(StudentApi studentApi) throws TransactionException {
+	public void update(StudentApi studentApi) throws StudentException {
 
 		findById(studentApi.getId()).ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi,student)));
 	}
 
-	public void addCourse(String idStudent, String idCourse) throws TransactionException {
+	public void addCourse(String idStudent, String idCourse) throws StudentException, CourseException {
 
 		Student student = findById(idStudent)
-				.orElseThrow(() -> new TransactionException(StudentMessage.GET_ERROR.getCode(),
-						StudentMessage.GET_ERROR.getDescription()));
+				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		Optional<Course> optional = courseService.findById(idCourse);
 		if (optional.isPresent()) {
 			student.setCourse(optional.get());
@@ -78,7 +76,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
-	public void delete(String id) throws TransactionException {
+	public void delete(String id) throws StudentException {
 
 		studentRepository.deleteById(UUID.fromString(id));
 	}
@@ -103,29 +101,28 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
 	}
 
-	public void exists(StudentApi student) throws TransactionException {
+	public void exists(StudentApi student) throws StudentException {
 
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
 
 		if (studentExist.isPresent()) {
-			throw new TransactionException(StudentMessage.EXIST.getCode(), StudentMessage.EXIST.getDescription());
+			throw new StudentException(StudentMessage.EXIST);
 		}
 
 	}
 
-	public void deleteCourse(String idStudent, String idCourse) throws TransactionException {
+	public void deleteCourse(String idStudent, String idCourse) throws StudentException {
 
 		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
-				.orElseThrow(() -> new TransactionException(StudentMessage.UPDATE_ERROR.getCode(),
-						StudentMessage.UPDATE_ERROR.getDescription()));
+				.orElseThrow(() -> new StudentException(StudentMessage.UPDATE_ERROR));
 
 		student.setCourse(null);
 		studentRepository.save(student);
 
 	}
 
-	public void addBill(Bill bill, UUID studentId) throws TransactionException {
+	public void addBill(Bill bill, UUID studentId) throws StudentException {
 
 		findById(studentId.toString()).ifPresent(student -> {
 
