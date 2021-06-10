@@ -6,7 +6,7 @@ import click.escuela.school.admin.exception.TransactionException;
 
 public interface BillServiceGeneric <T, S>{
 
-	public void create(String id, T entity) throws TransactionException;
+	public void create(String idSchool, String id, T entity) throws TransactionException;
 	
 	public S getById(String id) throws TransactionException;
 	

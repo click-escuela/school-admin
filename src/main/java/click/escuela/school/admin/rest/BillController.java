@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.BillApi;
@@ -49,14 +50,27 @@ public class BillController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.getById(billId));
 	}
 
+	@Operation(summary = "Get bill by studentId", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BillDTO.class))) })
+	@GetMapping(value = "student/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<BillDTO>> getByStudentId(
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
+			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
+			@RequestParam(required = false, value = "status") String status,
+			@RequestParam(required = false, value = "month") Integer month,
+			@RequestParam(required = false, value ="year") Integer year){
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.findBills(schoolId, studentId, status, month, year));
+	}
+
 	@Operation(summary = "Create Bill", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BillEnum> create(
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
 			@RequestBody @Validated BillApi billApi) throws TransactionException {
 
-		billService.create(studentId, billApi);
+		billService.create(schoolId, studentId, billApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.CREATE_OK);
 	}
 

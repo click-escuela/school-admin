@@ -24,6 +24,7 @@ import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
+import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.model.Adress;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
@@ -196,6 +197,10 @@ public class Mapper {
 	public static BillDTO mapperToBillDTO(Bill bill) {
 		return modelMapper.map(bill, BillDTO.class);
 	}
+	
+	public static PaymentStatus mapperToEnumPaymentStatus(String status) {
+		return modelMapper.map(PaymentStatus.valueOf(status), PaymentStatus.class);
+	}
 
 	// School
 	public static School mapperToSchool(SchoolApi schoolApi) {
@@ -211,4 +216,6 @@ public class Mapper {
 	private static SchoolDTO mapperToSchool(School school) {
 		return modelMapper.map(school, SchoolDTO.class);
 	}
+
+	
 }
