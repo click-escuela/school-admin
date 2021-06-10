@@ -2,9 +2,9 @@ package click.escuela.school.admin.enumerator;
 
 public enum CourseMessage {
 
-	CREATE_OK("CREATED_STUDENT","Se creó el curso correctamente"),
+	CREATE_OK("CREATED_OK","Se creó el curso correctamente"),
 	CREATE_ERROR("CREATE_ERROR","No se pudo crear el curso correctamente"),
-	UPDATE_OK("UPDATE_STUDENT","Se modificó el curso correctamente"),
+	UPDATE_OK("UPDATE_OK","Se modificó el curso correctamente"),
 	UPDATE_ERROR("UPDATE_ERROR","No se pudo modificar el curso correctamente"),
 	GET_ERROR("GET_ERROR","No se pudo encontrar el curso");
 
