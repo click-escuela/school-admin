@@ -19,7 +19,6 @@ import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.exception.BillException;
-import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

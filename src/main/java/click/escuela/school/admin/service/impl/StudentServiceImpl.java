@@ -12,7 +12,6 @@ import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.StudentException;
-import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
