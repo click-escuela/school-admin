@@ -23,6 +23,7 @@ import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
@@ -93,7 +94,7 @@ public class TeacherServiceTest {
 
 		Mockito.when(teacherRepository.save(null)).thenThrow(IllegalArgumentException.class);
 
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherServiceImpl.create(teacherApi);
 		}).withMessage(TeacherMessage.CREATE_ERROR.getDescription());
 	}
@@ -115,7 +116,7 @@ public class TeacherServiceTest {
 	public void whenUpdateIsError() throws TransactionException {
 
 		id = UUID.randomUUID();
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherApi.setId(id.toString());
 			teacherServiceImpl.update(teacherApi);
 		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
@@ -134,7 +135,7 @@ public class TeacherServiceTest {
 	@Test
 	public void whenGetByIdIsError() throws TransactionException {
 		id = UUID.randomUUID();
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherServiceImpl.getById(id.toString());
 		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}

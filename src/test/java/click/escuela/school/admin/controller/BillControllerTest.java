@@ -37,6 +37,7 @@ import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.PaymentStatus;
+import click.escuela.school.admin.exception.BillException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
@@ -66,7 +67,7 @@ public class BillControllerTest {
 	private static String EMPTY = "";
 
 	@Before
-	public void setup() throws TransactionException {
+	public void setup() throws BillException {
 		mockMvc = MockMvcBuilders.standaloneSetup(billController).setControllerAdvice(new Handler()).build();
 		mapper = new ObjectMapper().findAndRegisterModules().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 				.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false)
@@ -180,7 +181,7 @@ public class BillControllerTest {
 	@Test
 	public void whenCreateError() throws JsonProcessingException, Exception {
 
-		doThrow(new TransactionException(BillEnum.CREATE_ERROR.getCode(), BillEnum.CREATE_ERROR.getDescription()))
+		doThrow(new BillException(BillEnum.CREATE_ERROR))
 				.when(billService).create(Mockito.anyString(), Mockito.anyString(), Mockito.any());
 
 		MvcResult result = mockMvc

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,7 +49,7 @@ public class StudentController {
 	@GetMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentDTO> getById(
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId, @RequestParam("fullDetail") Boolean fullDetail)
-			throws TransactionException {
+			throws StudentException {
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getById(studentId,fullDetail));
 	}
@@ -73,7 +73,7 @@ public class StudentController {
 	@Operation(summary = "Create student", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentMessage> create(@RequestBody @Validated StudentApi studentApi) throws TransactionException {
+	public ResponseEntity<StudentMessage> create(@RequestBody @Validated StudentApi studentApi) throws StudentException {
 
 		studentService.create(studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.CREATE_OK);
@@ -82,7 +82,7 @@ public class StudentController {
 	@Operation(summary = "Update student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentMessage> update(@RequestBody @Validated StudentApi studentApi) throws TransactionException {
+	public ResponseEntity<StudentMessage> update(@RequestBody @Validated StudentApi studentApi) throws StudentException  {
 		studentService.update(studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.UPDATE_OK);
 	}
@@ -92,7 +92,7 @@ public class StudentController {
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> delete(
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId)
-			throws TransactionException {
+			throws StudentException {
 		studentService.delete(studentId);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.DELETE_OK);
 	}

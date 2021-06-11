@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.BillException;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,7 +46,7 @@ public class BillController {
 	@GetMapping(value = "/{billId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BillDTO> getById(
 			@Parameter(name = "Bill id", required = true) @PathVariable("billId") String billId)
-			throws TransactionException {
+			throws BillException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.getById(billId));
 	}
 
@@ -68,7 +68,7 @@ public class BillController {
 	public ResponseEntity<BillEnum> create(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
-			@RequestBody @Validated BillApi billApi) throws TransactionException {
+			@RequestBody @Validated BillApi billApi) throws BillException {
 
 		billService.create(schoolId, studentId, billApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.CREATE_OK);

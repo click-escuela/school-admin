@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.enumerator.CourseMessage;
+import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.rest.CourseController;
 import click.escuela.school.admin.rest.handler.Handler;
@@ -55,7 +56,7 @@ public class CourseControllerTest {
 	private static String EMPTY = "";
 
 	@Before
-	public void setup() throws TransactionException {
+	public void setup() throws CourseException {
 		mockMvc = MockMvcBuilders.standaloneSetup(courseController).setControllerAdvice(new Handler()).build();
 		mapper = new ObjectMapper().findAndRegisterModules().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 				.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false)

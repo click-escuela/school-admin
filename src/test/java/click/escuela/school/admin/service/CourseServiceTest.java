@@ -17,6 +17,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.api.CourseApi;
+import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
@@ -73,7 +74,7 @@ public class CourseServiceTest {
 
 		Mockito.when(courseRepository.save(null)).thenThrow(IllegalArgumentException.class);
 
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(CourseException.class).isThrownBy(() -> {
 
 			courseServiceImpl.create(courseApi);
 		}).withMessage("No se pudo crear el curso correctamente");
