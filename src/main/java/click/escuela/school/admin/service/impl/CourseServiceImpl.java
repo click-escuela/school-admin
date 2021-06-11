@@ -17,7 +17,7 @@ import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.CourseServiceGeneric;
 
 @Service
-public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, CourseDTO> {
+public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 	@Autowired
 	private CourseRepository courseRepository;
 

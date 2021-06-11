@@ -2,6 +2,7 @@ package click.escuela.school.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -55,8 +56,7 @@ public class TeacherServiceTest {
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").cellPhone("1589632485").email("mariAna@gmail.com")
 				.courseId(courseId).schoolId(schoolId).adress(new Adress()).build();
-
-		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now()).documentType("DNI")
+		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now()).documentType("DNI")
 				.document("25897863").schoolId(schoolId).cellPhone("1589632485").email("mariAna@gmail.com")
 				.adressApi(new AdressApi()).build();
 		Optional<Teacher> optional = Optional.of(teacher);
@@ -66,24 +66,19 @@ public class TeacherServiceTest {
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi)).thenReturn(teacher);
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
-
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(teacherRepository.findBySchoolId(schoolId)).thenReturn(teachers);
 		Mockito.when(teacherRepository.findByCourseId(courseId)).thenReturn(teachers);
+		Mockito.when(teacherRepository.findAll()).thenReturn(teachers);
 
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 	}
 
 	@Test
 	public void whenCreateIsOk() throws TransactionException {
-		boolean hasError = false;
-		try {
-			teacherServiceImpl.create(teacherApi);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+		teacherServiceImpl.create(teacherApi);
+		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
 	}
 
 	@Test
@@ -100,10 +95,8 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenUpdateIsOk() throws TransactionException {
-
 		boolean hasError = false;
 		try {
-			teacherApi.setId(id.toString());
 			teacherServiceImpl.update(teacherApi);
 		} catch (Exception e) {
 			hasError = true;
@@ -113,7 +106,6 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenUpdateIsError() throws TransactionException {
-
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			teacherApi.setId(id.toString());
@@ -122,13 +114,9 @@ public class TeacherServiceTest {
 	}
 
 	@Test
-	public void whenGetByIsOk() {
-		boolean hasError = false;
-		try {
-			teacherServiceImpl.getById(id.toString());
-		} catch (Exception e) {
-			assertThat(hasError).isFalse();
-		}
+	public void whenGetByIsOk() throws TransactionException {
+		teacherServiceImpl.getById(id.toString());
+		verify(teacherRepository).findById(id);
 	}
 
 	@Test
@@ -141,12 +129,8 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenGetBySchoolIsOk() {
-		boolean hasError = false;
-		try {
-			teacherServiceImpl.getBySchoolId(schoolId.toString());
-		} catch (Exception e) {
-			assertThat(hasError).isFalse();
-		}
+		teacherServiceImpl.getBySchoolId(schoolId.toString());
+		verify(teacherRepository).findBySchoolId(schoolId);
 	}
 
 	@Test
@@ -163,12 +147,8 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenGetByCourseIsOk() {
-		boolean hasError = false;
-		try {
-			teacherServiceImpl.getByCourseId(courseId.toString());
-		} catch (Exception e) {
-			assertThat(hasError).isFalse();
-		}
+		teacherServiceImpl.getByCourseId(courseId.toString());
+		verify(teacherRepository).findByCourseId(courseId);
 	}
 
 	@Test
@@ -181,5 +161,11 @@ public class TeacherServiceTest {
 		} catch (Exception e) {
 			assertThat(hasEmpty).isFalse();
 		}
+	}
+	
+	@Test
+	public void whenFindAllIsOk() {
+		teacherServiceImpl.findAll();
+		verify(teacherRepository).findAll();
 	}
 }
