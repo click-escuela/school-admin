@@ -2,14 +2,14 @@ package click.escuela.school.admin.service;
 
 import java.util.List;
 
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.BillException;
 
 public interface BillServiceGeneric <T, S>{
 
-	public void create(String id, T entity) throws TransactionException;
+	public void create(String idSchool, String id, T entity) throws BillException;
 	
-	public S getById(String id) throws TransactionException;
+	public S getById(String id) throws BillException;
 	
-	public List<S> findAll()  throws TransactionException;
+	public List<S> findAll()  throws BillException;
 
 }

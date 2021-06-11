@@ -6,21 +6,25 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.api.CourseApiUpdate;
 import click.escuela.school.admin.api.ParentApi;
+import click.escuela.school.admin.api.SchoolApi;
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.api.StudentUpdateApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
+import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
+import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.model.Adress;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
@@ -193,5 +197,25 @@ public class Mapper {
 	public static BillDTO mapperToBillDTO(Bill bill) {
 		return modelMapper.map(bill, BillDTO.class);
 	}
+	
+	public static PaymentStatus mapperToEnumPaymentStatus(String status) {
+		return modelMapper.map(PaymentStatus.valueOf(status), PaymentStatus.class);
+	}
 
+	// School
+	public static School mapperToSchool(SchoolApi schoolApi) {
+		return modelMapper.map(schoolApi, School.class);
+	}
+
+	public static List<SchoolDTO> mapperToSchoolsDTO(List<School> schools) {
+		List<SchoolDTO> schoolDTOList = new ArrayList<>();
+		schools.stream().forEach(p -> schoolDTOList.add(mapperToSchool(p)));
+		return schoolDTOList;
+	}
+
+	private static SchoolDTO mapperToSchool(School school) {
+		return modelMapper.map(school, SchoolDTO.class);
+	}
+
+	
 }

@@ -40,6 +40,7 @@ import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
@@ -277,8 +278,7 @@ public class TeacherControllerTest {
 	@Test
 	public void whenCreateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new TransactionException(TeacherMessage.CREATE_ERROR.getCode(),
-				TeacherMessage.CREATE_ERROR.getDescription())).when(teacherService).create(Mockito.any());
+		doThrow(new TeacherException(TeacherMessage.CREATE_ERROR)).when(teacherService).create(Mockito.any());
 
 		MvcResult result = mockMvc.perform(post("/school/{schoolId}/teacher", schoolId)
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi))).andExpect(status().isBadRequest())
@@ -302,8 +302,7 @@ public class TeacherControllerTest {
 	@Test
 	public void whenUpdateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new TransactionException(TeacherMessage.UPDATE_ERROR.getCode(),
-				TeacherMessage.UPDATE_ERROR.getDescription())).when(teacherService).update(Mockito.any());
+		doThrow(new TeacherException(TeacherMessage.UPDATE_ERROR)).when(teacherService).update(Mockito.any());
 
 		MvcResult result = mockMvc.perform(put("/school/{schoolId}/teacher", schoolId)
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi))).andExpect(status().isBadRequest())
@@ -326,7 +325,7 @@ public class TeacherControllerTest {
 	@Test
 	public void getByIdIsError() throws JsonProcessingException, Exception {
 		id = UUID.randomUUID().toString();
-		doThrow(new TransactionException(TeacherMessage.GET_ERROR.getCode(), TeacherMessage.GET_ERROR.getDescription()))
+		doThrow(new TeacherException(TeacherMessage.GET_ERROR))
 				.when(teacherService).getById(id);
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders

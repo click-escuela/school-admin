@@ -23,6 +23,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.enumerator.DocumentType;
+import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
@@ -85,21 +87,20 @@ public class CourseServiceTest {
 	public void whenCreateIsError() {
 		CourseApi courseApi = CourseApi.builder().year(10).division("C").countStudent(40).schoolId(85252).build();
 		Mockito.when(courseRepository.save(null)).thenThrow(IllegalArgumentException.class);
-
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			courseServiceImpl.create(courseApi);
 		}).withMessage("No se pudo crear el curso correctamente");
 	}
 
 	@Test
-	public void whenAddTeacherIsOk() throws TransactionException {
+	public void whenAddTeacherIsOk() throws CourseException, TeacherException{
 		Mockito.when(teacherService.addCourseId(teacherId.toString(), id.toString())).thenReturn(teacher);
 		courseServiceImpl.addTeacher(teacherId.toString(), id.toString());
 		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
 	@Test
-	public void whenAddTeacherIsError() throws TransactionException {
+	public void whenAddTeacherIsError(){
 		boolean hasError = false;
 		try {
 			courseServiceImpl.addTeacher(UUID.randomUUID().toString(), UUID.randomUUID().toString());
@@ -110,14 +111,14 @@ public class CourseServiceTest {
 	}
 
 	@Test
-	public void whenDeleteTeacherIsOk() throws TransactionException {
+	public void whenDeleteTeacherIsOk() throws CourseException, TeacherException{
 		doNothing().when(teacherService).deleteCourseId(teacherId.toString());
 		courseServiceImpl.deleteTeacher(teacherId.toString(), id.toString());
 		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
 	@Test
-	public void whenDeleteTeacherIsError() throws TransactionException {
+	public void whenDeleteTeacherIsError() {
 		boolean hasError = false;
 		try {
 			courseServiceImpl.deleteTeacher(UUID.randomUUID().toString(), UUID.randomUUID().toString());

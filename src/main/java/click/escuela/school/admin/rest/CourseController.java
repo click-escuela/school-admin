@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.StudentException;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,9 +54,7 @@ public class CourseController {
 	@Operation(summary = "Create Course", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<CourseMessage> create(@RequestBody @Validated CourseApi courseApi)
-			throws TransactionException {
-
+	public ResponseEntity<CourseMessage> create(@RequestBody @Validated CourseApi courseApi) throws CourseException {
 		courseService.create(courseApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.CREATE_OK);
 	}
@@ -68,7 +68,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idCourse}/student/add/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CourseMessage> addStudent(@PathVariable("idCourse") String idCourse,
-			@PathVariable("idStudent") String idStudent) throws TransactionException {
+			@PathVariable("idStudent") String idStudent) throws CourseException, StudentException {
 		studentService.addCourse(idStudent, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
 	}
@@ -77,7 +77,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idCourse}/student/del/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CourseMessage> deleteStudent(@PathVariable("idCourse") String idCourse,
-			@PathVariable("idStudent") String idStudent) throws TransactionException {
+			@PathVariable("idStudent") String idStudent) throws StudentException {
 		studentService.deleteCourse(idStudent, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
 	}
@@ -86,7 +86,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idCourse}/teacher/add/{idTeacher}")
 	public ResponseEntity<CourseMessage> addTeacher(@PathVariable("idCourse") String idCourse,
-			@PathVariable("idTeacher") String idTeacher) throws TransactionException {
+			@PathVariable("idTeacher") String idTeacher) throws CourseException, TeacherException {
 		courseService.addTeacher(idTeacher, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
 	}
@@ -95,7 +95,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idCourse}/teacher/del/{idTeacher}")
 	public ResponseEntity<CourseMessage> deleteTeacher(@PathVariable("idCourse") String idCourse,
-			@PathVariable("idTeacher") String idTeacher) throws TransactionException {
+			@PathVariable("idTeacher") String idTeacher) throws CourseException, TeacherException {
 		courseService.deleteTeacher(idTeacher, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
 	}

@@ -30,7 +30,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.enumerator.CourseMessage;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.rest.CourseController;
 import click.escuela.school.admin.rest.handler.Handler;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
@@ -59,7 +60,7 @@ public class CourseControllerTest {
 	private static String EMPTY = "";
 
 	@Before
-	public void setup() throws TransactionException {
+	public void setup() throws CourseException, TeacherException {
 		mockMvc = MockMvcBuilders.standaloneSetup(courseController).setControllerAdvice(new Handler()).build();
 		mapper = new ObjectMapper().findAndRegisterModules().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 				.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false)
@@ -139,7 +140,6 @@ public class CourseControllerTest {
 
 	@Test
 	public void whenAddStudentIdCourseEmpty() throws JsonProcessingException, Exception {
-
 		MvcResult result = mockMvc
 				.perform(put("/school/{schoolId}/course/{idCourse}/student/add/{idStudent}", "123", EMPTY,
 						UUID.randomUUID().toString()).contentType(MediaType.APPLICATION_JSON))
@@ -202,8 +202,7 @@ public class CourseControllerTest {
 
 	@Test
 	public void whenAddTeacherIsError() throws JsonProcessingException, Exception {
-		doThrow(new TransactionException(CourseMessage.UPDATE_ERROR.getCode(),
-				CourseMessage.UPDATE_ERROR.getDescription())).when(courseService).addTeacher(teacherId, id);
+		doThrow(new CourseException(CourseMessage.UPDATE_ERROR)).when(courseService).addTeacher(teacherId, id);
 		MvcResult result = mockMvc
 				.perform(put("/school/{schoolId}/course/{idCourse}/teacher/add/{idTeacher}", schoolId, id, teacherId)
 						.contentType(MediaType.APPLICATION_JSON))
@@ -224,8 +223,7 @@ public class CourseControllerTest {
 
 	@Test
 	public void whenDeleteTeacherIsError() throws JsonProcessingException, Exception {
-		doThrow(new TransactionException(CourseMessage.UPDATE_ERROR.getCode(),
-				CourseMessage.UPDATE_ERROR.getDescription())).when(courseService).deleteTeacher(teacherId, id);
+		doThrow(new CourseException(CourseMessage.UPDATE_ERROR)).when(courseService).deleteTeacher(teacherId, id);
 		MvcResult result = mockMvc
 				.perform(put("/school/{schoolId}/course/{idCourse}/teacher/del/{idTeacher}", schoolId, id, teacherId)
 						.contentType(MediaType.APPLICATION_JSON))

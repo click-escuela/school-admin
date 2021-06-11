@@ -33,8 +33,14 @@ public class Bill {
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	private UUID id;
 
-	@Column(name = "period", nullable = false)
-	private Integer period;
+	@Column(name = "id_school", nullable = false)
+	private Integer schoolId;
+	
+	@Column(name = "month", nullable = false)
+	private Integer month;
+	
+	@Column(name = "year", nullable = false)
+	private Integer year;
 
 	@Column(name = "amount", nullable = false)
 	private Double amount;
@@ -42,7 +48,7 @@ public class Bill {
 	@Column(name = "file", nullable = false)
 	private String file;
 	
-	@Column(name = "id_student", nullable = false)
+	@Column(name = "id_student", columnDefinition = "BINARY(16)", nullable = false)
 	private UUID studentId;
 	
 	@Column(name = "status", nullable = false)
