@@ -23,6 +23,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.enumerator.DocumentType;
+import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
@@ -55,11 +56,11 @@ public class TeacherServiceTest {
 		schoolId = 1234;
 		courseId = UUID.randomUUID();
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
-				.documentType(DocumentType.DNI).document("25897863").cellPhone("1589632485").email("mariAna@gmail.com")
-				.courseId(courseId).schoolId(schoolId).adress(new Adress()).build();
-		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now()).documentType("DNI")
-				.document("25897863").schoolId(schoolId).cellPhone("1589632485").email("mariAna@gmail.com")
-				.adressApi(new AdressApi()).build();
+				.documentType(DocumentType.DNI).document("25897863").gender(GenderType.FEMALE).cellPhone("1589632485")
+				.email("mariAna@gmail.com").courseId(courseId).schoolId(schoolId).adress(new Adress()).build();
+		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now())
+				.documentType("DNI").document("25897863").gender(GenderType.FEMALE.toString()).schoolId(schoolId)
+				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(new AdressApi()).build();
 		Optional<Teacher> optional = Optional.of(teacher);
 		teachers = new ArrayList<>();
 		teachers.add(teacher);
@@ -72,6 +73,9 @@ public class TeacherServiceTest {
 		Mockito.when(teacherRepository.findBySchoolId(schoolId)).thenReturn(teachers);
 		Mockito.when(teacherRepository.findByCourseId(courseId)).thenReturn(teachers);
 		Mockito.when(teacherRepository.findAll()).thenReturn(teachers);
+		Mockito.when(Mapper.mapperToEnum(teacherApi.getGender())).thenReturn(teacher.getGender());
+		Mockito.when(teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
+				Mapper.mapperToEnum(teacherApi.getGender()))).thenReturn(optional);
 
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 	}
@@ -163,10 +167,39 @@ public class TeacherServiceTest {
 			assertThat(hasEmpty).isFalse();
 		}
 	}
-	
+
 	@Test
 	public void whenFindAllIsOk() {
 		teacherServiceImpl.findAll();
 		verify(teacherRepository).findAll();
+	}
+
+	@Test
+	public void whenExistsIsOk() throws TeacherException {
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
+			teacherServiceImpl.exists(teacherApi);
+		}).withMessage(TeacherMessage.EXIST.getDescription());
+	}
+
+	@Test
+	public void whenAddCourseIdIsOk() throws TeacherException {
+		boolean hasError = false;
+		try {
+			teacherServiceImpl.addCourseId(id.toString(), courseId.toString());
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isFalse();
+	}
+
+	@Test
+	public void whenDeleteCourseIdIsOk() throws TeacherException {
+		boolean hasError = false;
+		try {
+			teacherServiceImpl.deleteCourseId(id.toString());
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isFalse();
 	}
 }
