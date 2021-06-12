@@ -22,7 +22,6 @@ public class TeacherServiceImpl {
 	private TeacherRepository teacherRepository;
 
 	public void create(TeacherApi teacherApi) throws TeacherException {
-
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);
 			teacherRepository.save(teacher);
@@ -57,6 +56,29 @@ public class TeacherServiceImpl {
 
 	public List<TeacherDTO> getByCourseId(String courseId) {
 		return Mapper.mapperToTeachersDTO(teacherRepository.findByCourseId(UUID.fromString(courseId)));
+	}
+
+	public void exists(TeacherApi teacherApi) throws TeacherException {
+		Optional<Teacher> teacherExist = teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
+				Mapper.mapperToEnum(teacherApi.getGender()));
+		if (teacherExist.isPresent()) {
+			throw new TeacherException(TeacherMessage.EXIST);
+		}
+	}
+
+	public Teacher addCourseId(String idTeacher, String idCourse) throws TeacherException {
+		Teacher teacher = findById(idTeacher)
+				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
+		teacher.setCourseId(UUID.fromString(idCourse));
+		teacherRepository.save(teacher);
+		return teacher;
+	}
+
+	public void deleteCourseId(String teacherId) throws TeacherException {
+		Teacher teacher = findById(teacherId)
+				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
+		teacher.setCourseId(null);
+		teacherRepository.save(teacher);
 	}
 
 }

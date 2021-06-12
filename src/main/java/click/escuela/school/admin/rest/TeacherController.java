@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,12 +40,13 @@ public class TeacherController {
 	public ResponseEntity<List<TeacherDTO>> getAllCourses() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.findAll());
 	}
-	
+
 	@Operation(summary = "Get teacher by Id", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(value = "/{teacherId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<TeacherDTO> getById(
-			@Parameter(name = "Teacher id", required = true) @PathVariable("teacherId") String teacherId) throws TransactionException {
+			@Parameter(name = "Teacher id", required = true) @PathVariable("teacherId") String teacherId)
+			throws TeacherException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getById(teacherId));
 	}
 
@@ -61,7 +62,7 @@ public class TeacherController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(value = "course/{courseId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<TeacherDTO>> getByCourseId(
-			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId){
+			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getByCourseId(courseId));
 	}
 
@@ -69,7 +70,7 @@ public class TeacherController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<TeacherMessage> create(@RequestBody @Validated TeacherApi teacherApi)
-			throws TransactionException {
+			throws TeacherException {
 		teacherService.create(teacherApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.CREATE_OK);
 	}
@@ -78,7 +79,7 @@ public class TeacherController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<TeacherMessage> update(@RequestBody @Validated TeacherApi teacherApi)
-			throws TransactionException {
+			throws TeacherException {
 		teacherService.update(teacherApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}

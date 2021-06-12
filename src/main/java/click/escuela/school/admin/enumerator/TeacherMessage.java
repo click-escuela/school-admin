@@ -6,7 +6,7 @@ public enum TeacherMessage {
 	CREATE_ERROR("CREATE_ERROR", "No se pudo crear el profesor correctamente"),
 	UPDATE_OK("UPDATE_OK", "Se modificó el profesor correctamente"),
 	UPDATE_ERROR("UPDATE_ERROR", "No se pudo modificar el profesor correctamente"),
-	GET_ERROR("GET_ERROR", "No se pudo encontrar el profesor");
+	GET_ERROR("GET_ERROR", "No se pudo encontrar el profesor"), EXIST("TEACHER_EXIST", "Ya existe el profesor");
 
 	private String code;
 	private String description;
