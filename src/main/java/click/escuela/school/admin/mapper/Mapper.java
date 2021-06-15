@@ -32,6 +32,7 @@ import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.model.Teacher;
 
+
 @Component
 public class Mapper {
 
@@ -58,6 +59,7 @@ public class Mapper {
 	}
 
 	public static StudentDTO mapperToStudentDTO(Student student) {
+
 		StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
 		studentDTO.setBills(null);
 		return studentDTO;
@@ -120,9 +122,9 @@ public class Mapper {
 		students.stream().forEach(p -> studentList.add(mapperToStudent(p)));
 		return studentList;
 	}
-
+	
 	public static StudentDTO mapperToStudentFullDTO(Student student) {
-		StudentDTO studentFull = modelMapper.map(student, StudentDTO.class);
+		StudentDTO studentFull=modelMapper.map(student, StudentDTO.class);
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
 	}

@@ -1,7 +1,6 @@
 package click.escuela.school.admin.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +50,14 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 		courseRepository.save(course);
 	}
 
-
 	public void deleteTeacher(String teacherId, String courseId) throws CourseException, TeacherException {
 		Course course = findById(courseId).orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR));
 		teacherService.deleteCourseId(teacherId);
 		course.setTeacher(null);
 		courseRepository.save(course);
+
 	}
+
+	
 
 }

@@ -16,5 +16,5 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
 	public Optional<Student> findByDocumentAndGender(String document, GenderType gender);
 
 	public List<Student> findByCourseId(UUID id);
-	
+
 }

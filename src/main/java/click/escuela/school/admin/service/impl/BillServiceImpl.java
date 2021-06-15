@@ -2,7 +2,6 @@ package click.escuela.school.admin.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -66,6 +65,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 		return billRepository.findById(UUID.fromString(billId)).orElseThrow(
 				() -> new BillException(BillEnum.GET_ERROR));
 	}
+
 
 	public List<BillDTO> findBills( String schoolId, String studentId, String status, Integer month, Integer year){
 				
