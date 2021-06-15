@@ -11,7 +11,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import click.escuela.school.admin.exception.BillException;
 import click.escuela.school.admin.exception.ErrorStudent;
+import click.escuela.school.admin.exception.StudentException;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -25,7 +28,22 @@ public class Handler {
 		logger.error(e.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
-
+	@ExceptionHandler(StudentException.class)
+	public ResponseEntity<String> handleTransactionException(StudentException e) {
+		logger.error(e.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
+	@ExceptionHandler(TeacherException.class)
+	public ResponseEntity<String> handleTransactionException(TeacherException e) {
+		logger.error(e.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
+	
+	@ExceptionHandler(BillException.class)
+	public ResponseEntity<String> handleTransactionException(BillException e) {
+		logger.error(e.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorStudent> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		logger.error(e.getMessage());

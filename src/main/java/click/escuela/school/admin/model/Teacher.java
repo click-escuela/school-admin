@@ -72,7 +72,10 @@ public class Teacher {
 	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column(name = "course_id", nullable = true)
+	@Column(name = "course_id", columnDefinition = "BINARY(16)", nullable = true)
 	private UUID courseId;
+
+	@Column(name = "school_id", nullable = false)
+	private Integer schoolId;
 
 }

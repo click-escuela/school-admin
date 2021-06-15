@@ -26,6 +26,8 @@ import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.StudentMessage;
+import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
@@ -58,7 +60,7 @@ public class StudentServiceTest {
 	private Student student;
 
 	@Before
-	public void setUp() throws TransactionException {
+	public void setUp() throws CourseException {
 
 		PowerMockito.mockStatic(Mapper.class);
 
@@ -80,6 +82,7 @@ public class StudentServiceTest {
 				.gender(GenderType.MALE.toString()).name("oscar").level(EducationLevels.SECUNDARIO.toString())
 				.parentApi(parentApi).schoolId(1234).build();
 		Optional<Student> optional = Optional.of(student);
+		Optional<Course> optionalCourse=Optional.of(course);
 		students = new ArrayList<>();
 		students.add(student);
 
@@ -95,7 +98,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 
-		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(course);
+		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
@@ -134,7 +137,7 @@ public class StudentServiceTest {
 	public void whenUpdateIsError() {
 
 		id = UUID.randomUUID();
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentApi.setId(id.toString());
 			studentServiceImpl.update(studentApi);
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
@@ -152,7 +155,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any()))
 				.thenReturn(optional);
 
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 
 			studentServiceImpl.create(studentApi);
 		}).withMessage(StudentMessage.EXIST.getDescription());
@@ -171,9 +174,9 @@ public class StudentServiceTest {
 	}
 
 	@Test
-	public void whenAddCourseError() throws TransactionException {
+	public void whenAddCourseError() {
 		id = UUID.randomUUID();
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentServiceImpl.addCourse(id.toString(), idCourse.toString());
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
@@ -191,13 +194,12 @@ public class StudentServiceTest {
 	}
 
 	@Test
-	public void whenDeletedCourseError() throws TransactionException {
+	public void whenDeletedCourseError() {
 		id = UUID.randomUUID();
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
-
 	@Test
 	public void whenGetByIdIsOK() throws TransactionException {
 		boolean hasError = false;
@@ -210,9 +212,9 @@ public class StudentServiceTest {
 	}
 
 	@Test
-	public void whenGetByIdIsError() throws TransactionException {
+	public void whenGetByIdIsError() {
 		id = UUID.randomUUID();
-		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentServiceImpl.getById(id.toString(), false);
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}

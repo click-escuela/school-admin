@@ -1,6 +1,7 @@
 package click.escuela.school.admin.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,43 +10,29 @@ import org.springframework.stereotype.Service;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.CourseServiceGeneric;
 
-
 @Service
-public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, CourseDTO> {
+public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 	@Autowired
 	private CourseRepository courseRepository;
 
-	@Override
-	public void create(CourseApi courserApi) throws TransactionException {
-		try {
+	@Autowired
+	private TeacherServiceImpl teacherService;
 
+	@Override
+	public void create(CourseApi courserApi) throws CourseException {
+		try {
 			Course course = Mapper.mapperToCourse(courserApi);
 			courseRepository.save(course);
 		} catch (Exception e) {
-			throw new TransactionException(CourseMessage.CREATE_ERROR.getCode(), CourseMessage.CREATE_ERROR.getDescription());
+			throw new CourseException(CourseMessage.CREATE_ERROR);
 		}
-	}
-
-	@Override
-	public CourseDTO getById(String id, Boolean detail) throws TransactionException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(CourseApi entity) throws TransactionException {
-		 // Metodo no implentado.
-	}
-
-	@Override
-	public void delete(String id) throws TransactionException {
-		// Metodo no implentado.
 	}
 
 	public List<CourseDTO> findAll() {
@@ -53,12 +40,22 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi, Course
 		return Mapper.mapperToCoursesDTO(listCourses);
 	}
 
-	public Course findById(String idCourse) throws TransactionException {
+	public Optional<Course> findById(String idCourse) throws CourseException {
+		return Optional.of(courseRepository.findById(UUID.fromString(idCourse))
+				.orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR)));
+	}
 
-		return courseRepository.findById(UUID.fromString(idCourse))
-				.orElseThrow(() -> new TransactionException(CourseMessage.UPDATE_ERROR.getCode(),
-						CourseMessage.UPDATE_ERROR.getDescription()));
+	public void addTeacher(String teacherId, String courseId) throws CourseException, TeacherException {
+		Course course = findById(courseId).orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR));
+		course.setTeacher(teacherService.addCourseId(teacherId, courseId));
+		courseRepository.save(course);
+	}
 
+	public void deleteTeacher(String teacherId, String courseId) throws CourseException, TeacherException {
+		Course course = findById(courseId).orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR));
+		teacherService.deleteCourseId(teacherId);
+		course.setTeacher(null);
+		courseRepository.save(course);
 
 	}
 

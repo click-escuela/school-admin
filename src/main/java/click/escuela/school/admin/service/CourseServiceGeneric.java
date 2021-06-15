@@ -1,15 +1,9 @@
 package click.escuela.school.admin.service;
 
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.CourseException;
 
-public interface CourseServiceGeneric <T, S>{
+public interface CourseServiceGeneric<T> {
 
-	public void create(T entity) throws TransactionException;
-	
-	public S getById(String id, Boolean detail) throws TransactionException;
-	
-	public void update(T entity) throws TransactionException;
-	
-	public void delete(String id) throws TransactionException;
+	public void create(T entity) throws CourseException;
 
 }
