@@ -30,7 +30,7 @@ import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Teacher;
-import click.escuela.school.admin.repository.CourseRepository;
+import click.escuela.school.admin.repository.ExcellRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 
@@ -39,7 +39,7 @@ import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 public class CourseServiceTest {
 
 	@Mock
-	private CourseRepository courseRepository;
+	private ExcellRepository excellRepository;
 
 	@Mock
 	private TeacherServiceImpl teacherService;
@@ -68,25 +68,25 @@ public class CourseServiceTest {
 		courses.add(course);
 
 		Mockito.when(Mapper.mapperToCourse(courseApi)).thenReturn(course);
-		Mockito.when(courseRepository.save(course)).thenReturn(course);
-		Mockito.when(courseRepository.findById(id)).thenReturn(optional);
-		Mockito.when(courseRepository.findAll()).thenReturn(courses);
+		Mockito.when(excellRepository.save(course)).thenReturn(course);
+		Mockito.when(excellRepository.findById(id)).thenReturn(optional);
+		Mockito.when(excellRepository.findAll()).thenReturn(courses);
 
 		// inyecta en el servicio el objeto repository
-		ReflectionTestUtils.setField(courseServiceImpl, "courseRepository", courseRepository);
+		ReflectionTestUtils.setField(courseServiceImpl, "courseRepository", excellRepository);
 		ReflectionTestUtils.setField(courseServiceImpl, "teacherService", teacherService);
 	}
 
 	@Test
 	public void whenCreateIsOk() throws TransactionException {
 		courseServiceImpl.create(courseApi);
-		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
+		verify(excellRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
 	@Test
 	public void whenCreateIsError() {
 		CourseApi courseApi = CourseApi.builder().year(10).division("C").countStudent(40).schoolId(85252).build();
-		Mockito.when(courseRepository.save(null)).thenThrow(IllegalArgumentException.class);
+		Mockito.when(excellRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			courseServiceImpl.create(courseApi);
 		}).withMessage("No se pudo crear el curso correctamente");
@@ -96,7 +96,7 @@ public class CourseServiceTest {
 	public void whenAddTeacherIsOk() throws CourseException, TeacherException{
 		Mockito.when(teacherService.addCourseId(teacherId.toString(), id.toString())).thenReturn(teacher);
 		courseServiceImpl.addTeacher(teacherId.toString(), id.toString());
-		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
+		verify(excellRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
 	@Test
@@ -114,7 +114,7 @@ public class CourseServiceTest {
 	public void whenDeleteTeacherIsOk() throws CourseException, TeacherException{
 		doNothing().when(teacherService).deleteCourseId(teacherId.toString());
 		courseServiceImpl.deleteTeacher(teacherId.toString(), id.toString());
-		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
+		verify(excellRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
 	@Test
@@ -131,6 +131,6 @@ public class CourseServiceTest {
 	@Test
 	public void whenFindAllIsOk() {
 		courseServiceImpl.findAll();
-		verify(courseRepository).findAll();
+		verify(excellRepository).findAll();
 	}
 }

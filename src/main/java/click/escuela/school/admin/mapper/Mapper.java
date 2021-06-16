@@ -11,6 +11,7 @@ import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.api.CourseApiUpdate;
+import click.escuela.school.admin.api.ExcelApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.SchoolApi;
 import click.escuela.school.admin.api.StudentApi;
@@ -23,15 +24,16 @@ import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.EducationLevels;
+import click.escuela.school.admin.enumerator.FileStatus;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.model.Adress;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
+import click.escuela.school.admin.model.Excel;
 import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.model.Teacher;
-
 
 @Component
 public class Mapper {
@@ -122,9 +124,9 @@ public class Mapper {
 		students.stream().forEach(p -> studentList.add(mapperToStudent(p)));
 		return studentList;
 	}
-	
+
 	public static StudentDTO mapperToStudentFullDTO(Student student) {
-		StudentDTO studentFull=modelMapper.map(student, StudentDTO.class);
+		StudentDTO studentFull = modelMapper.map(student, StudentDTO.class);
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
 	}
@@ -199,7 +201,7 @@ public class Mapper {
 	public static BillDTO mapperToBillDTO(Bill bill) {
 		return modelMapper.map(bill, BillDTO.class);
 	}
-	
+
 	public static PaymentStatus mapperToEnumPaymentStatus(String status) {
 		return modelMapper.map(PaymentStatus.valueOf(status), PaymentStatus.class);
 	}
@@ -219,5 +221,15 @@ public class Mapper {
 		return modelMapper.map(school, SchoolDTO.class);
 	}
 
-	
+	// Excel
+	public static Excel mapperToExcel(ExcelApi excelApi) {
+		Excel excel = modelMapper.map(excelApi, Excel.class);
+		excel.setStatus(mapperToEnumStatus(excelApi.getStatus()));
+		return excel;
+	}
+
+	private static FileStatus mapperToEnumStatus(String status) {
+		return modelMapper.map(FileStatus.valueOf(status), FileStatus.class);
+	}
+
 }
