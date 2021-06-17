@@ -19,12 +19,12 @@ import click.escuela.school.admin.api.StudentUpdateApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
+import click.escuela.school.admin.dto.ExcelDTO;
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.EducationLevels;
-import click.escuela.school.admin.enumerator.FileStatus;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.model.Adress;
@@ -223,13 +223,17 @@ public class Mapper {
 
 	// Excel
 	public static Excel mapperToExcel(ExcelApi excelApi) {
-		Excel excel = modelMapper.map(excelApi, Excel.class);
-		excel.setStatus(mapperToEnumStatus(excelApi.getStatus()));
-		return excel;
+		return modelMapper.map(excelApi, Excel.class);
 	}
 
-	private static FileStatus mapperToEnumStatus(String status) {
-		return modelMapper.map(FileStatus.valueOf(status), FileStatus.class);
+	public static ExcelDTO mapperToExcel(Excel excel) {
+		return modelMapper.map(excel, ExcelDTO.class);
+	}
+
+	public static List<ExcelDTO> mapperToExcelsDTO(List<Excel> excels) {
+		List<ExcelDTO> excelsDTO = new ArrayList<>();
+		excels.stream().forEach(p -> excelsDTO.add(mapperToExcel(p)));
+		return excelsDTO;
 	}
 
 }
