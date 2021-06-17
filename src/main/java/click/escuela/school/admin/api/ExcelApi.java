@@ -29,7 +29,7 @@ public class ExcelApi {
 	@JsonProperty(value = "name", required = true)
 	private String name;
 
-	@NotNull(message = "School cannot be null")
+	@NotNull(message = "School Id cannot be null")
 	@JsonProperty(value = "schoolId", required = true)
 	private Integer schoolId;
 	
