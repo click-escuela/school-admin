@@ -14,13 +14,13 @@ import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
-import click.escuela.school.admin.repository.ExcellRepository;
+import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.CourseServiceGeneric;
 
 @Service
 public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 	@Autowired
-	private ExcellRepository excellRepository;
+	private CourseRepository courseRepository;
 
 	@Autowired
 	private TeacherServiceImpl teacherService;
@@ -29,33 +29,33 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 	public void create(CourseApi courserApi) throws CourseException {
 		try {
 			Course course = Mapper.mapperToCourse(courserApi);
-			excellRepository.save(course);
+			courseRepository.save(course);
 		} catch (Exception e) {
 			throw new CourseException(CourseMessage.CREATE_ERROR);
 		}
 	}
 
 	public List<CourseDTO> findAll() {
-		List<Course> listCourses = excellRepository.findAll();
+		List<Course> listCourses = courseRepository.findAll();
 		return Mapper.mapperToCoursesDTO(listCourses);
 	}
 
 	public Optional<Course> findById(String idCourse) throws CourseException {
-		return Optional.of(excellRepository.findById(UUID.fromString(idCourse))
+		return Optional.of(courseRepository.findById(UUID.fromString(idCourse))
 				.orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR)));
 	}
 
 	public void addTeacher(String teacherId, String courseId) throws CourseException, TeacherException {
 		Course course = findById(courseId).orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR));
 		course.setTeacher(teacherService.addCourseId(teacherId, courseId));
-		excellRepository.save(course);
+		courseRepository.save(course);
 	}
 
 	public void deleteTeacher(String teacherId, String courseId) throws CourseException, TeacherException {
 		Course course = findById(courseId).orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR));
 		teacherService.deleteCourseId(teacherId);
 		course.setTeacher(null);
-		excellRepository.save(course);
+		courseRepository.save(course);
 
 	}
 

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import click.escuela.school.admin.model.Course;
 
-public interface ExcellRepository extends JpaRepository<Course, UUID>{
+public interface CourseRepository extends JpaRepository<Course, UUID>{
 
 }
