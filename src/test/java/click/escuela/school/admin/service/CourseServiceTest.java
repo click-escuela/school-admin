@@ -78,7 +78,7 @@ public class CourseServiceTest {
 	}
 
 	@Test
-	public void whenCreateIsOk() throws TransactionException {
+	public void whenCreateIsOk() throws CourseException   {
 		courseServiceImpl.create(courseApi);
 		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
 	}
