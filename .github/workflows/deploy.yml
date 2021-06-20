@@ -10,9 +10,8 @@ jobs:
       id: ecr
       uses: elgohr/ecr-login-action@master
       with:
-        access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        access_key_id: ${{ secrets.AWS_ACCESS_KEY }}
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        account_id: ${{ secrets.AWS_ACCOUNT_ID }}
         region: ${{ secrets.AWS_REGION }}
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
