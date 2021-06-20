@@ -10,13 +10,13 @@ jobs:
       id: ecr
       uses: elgohr/ecr-login-action@master
       with:
-        access_key_id: ${{ secrets.AWS_ACCESS_KEY }}
+        access_key: ${{ secrets.AWS_ACCESS_KEY }}
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: ${{ secrets.AWS_REGION }}
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: myDocker/repository
+        name: school-admin/school-admin
         username: ${{ steps.ecr.outputs.username }}
         password: ${{ steps.ecr.outputs.password }}
         registry: ${{ steps.ecr.outputs.registry }}
