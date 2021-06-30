@@ -38,7 +38,6 @@ import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.exception.BillException;
-import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.rest.BillController;

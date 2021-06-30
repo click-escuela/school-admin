@@ -80,7 +80,7 @@ public class StudentServiceTest {
 		studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now()).cellPhone("4534543")
 				.division("C").grade("3°").document("435345").email("oscar@gmail.com")
 				.gender(GenderType.MALE.toString()).name("oscar").level(EducationLevels.SECUNDARIO.toString())
-				.parentApi(parentApi).schoolId(1234).build();
+				.parentApi(parentApi).build();
 		Optional<Student> optional = Optional.of(student);
 		Optional<Course> optionalCourse=Optional.of(course);
 		students = new ArrayList<>();
@@ -114,7 +114,7 @@ public class StudentServiceTest {
 
 		boolean hasError = false;
 		try {
-			studentServiceImpl.create(studentApi);
+			studentServiceImpl.create(idSchool.toString(),studentApi);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -126,7 +126,7 @@ public class StudentServiceTest {
 		boolean hasError = false;
 		try {
 			studentApi.setId(id.toString());
-			studentServiceImpl.update(studentApi);
+			studentServiceImpl.update(idSchool.toString(),studentApi);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -139,7 +139,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentApi.setId(id.toString());
-			studentServiceImpl.update(studentApi);
+			studentServiceImpl.update(idSchool.toString(),studentApi);
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 
 	}
@@ -151,13 +151,13 @@ public class StudentServiceTest {
 
 		StudentApi studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now())
 				.cellPhone("4534543").document("55555").division("F").grade("3°").email("oscar@gmail.com")
-				.gender(GenderType.MALE.toString()).name("oscar").parentApi(new ParentApi()).schoolId(1234).build();
+				.gender(GenderType.MALE.toString()).name("oscar").parentApi(new ParentApi()).build();
 		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any()))
 				.thenReturn(optional);
 
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 
-			studentServiceImpl.create(studentApi);
+			studentServiceImpl.create(idSchool.toString(),studentApi);
 		}).withMessage(StudentMessage.EXIST.getDescription());
 
 	}

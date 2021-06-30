@@ -1,6 +1,5 @@
 package click.escuela.school.admin.controller;
 
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +38,6 @@ import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.StudentApi;
-import click.escuela.school.admin.api.StudentUpdateApi;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
@@ -52,7 +50,6 @@ import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.rest.StudentController;
 import click.escuela.school.admin.rest.handler.Handler;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
-
 
 @EnableWebMvc
 @RunWith(MockitoJUnitRunner.class)
@@ -68,7 +65,6 @@ public class StudentControllerTest {
 
 	private ObjectMapper mapper;
 	private StudentApi studentApi;
-	private StudentUpdateApi studentUpdateApi;
 	private ParentApi parentApi;
 	private AdressApi adressApi;
 	private UUID idStudent;
@@ -95,12 +91,9 @@ public class StudentControllerTest {
 		studentApi = StudentApi.builder().adressApi(adressApi).birthday(LocalDate.now()).document("32333222")
 				.cellPhone("4534543").division("C").grade("3°").email("oscar@gmail.com")
 				.level(EducationLevels.SECUNDARIO.toString()).gender(GenderType.MALE.toString()).name("oscar")
-				.surname("umbert").parentApi(parentApi).schoolId(1234).build();
+				.surname("umbert").parentApi(parentApi).build();
 
-		studentUpdateApi = new StudentUpdateApi(studentApi);
-		studentUpdateApi.setId(idStudent.toString());
-
-		doNothing().when(studentService).create(Mockito.any());
+		doNothing().when(studentService).create(Mockito.anyString(), Mockito.any());
 		// doNothing().when(studentService).update(Mockito.any());
 
 	}
@@ -225,18 +218,6 @@ public class StudentControllerTest {
 	}
 
 	@Test
-	public void whenCreateSchoolEmpty() throws JsonProcessingException, Exception {
-
-		studentApi.setSchoolId(null);
-		MvcResult result = mockMvc.perform(post("/school/{schoolId}/student", "123")
-				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().isBadRequest())
-				.andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("School cannot be null");
-
-	}
-
-	@Test
 	public void whenCreateGradeEmpty() throws JsonProcessingException, Exception {
 
 		studentApi.setGrade(EMPTY);
@@ -311,8 +292,8 @@ public class StudentControllerTest {
 	@Test
 	public void whenCreateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new StudentException(StudentMessage.CREATE_ERROR))
-				.when(studentService).create(Mockito.any());
+		doThrow(new StudentException(StudentMessage.CREATE_ERROR)).when(studentService).create(Mockito.anyString(),
+				Mockito.any());
 
 		MvcResult result = mockMvc.perform(post("/school/{schoolId}/student", "123")
 				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().isBadRequest())
@@ -330,7 +311,7 @@ public class StudentControllerTest {
 	public void whenUpdatOk() throws JsonProcessingException, Exception {
 
 		MvcResult result = mockMvc.perform(put("/school/{schoolId}/student", "123")
-				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentUpdateApi)))
+				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi)))
 				.andExpect(status().is2xxSuccessful()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(StudentMessage.UPDATE_OK.name());
@@ -340,12 +321,12 @@ public class StudentControllerTest {
 	@Test
 	public void whenUpdateErrorService() throws JsonProcessingException, Exception {
 
-		doThrow(new StudentException(StudentMessage.UPDATE_ERROR))
-				.when(studentService).update(Mockito.any());
+		doThrow(new StudentException(StudentMessage.UPDATE_ERROR)).when(studentService).update(Mockito.anyString(),
+				Mockito.any());
 
 		MvcResult result = mockMvc.perform(put("/school/{schoolId}/student", "123")
-				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentUpdateApi)))
-				.andExpect(status().isBadRequest()).andReturn();
+				.contentType(MediaType.APPLICATION_JSON).content(toJson(studentApi))).andExpect(status().isBadRequest())
+				.andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains(StudentMessage.UPDATE_ERROR.getDescription());
 
@@ -372,9 +353,9 @@ public class StudentControllerTest {
 	@Test
 	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
 		idStudent = UUID.randomUUID();
-		doThrow(new StudentException(StudentMessage.GET_ERROR))
-				.when(studentService).getById(idStudent.toString(), false);
-		
+		doThrow(new StudentException(StudentMessage.GET_ERROR)).when(studentService).getById(idStudent.toString(),
+				false);
+
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
 				.get("/school/{schoolId}/student/{idStudent}?fullDetail=false", "1234", idStudent.toString())
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
@@ -394,8 +375,7 @@ public class StudentControllerTest {
 				.thenReturn(Mapper.mapperToStudentsDTO(students));
 
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders
-						.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
+				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
@@ -410,8 +390,8 @@ public class StudentControllerTest {
 		idSchool = 6666;
 		doThrow(NullPointerException.class).when(studentService).getBySchool(idSchool.toString(), false);
 
-		MvcResult result = mockMvc.perform(
-				MockMvcRequestBuilders.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student?fullDetail=false", idSchool.toString())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
@@ -431,15 +411,17 @@ public class StudentControllerTest {
 		Mockito.when(studentService.getByCourse(idCourse.toString(), false)).thenReturn(students);
 
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
-						idSchool.toString(), idCourse.toString()).contentType(MediaType.APPLICATION_JSON))
+				.perform(
+						MockMvcRequestBuilders
+								.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
+										idSchool.toString(), idCourse.toString())
+								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.ACCEPTED.value())).andReturn();
 
 		TypeReference<List<StudentDTO>> typeReference = new TypeReference<List<StudentDTO>>() {
 		};
 		List<StudentDTO> studentResult = mapper.readValue(result.getResponse().getContentAsString(), typeReference);
 		assertThat(studentResult.get(0).getId()).contains(idStudent.toString());
-
 	}
 
 	@Test
@@ -448,8 +430,11 @@ public class StudentControllerTest {
 		doThrow(NullPointerException.class).when(studentService).getByCourse(idCourse.toString(), false);
 
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
-						idSchool.toString(), idCourse.toString()).contentType(MediaType.APPLICATION_JSON))
+				.perform(
+						MockMvcRequestBuilders
+								.get("/school/{schoolId}/student/course/{courseId}?fullDetail=false",
+										idSchool.toString(), idCourse.toString())
+								.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("");
