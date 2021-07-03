@@ -29,10 +29,8 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Override
 	public void create(StudentApi studentApi) throws StudentException {
-
 		exists(studentApi);
 		try {
-
 			Student student = Mapper.mapperToStudent(studentApi);
 			studentRepository.save(student);
 		} catch (Exception e) {
@@ -41,31 +39,32 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
-	public StudentDTO getById(String id, Boolean fullDetail) throws StudentException {
-
-		Student student = findById(id).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
-
+	public StudentDTO getById(String schoolId, String id, Boolean fullDetail) throws StudentException {
+		Student student = findByIdAndSchoolId(schoolId, id)
+				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
-
 	}
 
 	public Optional<Student> findById(String id) throws StudentException {
-
 		return Optional.of(studentRepository.findById(UUID.fromString(id))
+				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
+	}
+
+	public Optional<Student> findByIdAndSchoolId(String schoolId, String id) throws StudentException {
+		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Integer.valueOf(schoolId))
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
 	}
 
 	@Override
 	public void update(StudentApi studentApi) throws StudentException {
 
-		findById(studentApi.getId()).ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi,student)));
+		findById(studentApi.getId())
+				.ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi, student)));
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws StudentException, CourseException {
-
-		Student student = findById(idStudent)
-				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
+		Student student = findById(idStudent).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		Optional<Course> optional = courseService.findById(idCourse);
 		if (optional.isPresent()) {
 			student.setCourse(optional.get());
@@ -75,12 +74,10 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Override
 	public void delete(String id) throws StudentException {
-
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 
 	public List<StudentDTO> getBySchool(String school, Boolean fullDetail) {
-
 		return Boolean.TRUE.equals(fullDetail)
 				? Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))))
 				: Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
@@ -95,42 +92,31 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public List<StudentDTO> findAll() {
-
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
 	}
 
 	public void exists(StudentApi student) throws StudentException {
-
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
 
 		if (studentExist.isPresent()) {
 			throw new StudentException(StudentMessage.EXIST);
 		}
-
 	}
 
 	public void deleteCourse(String idStudent, String idCourse) throws StudentException {
-
 		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
 				.orElseThrow(() -> new StudentException(StudentMessage.UPDATE_ERROR));
-
 		student.setCourse(null);
 		studentRepository.save(student);
-
 	}
 
 	public void addBill(Bill bill, UUID studentId) throws StudentException {
-
-
 		findById(studentId.toString()).ifPresent(student -> {
-
 			List<Bill> bills = student.getBills();
 			bills.add(bill);
 			student.setBills(bills);
-
 			studentRepository.save(student);
 		});
-
 	}
 }

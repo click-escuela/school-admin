@@ -356,7 +356,7 @@ public class StudentControllerTest {
 		Student student = Student.builder().id(idStudent).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).build();
-		Mockito.when(studentService.getById(idStudent.toString(), false))
+		Mockito.when(studentService.getById(idSchool.toString(),idStudent.toString(), false))
 				.thenReturn(Mapper.mapperToStudentDTO(student));
 
 		MvcResult result = mockMvc
@@ -373,7 +373,7 @@ public class StudentControllerTest {
 	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
 		idStudent = UUID.randomUUID();
 		doThrow(new StudentException(StudentMessage.GET_ERROR))
-				.when(studentService).getById(idStudent.toString(), false);
+				.when(studentService).getById(idSchool.toString(),idStudent.toString(), false);
 		
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
 				.get("/school/{schoolId}/student/{idStudent}?fullDetail=false", "1234", idStudent.toString())
