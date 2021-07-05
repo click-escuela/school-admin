@@ -15,7 +15,6 @@ import click.escuela.school.admin.api.ExcelApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.SchoolApi;
 import click.escuela.school.admin.api.StudentApi;
-import click.escuela.school.admin.api.StudentUpdateApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
@@ -73,10 +72,6 @@ public class Mapper {
 
 	public static StudentApi mapperToStudent(Student student) {
 		return modelMapper.map(student, StudentApi.class);
-	}
-
-	public static StudentDTO mapperToStudentDTO(StudentUpdateApi studentUpdateApi) {
-		return modelMapper.map(studentUpdateApi, StudentDTO.class);
 	}
 
 	public static StudentDTO mapperToStudentDTO(StudentApi studentApi) {
