@@ -27,12 +27,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class StudentApi extends PersonApi {
 
 	public StudentApi(String name, String surname, String document, String gender, LocalDate birthday,
-			AdressApi adressApi, String cellPhone, String email, ParentApi parentApi, Integer schoolId, String grade,
+			AdressApi adressApi, String cellPhone, String email, ParentApi parentApi, String grade,
 			String division, String level) {
 
 		super(name, surname, document, gender, birthday, adressApi, cellPhone, email);
 		this.parentApi = parentApi;
-		this.schoolId = schoolId;
 		this.grade = grade;
 		this.division = division;
 		this.level = level;
@@ -45,10 +44,6 @@ public class StudentApi extends PersonApi {
 	@JsonProperty(value = "parent", required = true)
 	@Valid
 	private ParentApi parentApi;
-
-	@NotNull(message = "School cannot be null")
-	@JsonProperty(value = "schoolId", required = true)
-	private Integer schoolId;
 
 	@NotBlank(message = "Grade cannot be null")
 	@JsonProperty(value = "grade", required = true)

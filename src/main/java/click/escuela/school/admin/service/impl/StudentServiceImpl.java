@@ -28,10 +28,11 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	private CourseServiceImpl courseService;
 
 	@Override
-	public void create(StudentApi studentApi) throws StudentException {
+	public void create(String schoolId, StudentApi studentApi) throws StudentException {
 		exists(studentApi);
 		try {
 			Student student = Mapper.mapperToStudent(studentApi);
+			student.setSchoolId(Integer.valueOf(schoolId));
 			studentRepository.save(student);
 		} catch (Exception e) {
 			throw new StudentException(StudentMessage.CREATE_ERROR);
@@ -57,10 +58,10 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
-	public void update(StudentApi studentApi) throws StudentException {
-
-		findById(studentApi.getId())
-				.ifPresent(student -> studentRepository.save(Mapper.mapperToStudent(studentApi, student)));
+	public void update(String schoolId, StudentApi studentApi) throws StudentException {
+		Student student = findById(studentApi.getId()).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
+		student.setSchoolId(Integer.valueOf(schoolId));
+		studentRepository.save(Mapper.mapperToStudent(studentApi, student));
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws StudentException, CourseException {
@@ -81,7 +82,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return Boolean.TRUE.equals(fullDetail)
 				? Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))))
 				: Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
-
 	}
 
 	public List<StudentDTO> getByCourse(String courseId, Boolean fullDetail) {
@@ -98,7 +98,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public void exists(StudentApi student) throws StudentException {
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
-
 		if (studentExist.isPresent()) {
 			throw new StudentException(StudentMessage.EXIST);
 		}

@@ -36,7 +36,6 @@ public class StudentController {
 	@Autowired
 	private StudentServiceImpl studentService;
 
-	// Metodo de prueba
 	@Operation(summary = "Get all the students", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -58,32 +57,35 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<StudentDTO>> getBySchool(
-			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,@RequestParam("fullDetail") Boolean fullDetail) {
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getBySchool(schoolId,fullDetail));
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId, @RequestParam("fullDetail") Boolean fullDetail) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getBySchool(schoolId, fullDetail));
 	}
 
 	@Operation(summary = "Get student by courseId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "course/{courseId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<StudentDTO>> getByCourse(
-			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId,@RequestParam("fullDetail") Boolean fullDetail){
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getByCourse(courseId,fullDetail));
+			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId, @RequestParam("fullDetail") Boolean fullDetail) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getByCourse(courseId, fullDetail));
 	}
 
 	@Operation(summary = "Create student", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentMessage> create(@RequestBody @Validated StudentApi studentApi) throws StudentException {
-
-		studentService.create(studentApi);
+	public ResponseEntity<StudentMessage> create(
+			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
+			@RequestBody @Validated StudentApi studentApi) throws StudentException {
+		studentService.create(schoolId, studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.CREATE_OK);
 	}
 
 	@Operation(summary = "Update student by studentId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentMessage> update(@RequestBody @Validated StudentApi studentApi) throws StudentException  {
-		studentService.update(studentApi);
+	public ResponseEntity<StudentMessage> update(
+			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
+			@RequestBody @Validated StudentApi studentApi) throws StudentException {
+		studentService.update(schoolId, studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.UPDATE_OK);
 	}
 
@@ -91,8 +93,7 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> delete(
-			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId)
-			throws StudentException {
+			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId) throws StudentException {
 		studentService.delete(studentId);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.DELETE_OK);
 	}
