@@ -36,7 +36,6 @@ import click.escuela.school.admin.model.Adress;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
-import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.StudentRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
@@ -68,8 +67,7 @@ public class StudentServiceTest {
 		idSchool = 1234;
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
-		Course course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).teacher(new Teacher())
-				.schoolId(12345).build();
+		Course course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
 		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();

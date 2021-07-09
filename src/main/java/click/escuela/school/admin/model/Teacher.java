@@ -1,6 +1,7 @@
 package click.escuela.school.admin.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -72,9 +74,9 @@ public class Teacher {
 	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column(name = "course_id", columnDefinition = "BINARY(16)", nullable = true)
-	private UUID courseId;
-
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Course> courses;
+	
 	@Column(name = "school_id", nullable = false)
 	private Integer schoolId;
 

@@ -44,6 +44,7 @@ import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
+import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.rest.TeacherController;
 import click.escuela.school.admin.rest.handler.Handler;
@@ -81,12 +82,17 @@ public class TeacherControllerTest {
 		schoolId= "1234";
 		courseId= UUID.randomUUID().toString();
 		adressApi = new AdressApi("Calle falsa", "6458", "Nogues");
+		List<String> listStringIds = new ArrayList<>();
+		List<Course> course = new ArrayList<>();
+		listStringIds.add(courseId);
+		course.add(new Course());
+		
 		teacherApi = TeacherApi.builder().gender(GenderType.FEMALE.toString()).name("Mariana").surname("Lopez")
 				.birthday(LocalDate.now()).documentType(DocumentType.DNI.toString()).document("25897863").cellPhone("1589632485")
 				.email("mariAna@gmail.com").schoolId(Integer.valueOf(schoolId)).adressApi(adressApi).build();
 		Teacher teacher=Teacher.builder().id(UUID.fromString(id)).gender(GenderType.FEMALE).name("Mariana").surname("Lopez")
 				.birthday(LocalDate.now()).documentType(DocumentType.DNI).document("25897863").cellPhone("1589632485")
-				.email("mariAna@gmail.com").courseId(UUID.fromString(courseId)).schoolId(Integer.valueOf(schoolId)).adress(new Adress()).build();
+				.email("mariAna@gmail.com").courses(course).schoolId(Integer.valueOf(schoolId)).adress(new Adress()).build();
 		List<Teacher> teachers= new ArrayList<>();
 		teachers.add(teacher);
 		

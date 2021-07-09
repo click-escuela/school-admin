@@ -2,6 +2,7 @@ package click.escuela.school.admin.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -229,6 +230,12 @@ public class Mapper {
 		List<ExcelDTO> excelsDTO = new ArrayList<>();
 		excels.stream().forEach(p -> excelsDTO.add(mapperToExcel(p)));
 		return excelsDTO;
+	}
+
+	public static List<UUID> mapperStringToUUID(List<String> listStrings) {
+		List<UUID> listUUID = new ArrayList<>();
+		listStrings.stream().forEach(p -> listUUID.add(UUID.fromString(p)));
+		return listUUID;
 	}
 
 }

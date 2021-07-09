@@ -13,7 +13,5 @@ public interface TeacherRepository extends JpaRepository<Teacher, UUID> {
 
 	public List<Teacher> findBySchoolId(Integer school);
 
-	public List<Teacher> findByCourseId(UUID courseId);
-
 	public Optional<Teacher> findByDocumentAndGender(String document, GenderType gender);
 }

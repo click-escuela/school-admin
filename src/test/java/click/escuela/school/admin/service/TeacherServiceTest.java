@@ -25,12 +25,15 @@ import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
+import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
+import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.TeacherRepository;
+import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 
 @RunWith(PowerMockRunner.class)
@@ -39,6 +42,9 @@ public class TeacherServiceTest {
 
 	@Mock
 	private TeacherRepository teacherRepository;
+	
+	@Mock
+	private CourseServiceImpl courseService;
 
 	private TeacherServiceImpl teacherServiceImpl = new TeacherServiceImpl();
 	private TeacherApi teacherApi;
@@ -47,6 +53,8 @@ public class TeacherServiceTest {
 	private UUID courseId;
 	private Integer schoolId;
 	private List<Teacher> teachers;
+	List<String> listStringIds = new ArrayList<>();
+	List<Course> courses = new ArrayList<>();
 
 	@Before
 	public void setUp() {
@@ -55,9 +63,12 @@ public class TeacherServiceTest {
 		id = UUID.randomUUID();
 		schoolId = 1234;
 		courseId = UUID.randomUUID();
+		
+		listStringIds.add(courseId.toString());
+		courses.add(new Course());
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").gender(GenderType.FEMALE).cellPhone("1589632485")
-				.email("mariAna@gmail.com").courseId(courseId).schoolId(schoolId).adress(new Adress()).build();
+				.email("mariAna@gmail.com").courses(courses).schoolId(schoolId).adress(new Adress()).build();
 		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("25897863").gender(GenderType.FEMALE.toString()).schoolId(schoolId)
 				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(new AdressApi()).build();
@@ -71,13 +82,14 @@ public class TeacherServiceTest {
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(teacherRepository.findBySchoolId(schoolId)).thenReturn(teachers);
-		Mockito.when(teacherRepository.findByCourseId(courseId)).thenReturn(teachers);
 		Mockito.when(teacherRepository.findAll()).thenReturn(teachers);
 		Mockito.when(Mapper.mapperToEnum(teacherApi.getGender())).thenReturn(teacher.getGender());
 		Mockito.when(teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
 				Mapper.mapperToEnum(teacherApi.getGender()))).thenReturn(optional);
 
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
+		ReflectionTestUtils.setField(teacherServiceImpl, "courseService", courseService);
+
 	}
 
 	@Test
@@ -151,9 +163,9 @@ public class TeacherServiceTest {
 	}
 
 	@Test
-	public void whenGetByCourseIsOk() {
+	public void whenGetByCourseIsOk() throws CourseException {
 		teacherServiceImpl.getByCourseId(courseId.toString());
-		verify(teacherRepository).findByCourseId(courseId);
+		verify(courseService).findById(courseId.toString());
 	}
 
 	@Test
@@ -185,7 +197,7 @@ public class TeacherServiceTest {
 	public void whenAddCourseIdIsOk() throws TeacherException {
 		boolean hasError = false;
 		try {
-			teacherServiceImpl.addCourseId(id.toString(), courseId.toString());
+			teacherServiceImpl.addCourseId(id.toString(), listStringIds);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -196,7 +208,7 @@ public class TeacherServiceTest {
 	public void whenDeleteCourseIdIsOk() throws TeacherException {
 		boolean hasError = false;
 		try {
-			teacherServiceImpl.deleteCourseId(id.toString());
+			teacherServiceImpl.deleteCourseId(id.toString(),listStringIds);
 		} catch (Exception e) {
 			hasError = true;
 		}

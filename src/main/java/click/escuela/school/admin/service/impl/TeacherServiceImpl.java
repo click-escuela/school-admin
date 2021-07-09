@@ -1,8 +1,10 @@
 package click.escuela.school.admin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,8 +12,10 @@ import org.springframework.stereotype.Service;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
+import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.mapper.Mapper;
+import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.TeacherRepository;
 
@@ -20,6 +24,9 @@ public class TeacherServiceImpl {
 
 	@Autowired
 	private TeacherRepository teacherRepository;
+	
+	@Autowired
+	private CourseServiceImpl courseService;
 
 	public void create(TeacherApi teacherApi) throws TeacherException {
 		try {
@@ -54,8 +61,13 @@ public class TeacherServiceImpl {
 		return Mapper.mapperToTeachersDTO(teacherRepository.findBySchoolId(Integer.valueOf(schoolId)));
 	}
 
-	public List<TeacherDTO> getByCourseId(String courseId) {
-		return Mapper.mapperToTeachersDTO(teacherRepository.findByCourseId(UUID.fromString(courseId)));
+	public List<TeacherDTO> getByCourseId(String courseId) throws CourseException {
+		List<TeacherDTO> teacherDTO = new ArrayList<>();
+		Optional<Course> course = courseService.findById(courseId);
+		if(course.isPresent()) {
+			teacherDTO = Mapper.mapperToTeachersDTO( teacherRepository.findAll().stream().filter(p -> p.getCourses().contains(course.get())).collect(Collectors.toList()));
+		}
+		return teacherDTO;
 	}
 
 	public void exists(TeacherApi teacherApi) throws TeacherException {
@@ -66,18 +78,18 @@ public class TeacherServiceImpl {
 		}
 	}
 
-	public Teacher addCourseId(String idTeacher, String idCourse) throws TeacherException {
+	public Teacher addCourseId(String idTeacher, List<String> idCourses) throws TeacherException, CourseException {
 		Teacher teacher = findById(idTeacher)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
-		teacher.setCourseId(UUID.fromString(idCourse));
+		teacher.setCourses(courseService.getCourses(idCourses));
 		teacherRepository.save(teacher);
 		return teacher;
 	}
 
-	public void deleteCourseId(String teacherId) throws TeacherException {
+	public void deleteCourseId(String teacherId, List<String> idCourses) throws TeacherException, CourseException {
 		Teacher teacher = findById(teacherId)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
-		teacher.setCourseId(null);
+		teacher.getCourses().removeAll(courseService.getCourses(idCourses));
 		teacherRepository.save(teacher);
 	}
 
