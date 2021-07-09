@@ -79,7 +79,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public List<StudentDTO> getByCourse(String courseId, Boolean fullDetail) {
-
 		return Boolean.TRUE.equals(fullDetail)
 				? Mapper.mapperToStudentsFullDTO(studentRepository.findByCourseId(UUID.fromString(courseId)))
 				: Mapper.mapperToStudentsDTO(studentRepository.findByCourseId(UUID.fromString(courseId)));

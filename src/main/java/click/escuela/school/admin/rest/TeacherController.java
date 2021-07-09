@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.TeacherApi;
+import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.exception.CourseException;
@@ -50,7 +51,16 @@ public class TeacherController {
 			throws TeacherException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getById(teacherId));
 	}
-
+	
+	@Operation(summary = "Get course with students", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
+	@GetMapping(value = "/{teacherId}/courses", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<TeacherCourseStudentsDTO> getCoursesAndStudents(
+			@PathVariable("teacherId") String teacherId, @RequestBody @Validated List<String> listUUIDs)
+			throws TeacherException, CourseException {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getCourseAndStudents(teacherId,listUUIDs));
+	}
+	
 	@Operation(summary = "Get teacher by schoolId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -100,5 +110,7 @@ public class TeacherController {
 		teacherService.deleteCourseId(idTeacher, listUUIDs);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
+	
+	
 
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import click.escuela.school.admin.api.TeacherApi;
+import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.exception.CourseException;
@@ -81,7 +82,7 @@ public class TeacherServiceImpl {
 	public Teacher addCourseId(String idTeacher, List<String> idCourses) throws TeacherException, CourseException {
 		Teacher teacher = findById(idTeacher)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
-		teacher.setCourses(courseService.getCourses(idCourses));
+		teacher.setCourses(courseService.getCourses(teacher.getCourses(),idCourses));
 		teacherRepository.save(teacher);
 		return teacher;
 	}
@@ -89,8 +90,16 @@ public class TeacherServiceImpl {
 	public void deleteCourseId(String teacherId, List<String> idCourses) throws TeacherException, CourseException {
 		Teacher teacher = findById(teacherId)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
-		teacher.getCourses().removeAll(courseService.getCourses(idCourses));
+		teacher.getCourses().removeAll(courseService.getCourses(new ArrayList<>(),idCourses));
 		teacherRepository.save(teacher);
+	}
+
+	public TeacherCourseStudentsDTO getCourseAndStudents(String teacherId, List<String> listUUIDs) throws TeacherException, CourseException {
+		Teacher teacher = findById(teacherId)
+				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
+		TeacherCourseStudentsDTO teacherDTO = Mapper.mapperToTeacherCourseStudentsDTO(teacher);
+		teacherDTO.setCourses(courseService.getCourseStudents(listUUIDs));
+		return teacherDTO;
 	}
 
 }

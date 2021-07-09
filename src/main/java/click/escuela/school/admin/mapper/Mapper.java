@@ -19,9 +19,11 @@ import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
+import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.ExcelDTO;
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.EducationLevels;
@@ -141,10 +143,20 @@ public class Mapper {
 	public static CourseDTO mapperToCourseDTO(Course course) {
 		return modelMapper.map(course, CourseDTO.class);
 	}
+	
+	public static CourseStudentsDTO mapperToCourseStudentsDTO(Course course) {
+		return modelMapper.map(course, CourseStudentsDTO.class);
+	}
 
 	public static List<CourseDTO> mapperToCoursesDTO(List<Course> courses) {
 		List<CourseDTO> courseDTOList = new ArrayList<>();
 		courses.stream().forEach(p -> courseDTOList.add(mapperToCourseDTO(p)));
+		return courseDTOList;
+	}
+	
+	public static List<CourseStudentsDTO> mapperToCoursesStudentDTO(List<Course> courses) {
+		List<CourseStudentsDTO> courseDTOList = new ArrayList<>();
+		courses.stream().forEach(p -> courseDTOList.add(mapperToCourseStudentsDTO(p)));
 		return courseDTOList;
 	}
 
@@ -175,6 +187,10 @@ public class Mapper {
 
 	public static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
 		return modelMapper.map(teacher, TeacherDTO.class);
+	}
+	
+	public static TeacherCourseStudentsDTO mapperToTeacherCourseStudentsDTO(Teacher teacher) {
+		return modelMapper.map(teacher, TeacherCourseStudentsDTO.class);
 	}
 
 	public static List<TeacherDTO> mapperToTeachersDTO(List<Teacher> teachers) {
