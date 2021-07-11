@@ -51,16 +51,16 @@ public class TeacherController {
 			throws TeacherException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getById(teacherId));
 	}
-	
+
 	@Operation(summary = "Get course with students", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(value = "/{teacherId}/courses", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<TeacherCourseStudentsDTO> getCoursesAndStudents(
-			@PathVariable("teacherId") String teacherId, @RequestBody @Validated List<String> listUUIDs)
-			throws TeacherException, CourseException {
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getCourseAndStudents(teacherId,listUUIDs));
+	public ResponseEntity<TeacherCourseStudentsDTO> getCoursesAndStudents(@PathVariable("teacherId") String teacherId,
+			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(teacherService.getCourseAndStudents(teacherId, listUUIDs));
 	}
-	
+
 	@Operation(summary = "Get teacher by schoolId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -73,7 +73,8 @@ public class TeacherController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(value = "course/{courseId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<TeacherDTO>> getByCourseId(
-			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId) throws CourseException {
+			@Parameter(name = "Course id", required = true) @PathVariable("courseId") String courseId)
+			throws CourseException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getByCourseId(courseId));
 	}
 
@@ -94,23 +95,23 @@ public class TeacherController {
 		teacherService.update(teacherApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
-	
+
 	@Operation(summary = "Add courses in Teacher", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idTeacher}/add/courses")
-	public ResponseEntity<TeacherMessage> addTeacher(@PathVariable("idTeacher") String idTeacher, @RequestBody @Validated List<String> listUUIDs) throws  TeacherException, CourseException{
+	public ResponseEntity<TeacherMessage> addTeacher(@PathVariable("idTeacher") String idTeacher,
+			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
 		teacherService.addCourseId(idTeacher, listUUIDs);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
 
 	@Operation(summary = "Delete courses in Teacher", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
-	@PutMapping(value = "/{idTeacher}/delete/courses")
-	public ResponseEntity<TeacherMessage> deleteTeacher(@PathVariable("idTeacher") String idTeacher, @RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException{
+	@PutMapping(value = "/{idTeacher}/del/courses")
+	public ResponseEntity<TeacherMessage> deleteTeacher(@PathVariable("idTeacher") String idTeacher,
+			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
 		teacherService.deleteCourseId(idTeacher, listUUIDs);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
-	
-	
 
 }
