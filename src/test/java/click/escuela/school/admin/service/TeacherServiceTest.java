@@ -23,7 +23,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
-import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
@@ -44,7 +43,7 @@ public class TeacherServiceTest {
 
 	@Mock
 	private TeacherRepository teacherRepository;
-	
+
 	@Mock
 	private CourseServiceImpl courseService;
 
@@ -66,7 +65,7 @@ public class TeacherServiceTest {
 		id = UUID.randomUUID();
 		schoolId = 1234;
 		courseId = UUID.randomUUID();
-		
+
 		listStringIds.add(courseId.toString());
 		courses.add(new Course());
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
@@ -82,6 +81,7 @@ public class TeacherServiceTest {
 
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi)).thenReturn(teacher);
+		Mockito.when(Mapper.mapperToTeacher(teacherApi,teacher)).thenReturn(teacher);
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
@@ -105,25 +105,16 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenCreateIsError() {
-		teacherApi = TeacherApi.builder().name("Ana").surname("Lopez").birthday(LocalDate.now()).documentType("DNI")
-				.document("25896354").cellPhone("1589632485").email("ana@gmail.com").adressApi(new AdressApi()).build();
-
 		Mockito.when(teacherRepository.save(null)).thenThrow(IllegalArgumentException.class);
-
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
-			teacherServiceImpl.create(teacherApi);
+			teacherServiceImpl.create(new TeacherApi());
 		}).withMessage(TeacherMessage.CREATE_ERROR.getDescription());
 	}
 
 	@Test
 	public void whenUpdateIsOk() throws TransactionException {
-		boolean hasError = false;
-		try {
-			teacherServiceImpl.update(teacherApi);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+		teacherServiceImpl.update(teacherApi);
+		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
 	}
 
 	@Test
@@ -213,23 +204,30 @@ public class TeacherServiceTest {
 	public void whenDeleteCourseIdIsOk() throws TeacherException {
 		boolean hasError = false;
 		try {
-			teacherServiceImpl.deleteCourseId(id.toString(),listStringIds);
+			teacherServiceImpl.deleteCourseId(id.toString(), listStringIds);
 		} catch (Exception e) {
 			hasError = true;
 		}
 		assertThat(hasError).isFalse();
 	}
-	
+
 	@Test
 	public void whenGetCourseAndStudentsIsOk() throws TeacherException, CourseException {
 		teacherServiceImpl.getCourseAndStudents(id.toString(), listStringIds);
 		verify(teacherRepository).findById(id);
 	}
-	
+
 	@Test
-	public void whenGetCourseAndStudentsIsError()  {
+	public void whenGetCourseAndStudentsIsError() {
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherServiceImpl.getCourseAndStudents(UUID.randomUUID().toString(), listStringIds);
 		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
+	}
+
+	@Test
+	public void whenTeacherExistsIsOk() throws TeacherException {
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
+			teacherServiceImpl.exists(teacherApi);
+		}).withMessage(TeacherMessage.EXIST.getDescription());
 	}
 }
