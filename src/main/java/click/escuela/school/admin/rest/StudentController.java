@@ -47,10 +47,10 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentDTO> getById(
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
 			@RequestParam("fullDetail") Boolean fullDetail) throws StudentException {
-
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getById(studentId, fullDetail));
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getById(schoolId, studentId, fullDetail));
 	}
 
 	@Operation(summary = "Get student by schoolId", responses = {

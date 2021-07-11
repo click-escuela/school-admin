@@ -109,7 +109,7 @@ public class StudentControllerTest {
 				.thenReturn(Mapper.mapperToStudentsDTO(students));
 		doNothing().when(studentService).create(Mockito.anyString(), Mockito.any());
 		Mockito.when(studentService.getByCourse(idCourse.toString(), false)).thenReturn(studentsDTO);
-		Mockito.when(studentService.getById(idStudent.toString(), false))
+		Mockito.when(studentService.getById(schoolId.toString(),idStudent.toString(), false))
 				.thenReturn(Mapper.mapperToStudentDTO(student));
 	}
 
@@ -238,7 +238,7 @@ public class StudentControllerTest {
 	@Test
 	public void getStudentByIdIsError() throws JsonProcessingException, Exception {
 		idStudent = UUID.randomUUID();
-		doThrow(new StudentException(StudentMessage.GET_ERROR)).when(studentService).getById(idStudent.toString(),
+		doThrow(new StudentException(StudentMessage.GET_ERROR)).when(studentService).getById(schoolId.toString(),idStudent.toString(),
 				false);
 		assertThat(resultStudentApi(get(URL + "/{idStudent}?fullDetail=false", schoolId, idStudent.toString())))
 				.contains(StudentMessage.GET_ERROR.getDescription());

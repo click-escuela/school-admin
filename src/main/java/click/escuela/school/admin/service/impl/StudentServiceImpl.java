@@ -40,14 +40,20 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	@Override
-	public StudentDTO getById(String id, Boolean fullDetail) throws StudentException {
-		Student student = findById(id).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
+	public StudentDTO getById(String schoolId, String id, Boolean fullDetail) throws StudentException {
+		Student student = findByIdAndSchoolId(schoolId, id)
+				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
 	}
 
 	public Optional<Student> findById(String id) throws StudentException {
 		return Optional.of(studentRepository.findById(UUID.fromString(id))
+				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
+	}
+
+	public Optional<Student> findByIdAndSchoolId(String schoolId, String id) throws StudentException {
+		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Integer.valueOf(schoolId))
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
 	}
 

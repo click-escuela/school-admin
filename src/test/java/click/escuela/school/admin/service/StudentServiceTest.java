@@ -92,6 +92,7 @@ public class StudentServiceTest {
 		Mockito.when(Mapper.mapperToStudent(studentApi, student)).thenReturn(student);
 		Mockito.when(studentRepository.save(student)).thenReturn(student);
 		Mockito.when(studentRepository.findById(id)).thenReturn(optional);
+		Mockito.when(studentRepository.findByIdAndSchoolId(id,idSchool)).thenReturn(optional);
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
@@ -160,15 +161,15 @@ public class StudentServiceTest {
 
 	@Test
 	public void whenGetByIdIsOK() throws TransactionException {
-		studentServiceImpl.getById(id.toString(), false);
-		verify(studentRepository).findById(id);
+		studentServiceImpl.getById(idSchool.toString(),id.toString(), false);
+		verify(studentRepository).findByIdAndSchoolId(id, idSchool);
 	}
 
 	@Test
 	public void whenGetByIdIsError() {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
-			studentServiceImpl.getById(id.toString(), false);
+			studentServiceImpl.getById(idSchool.toString(),id.toString(), false);
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
