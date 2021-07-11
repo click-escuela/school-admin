@@ -1,7 +1,6 @@
 package click.escuela.school.admin.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.Column;
 
@@ -41,9 +40,6 @@ public class TeacherDTO {
 
 	@JsonProperty(value = "email")
 	private String email;
-	
-	@JsonProperty(value = "courses")
-	private List<CourseDTO> courses;
 	
 	@Column(name = "school_id", nullable = false)
 	private Integer schoolId;
