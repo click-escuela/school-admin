@@ -1,7 +1,6 @@
 package click.escuela.school.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseStudentsDTO;
-import click.escuela.school.admin.dto.CourseStudentsDTO.CourseStudentsDTOBuilder;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.CourseException;
@@ -112,6 +110,13 @@ public class CourseServiceTest {
 	public void whenGetCoursesStudentsIsOk() throws CourseException   {
 		courseServiceImpl.getCourseStudents(ids);
 		verify(studentService).getByCourse(null, false);
+	}
+	
+	@Test
+	public void whenGetCoursesIsError() throws CourseException   {
+		assertThatExceptionOfType(CourseException.class).isThrownBy(() -> {
+			courseServiceImpl.getCourses(courses, null);
+		}).withMessage(CourseMessage.GET_ERROR.getDescription());
 	}
 	
 	@Test
