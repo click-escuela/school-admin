@@ -22,6 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
+import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
+import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
@@ -53,8 +55,9 @@ public class TeacherServiceTest {
 	private UUID courseId;
 	private Integer schoolId;
 	private List<Teacher> teachers;
-	List<String> listStringIds = new ArrayList<>();
-	List<Course> courses = new ArrayList<>();
+	private List<String> listStringIds = new ArrayList<>();
+	private List<Course> courses = new ArrayList<>();
+	private TeacherCourseStudentsDTO teacherDTO;
 
 	@Before
 	public void setUp() {
@@ -72,6 +75,7 @@ public class TeacherServiceTest {
 		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("25897863").gender(GenderType.FEMALE.toString()).schoolId(schoolId)
 				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(new AdressApi()).build();
+		teacherDTO = TeacherCourseStudentsDTO.builder().courses(new ArrayList<>()).build();
 		Optional<Teacher> optional = Optional.of(teacher);
 		teachers = new ArrayList<>();
 		teachers.add(teacher);
@@ -86,6 +90,7 @@ public class TeacherServiceTest {
 		Mockito.when(Mapper.mapperToEnum(teacherApi.getGender())).thenReturn(teacher.getGender());
 		Mockito.when(teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
 				Mapper.mapperToEnum(teacherApi.getGender()))).thenReturn(optional);
+		Mockito.when(Mapper.mapperToTeacherCourseStudentsDTO(teacher)).thenReturn(teacherDTO);
 
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 		ReflectionTestUtils.setField(teacherServiceImpl, "courseService", courseService);
@@ -213,5 +218,18 @@ public class TeacherServiceTest {
 			hasError = true;
 		}
 		assertThat(hasError).isFalse();
+	}
+	
+	@Test
+	public void whenGetCourseAndStudentsIsOk() throws TeacherException, CourseException {
+		teacherServiceImpl.getCourseAndStudents(id.toString(), listStringIds);
+		verify(teacherRepository).findById(id);
+	}
+	
+	@Test
+	public void whenGetCourseAndStudentsIsError()  {
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
+			teacherServiceImpl.getCourseAndStudents(UUID.randomUUID().toString(), listStringIds);
+		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 }
