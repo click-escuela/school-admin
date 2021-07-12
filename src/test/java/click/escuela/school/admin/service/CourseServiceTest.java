@@ -29,7 +29,6 @@ import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
-import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Mapper.class })
@@ -37,9 +36,6 @@ public class CourseServiceTest {
 
 	@Mock
 	private CourseRepository courseRepository;
-	
-	@Mock
-	private StudentServiceImpl studentService;
 
 	private CourseServiceImpl courseServiceImpl = new CourseServiceImpl();
 	private CourseApi courseApi;
@@ -47,7 +43,7 @@ public class CourseServiceTest {
 	private List<String> ids = new ArrayList<>();
 	private List<Course> courses= new ArrayList<>();
 	private List<CourseStudentsDTO> coursesDTO= new ArrayList<>();
-	List<StudentDTO> students= new ArrayList<>();
+	private List<StudentDTO> students= new ArrayList<>();
 
 	@Before
 	public void setUp() {
@@ -71,11 +67,9 @@ public class CourseServiceTest {
 		Mockito.when(courseRepository.save(course)).thenReturn(course);
 		Mockito.when(courseRepository.findById(id)).thenReturn(optional);
 		Mockito.when(courseRepository.findAll()).thenReturn(courses);
-		Mockito.when(studentService.getByCourse(id.toString(), false)).thenReturn(students);
 		Mockito.when(Mapper.mapperToCoursesStudentDTO(courses)).thenReturn(coursesDTO);
 
 		ReflectionTestUtils.setField(courseServiceImpl, "courseRepository", courseRepository);
-		ReflectionTestUtils.setField(courseServiceImpl, "studentService", studentService);
 	}
 
 	@Test
@@ -107,9 +101,10 @@ public class CourseServiceTest {
 	}
 	
 	@Test
-	public void whenGetCoursesStudentsIsOk() throws CourseException   {
-		courseServiceImpl.getCourseStudents(ids);
-		verify(studentService).getByCourse(null, false);
+	public void whenGetCoursesIsOk() throws CourseException   {
+		courseServiceImpl.getCourses(courses, ids);
+		verify(courseRepository).findById(Mockito.any());
+		
 	}
 	
 	@Test

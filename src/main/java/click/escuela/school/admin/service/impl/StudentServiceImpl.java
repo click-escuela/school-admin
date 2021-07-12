@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import click.escuela.school.admin.api.StudentApi;
+import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
@@ -110,5 +111,10 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 			student.setBills(bills);
 			studentRepository.save(student);
 		});
+	}
+
+	public List<CourseStudentsDTO> getCourseStudents(List<CourseStudentsDTO> courses, List<String> listUUIDs) {
+		courses.forEach(p -> p.setStudents(getByCourse(p.getId(), false)));
+		return courses;
 	}
 }

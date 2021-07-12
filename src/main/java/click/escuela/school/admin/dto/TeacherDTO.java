@@ -1,18 +1,34 @@
 package click.escuela.school.admin.dto;
 
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.DocumentType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class TeacherDTO {
+
+	public TeacherDTO(String id, String name, String surname, DocumentType documentType, String document,
+			LocalDate birthday, AdressDTO adress, String cellPhone, String email, Integer schoolId) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.documentType = documentType;
+		this.document = document;
+		this.birthday = birthday;
+		this.adress = adress;
+		this.cellPhone = cellPhone;
+		this.email = email;
+		this.schoolId = schoolId;
+	}
 
 	@JsonProperty(value = "id")
 	private String id;

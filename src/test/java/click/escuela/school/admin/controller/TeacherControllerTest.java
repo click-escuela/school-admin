@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -394,5 +395,10 @@ public class TeacherControllerTest {
 	private String toJson(final Object obj) throws JsonProcessingException {
 		return mapper.writeValueAsString(obj);
 	}
-
+	
+	private String resultStudentApi(MockHttpServletRequestBuilder requestBuilder)
+			throws JsonProcessingException, Exception {
+		return mockMvc.perform(requestBuilder.contentType(MediaType.APPLICATION_JSON).content(toJson(teacherApi)))
+				.andReturn().getResponse().getContentAsString();
+	}
 }
