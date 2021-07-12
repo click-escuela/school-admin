@@ -213,6 +213,7 @@ public class StudentControllerTest {
 		doThrow(new StudentException(StudentMessage.CREATE_ERROR)).when(studentService).create(Mockito.anyString(),
 				Mockito.any());
 		assertThat(resultStudentApi(post(URL, schoolId))).contains(StudentMessage.CREATE_ERROR.getDescription());
+
 	}
 
 	@Test
@@ -226,6 +227,7 @@ public class StudentControllerTest {
 		doThrow(new StudentException(StudentMessage.UPDATE_ERROR)).when(studentService).update(Mockito.anyString(),
 				Mockito.any());
 		assertThat(resultStudentApi(put(URL, schoolId))).contains(StudentMessage.UPDATE_ERROR.getDescription());
+
 	}
 
 	@Test
@@ -242,6 +244,7 @@ public class StudentControllerTest {
 				false);
 		assertThat(resultStudentApi(get(URL + "/{idStudent}?fullDetail=false", schoolId, idStudent.toString())))
 				.contains(StudentMessage.GET_ERROR.getDescription());
+
 	}
 
 	@Test

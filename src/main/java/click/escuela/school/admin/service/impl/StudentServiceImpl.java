@@ -43,6 +43,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public StudentDTO getById(String schoolId, String id, Boolean fullDetail) throws StudentException {
 		Student student = findByIdAndSchoolId(schoolId, id)
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
+
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
 	}
@@ -75,6 +76,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Override
 	public void delete(String id) throws StudentException {
+
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 
@@ -96,6 +98,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public void exists(StudentApi student) throws StudentException {
+
 		Optional<Student> studentExist = studentRepository.findByDocumentAndGender(student.getDocument(),
 				Mapper.mapperToEnum(student.getGender()));
 		if (studentExist.isPresent()) {
@@ -106,6 +109,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public void deleteCourse(String idStudent, String idCourse) throws StudentException {
 		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
 				.orElseThrow(() -> new StudentException(StudentMessage.UPDATE_ERROR));
+
 		student.setCourse(null);
 		studentRepository.save(student);
 	}

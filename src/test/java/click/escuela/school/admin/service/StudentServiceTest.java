@@ -129,6 +129,7 @@ public class StudentServiceTest {
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentServiceImpl.create(idSchool.toString(), new StudentApi());
 		}).withMessage(StudentMessage.CREATE_ERROR.getDescription());
+
 	}
 
 	@Test
@@ -158,7 +159,6 @@ public class StudentServiceTest {
 			studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
-
 	@Test
 	public void whenGetByIdIsOK() throws TransactionException {
 		studentServiceImpl.getById(idSchool.toString(),id.toString(), false);
@@ -170,6 +170,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentServiceImpl.getById(idSchool.toString(),id.toString(), false);
+
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 

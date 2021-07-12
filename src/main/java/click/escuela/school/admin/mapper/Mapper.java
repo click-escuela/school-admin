@@ -19,6 +19,7 @@ import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.dto.ExcelDTO;
+
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
@@ -195,6 +196,10 @@ public class Mapper {
 
 	public static BillDTO mapperToBillDTO(Bill bill) {
 		return modelMapper.map(bill, BillDTO.class);
+	}
+	
+	public static PaymentStatus mapperToEnumPaymentStatus(String status) {
+		return modelMapper.map(PaymentStatus.valueOf(status), PaymentStatus.class);
 	}
 
 	public static PaymentStatus mapperToEnumPaymentStatus(String status) {

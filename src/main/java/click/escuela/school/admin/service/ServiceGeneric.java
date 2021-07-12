@@ -9,7 +9,7 @@ public interface ServiceGeneric<T, S> {
 	public S getById(String schoolId, String id, Boolean detail) throws StudentException;
 
 	public void update(String id, T entity) throws StudentException;
-
+  
 	public void delete(String id) throws StudentException;
 
 }

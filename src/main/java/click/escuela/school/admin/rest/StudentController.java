@@ -51,6 +51,7 @@ public class StudentController {
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
 			@RequestParam("fullDetail") Boolean fullDetail) throws StudentException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getById(schoolId, studentId, fullDetail));
+
 	}
 
 	@Operation(summary = "Get student by schoolId", responses = {
@@ -86,6 +87,7 @@ public class StudentController {
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
 			@RequestBody @Validated StudentApi studentApi) throws StudentException {
 		studentService.update(schoolId, studentApi);
+
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.UPDATE_OK);
 	}
 
@@ -94,6 +96,7 @@ public class StudentController {
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> delete(
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId) throws StudentException {
+
 		studentService.delete(studentId);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.DELETE_OK);
 	}
