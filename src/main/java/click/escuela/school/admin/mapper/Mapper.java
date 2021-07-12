@@ -202,10 +202,6 @@ public class Mapper {
 		return modelMapper.map(PaymentStatus.valueOf(status), PaymentStatus.class);
 	}
 
-	public static PaymentStatus mapperToEnumPaymentStatus(String status) {
-		return modelMapper.map(PaymentStatus.valueOf(status), PaymentStatus.class);
-	}
-
 	// School
 	public static School mapperToSchool(SchoolApi schoolApi) {
 		return modelMapper.map(schoolApi, School.class);
