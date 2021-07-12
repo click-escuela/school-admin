@@ -35,6 +35,7 @@ import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.TeacherRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
+import click.escuela.school.admin.service.impl.StudentServiceImpl;
 import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 
 @RunWith(PowerMockRunner.class)
@@ -46,6 +47,9 @@ public class TeacherServiceTest {
 
 	@Mock
 	private CourseServiceImpl courseService;
+
+	@Mock
+	private StudentServiceImpl studentService;
 
 	private TeacherServiceImpl teacherServiceImpl = new TeacherServiceImpl();
 	private TeacherApi teacherApi;
@@ -94,6 +98,7 @@ public class TeacherServiceTest {
 
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 		ReflectionTestUtils.setField(teacherServiceImpl, "courseService", courseService);
+		ReflectionTestUtils.setField(teacherServiceImpl, "studentService", studentService);
 
 	}
 
@@ -220,7 +225,7 @@ public class TeacherServiceTest {
 	@Test
 	public void whenGetCourseAndStudentsIsError() {
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
-			teacherServiceImpl.getCourseAndStudents(UUID.randomUUID().toString(), listStringIds);
+			teacherServiceImpl.getCourseAndStudents(UUID.randomUUID().toString(), null);
 		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 
