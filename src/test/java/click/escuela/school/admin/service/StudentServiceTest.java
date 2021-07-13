@@ -2,6 +2,7 @@ package click.escuela.school.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.StudentApi;
+import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.StudentMessage;
@@ -51,7 +53,6 @@ public class StudentServiceTest {
 
 	private StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
 	private StudentApi studentApi;
-
 	private CourseApi courseApi;
 	private UUID id;
 	private UUID idCourse;
@@ -69,108 +70,72 @@ public class StudentServiceTest {
 		idCourse = UUID.randomUUID();
 		Course course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).teacher(new Teacher())
 				.schoolId(12345).build();
-
-		student = Student.builder().absences(3).birthday(LocalDate.now()).cellPhone("535435").document("342343232")
-				.division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE).name("oscar")
-				.level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();
-
+		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
+				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
+				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();
 		ParentApi parentApi = new ParentApi();
 		parentApi.setAdressApi(new AdressApi());
-
 		studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now()).cellPhone("4534543")
 				.division("C").grade("3°").document("435345").email("oscar@gmail.com")
 				.gender(GenderType.MALE.toString()).name("oscar").level(EducationLevels.SECUNDARIO.toString())
-				.parentApi(parentApi).schoolId(1234).build();
+				.parentApi(parentApi).build();
 		Optional<Student> optional = Optional.of(student);
-		Optional<Course> optionalCourse=Optional.of(course);
+		Optional<Course> optionalCourse = Optional.of(course);
 		students = new ArrayList<>();
 		students.add(student);
-
 		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(45678).build();
 
 		Mockito.when(Mapper.mapperToCourse(courseApi)).thenReturn(course);
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
 		Mockito.when(Mapper.mapperToParent(Mockito.any())).thenReturn(new Parent());
 		Mockito.when(Mapper.mapperToStudent(studentApi)).thenReturn(student);
-
+		Mockito.when(Mapper.mapperToStudent(studentApi, student)).thenReturn(student);
 		Mockito.when(studentRepository.save(student)).thenReturn(student);
 		Mockito.when(studentRepository.findById(id)).thenReturn(optional);
+		Mockito.when(studentRepository.findByIdAndSchoolId(id,idSchool)).thenReturn(optional);
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
-
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 
-		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
-		// inyecta en el servicio Student el servicio Course
 		ReflectionTestUtils.setField(studentServiceImpl, "courseService", courseService);
 	}
 
 	@Test
-	public void whenCreateIsOk() {
-		Optional<Student> optional = Optional.empty();
-		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any()))
-				.thenReturn(optional);
-
-		boolean hasError = false;
-		try {
-			studentServiceImpl.create(studentApi);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+	public void whenCreateIsOk() throws StudentException {
+		studentServiceImpl.create(idSchool.toString(), studentApi);
+		verify(studentRepository).save(student);
 	}
 
 	@Test
-	public void whenUpdateOk() {
-		boolean hasError = false;
-		try {
-			studentApi.setId(id.toString());
-			studentServiceImpl.update(studentApi);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+	public void whenUpdateOk() throws StudentException {
+		studentApi.setId(id.toString());
+		studentServiceImpl.update(idSchool.toString(), studentApi);
+		verify(studentRepository).save(student);
 	}
 
 	@Test
 	public void whenUpdateIsError() {
-
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
 			studentApi.setId(id.toString());
-			studentServiceImpl.update(studentApi);
+			studentServiceImpl.update(idSchool.toString(), studentApi);
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
-
 	}
 
 	@Test
 	public void whenCreateIsError() {
-
-		Optional<Student> optional = Optional.of(student);
-
-		StudentApi studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now())
-				.cellPhone("4534543").document("55555").division("F").grade("3°").email("oscar@gmail.com")
-				.gender(GenderType.MALE.toString()).name("oscar").parentApi(new ParentApi()).schoolId(1234).build();
-		Mockito.when(studentRepository.findByDocumentAndGender(Mockito.anyString(), Mockito.any()))
-				.thenReturn(optional);
-
+		Mockito.when(studentRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
-
-			studentServiceImpl.create(studentApi);
-		}).withMessage(StudentMessage.EXIST.getDescription());
+			studentServiceImpl.create(idSchool.toString(), new StudentApi());
+		}).withMessage(StudentMessage.CREATE_ERROR.getDescription());
 
 	}
 
 	@Test
-	public void whenAddCourseOk() {
-		boolean hasError = false;
-		try {
-			studentServiceImpl.addCourse(id.toString(), idCourse.toString());
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+	public void whenAddCourseOk() throws StudentException, CourseException {
+		studentServiceImpl.addCourse(id.toString(), idCourse.toString());
+		verify(studentRepository).save(student);
 	}
 
 	@Test
@@ -182,15 +147,9 @@ public class StudentServiceTest {
 	}
 
 	@Test
-	public void whenDeleteCourseOk() {
-
-		boolean hasError = false;
-		try {
-			studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+	public void whenDeleteCourseOk() throws StudentException {
+		studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
+		verify(studentRepository).save(student);
 	}
 
 	@Test
@@ -202,73 +161,43 @@ public class StudentServiceTest {
 	}
 	@Test
 	public void whenGetByIdIsOK() throws TransactionException {
-		boolean hasError = false;
-		try {
-			studentServiceImpl.getById(id.toString(), false);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+		studentServiceImpl.getById(idSchool.toString(),id.toString(), false);
+		verify(studentRepository).findByIdAndSchoolId(id, idSchool);
 	}
 
 	@Test
 	public void whenGetByIdIsError() {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(StudentException.class).isThrownBy(() -> {
-			studentServiceImpl.getById(id.toString(), false);
+			studentServiceImpl.getById(idSchool.toString(),id.toString(), false);
+
 		}).withMessage(StudentMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
 	public void whenGetBySchoolIsOK() throws TransactionException {
-		boolean hasError = false;
-		try {
-			studentServiceImpl.getBySchool(idSchool.toString(), false);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+		studentServiceImpl.getBySchool(idSchool.toString(), false);
+		verify(studentRepository).findBySchoolId(idSchool);
 	}
 
 	@Test
 	public void whenGetBySchoolIsError() throws TransactionException {
-
-		boolean hasError = false;
-
-		try {
-			studentServiceImpl.getBySchool(null, false);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isTrue();
+		idSchool = 6666;
+		List<StudentDTO> listEmpty = studentServiceImpl.getBySchool(idSchool.toString(), false);
+		assertThat(listEmpty).isEmpty();
 	}
 
 	@Test
 	public void whenGetByIdCourseIsOK() throws TransactionException {
-
-		Course course = new Course();
-		course.setId(idCourse);
-		Mockito.when(studentRepository.findByCourseId(Mockito.any())).thenReturn(students);
-
-		boolean hasError = false;
-		try {
-			studentServiceImpl.getByCourse(idCourse.toString(), false);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+		studentServiceImpl.getByCourse(idCourse.toString(), false);
+		verify(studentRepository).findByCourseId(idCourse);
 	}
 
 	@Test
 	public void whenGetByIdCourseIsError() throws TransactionException {
-		boolean hasError = false;
-
-		try {
-			studentServiceImpl.getByCourse(null, false);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isTrue();
+		idCourse = UUID.randomUUID();
+		List<StudentDTO> listEmpty = studentServiceImpl.getByCourse(idCourse.toString(), false);
+		assertThat(listEmpty).isEmpty();
 	}
 
 }
