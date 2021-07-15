@@ -78,26 +78,25 @@ public class TeacherServiceImpl {
 		}
 	}
 
-	public Teacher addCourseId(String idTeacher, List<String> idCourses) throws TeacherException, CourseException {
+	public void addCourses(String idTeacher, List<String> idCourses) throws TeacherException, CourseException {
 		Teacher teacher = findById(idTeacher)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
 		teacher.setCourses(courseService.getCourses(teacher.getCourses(),idCourses));
 		teacherRepository.save(teacher);
-		return teacher;
 	}
 
-	public void deleteCourseId(String teacherId, List<String> idCourses) throws TeacherException, CourseException {
+	public void deleteCourses(String teacherId, List<String> idCourses) throws TeacherException, CourseException {
 		Teacher teacher = findById(teacherId)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
 		teacher.getCourses().removeAll(courseService.getCourses(new ArrayList<>(),idCourses));
 		teacherRepository.save(teacher);
 	}
 
-	public TeacherCourseStudentsDTO getCourseAndStudents(String teacherId, List<String> listUUIDs) throws TeacherException{
+	public TeacherCourseStudentsDTO getCourseAndStudents(String teacherId) throws TeacherException{
 		Teacher teacher = findById(teacherId)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
 		TeacherCourseStudentsDTO teacherDTO = Mapper.mapperToTeacherCourseStudentsDTO(teacher);
-		teacherDTO.setCourses(studentService.getCourseStudents(teacherDTO.getCourses(),listUUIDs));
+		teacherDTO.setCourses(studentService.getCourseStudents(teacherDTO.getCourses()));
 		return teacherDTO;
 	}
 

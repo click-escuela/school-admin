@@ -198,7 +198,7 @@ public class TeacherServiceTest {
 	public void whenAddCourseIdIsOk() throws TeacherException {
 		boolean hasError = false;
 		try {
-			teacherServiceImpl.addCourseId(id.toString(), listStringIds);
+			teacherServiceImpl.addCourses(id.toString(), listStringIds);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -209,7 +209,7 @@ public class TeacherServiceTest {
 	public void whenDeleteCourseIdIsOk() throws TeacherException {
 		boolean hasError = false;
 		try {
-			teacherServiceImpl.deleteCourseId(id.toString(), listStringIds);
+			teacherServiceImpl.deleteCourses(id.toString(), listStringIds);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -218,14 +218,14 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenGetCourseAndStudentsIsOk() throws TeacherException, CourseException {
-		teacherServiceImpl.getCourseAndStudents(id.toString(), listStringIds);
+		teacherServiceImpl.getCourseAndStudents(id.toString());
 		verify(teacherRepository).findById(id);
 	}
 
 	@Test
 	public void whenGetCourseAndStudentsIsError() {
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
-			teacherServiceImpl.getCourseAndStudents(UUID.randomUUID().toString(), null);
+			teacherServiceImpl.getCourseAndStudents(UUID.randomUUID().toString());
 		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 

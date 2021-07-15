@@ -55,10 +55,9 @@ public class TeacherController {
 	@Operation(summary = "Get course with students", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(value = "/{teacherId}/courses", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<TeacherCourseStudentsDTO> getCoursesAndStudents(@PathVariable("teacherId") String teacherId,
-			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
+	public ResponseEntity<TeacherCourseStudentsDTO> getCoursesAndStudents(@PathVariable("teacherId") String teacherId) throws TeacherException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED)
-				.body(teacherService.getCourseAndStudents(teacherId, listUUIDs));
+				.body(teacherService.getCourseAndStudents(teacherId));
 	}
 
 	@Operation(summary = "Get teacher by schoolId", responses = {
@@ -99,18 +98,18 @@ public class TeacherController {
 	@Operation(summary = "Add courses in Teacher", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idTeacher}/add/courses")
-	public ResponseEntity<TeacherMessage> addTeacher(@PathVariable("idTeacher") String idTeacher,
+	public ResponseEntity<TeacherMessage> addCourses(@PathVariable("idTeacher") String idTeacher,
 			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
-		teacherService.addCourseId(idTeacher, listUUIDs);
+		teacherService.addCourses(idTeacher, listUUIDs);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
 
-	@Operation(summary = "Delete courses in Teacher", responses = {
+	@Operation(summary = "Delete courses from Teacher", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idTeacher}/del/courses")
-	public ResponseEntity<TeacherMessage> deleteTeacher(@PathVariable("idTeacher") String idTeacher,
+	public ResponseEntity<TeacherMessage> deleteCourses(@PathVariable("idTeacher") String idTeacher,
 			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
-		teacherService.deleteCourseId(idTeacher, listUUIDs);
+		teacherService.deleteCourses(idTeacher, listUUIDs);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
 

@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import click.escuela.school.admin.enumerator.GenderType;
-import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Teacher;
 
 public interface TeacherRepository extends JpaRepository<Teacher, UUID> {

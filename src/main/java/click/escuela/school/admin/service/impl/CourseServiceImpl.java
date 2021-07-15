@@ -18,10 +18,9 @@ import click.escuela.school.admin.service.CourseServiceGeneric;
 
 @Service
 public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
-
 	@Autowired
 	private CourseRepository courseRepository;
-
+	
 	@Override
 	public void create(CourseApi courserApi) throws CourseException {
 		try {
@@ -44,9 +43,9 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 
 	public List<Course> getCourses(List<Course> courses, List<String> idCourses) throws CourseException {
 		try {
-			idCourses.forEach(p -> {
+			idCourses.forEach(p -> { 
 				Course course = courseRepository.findById(UUID.fromString(p)).get();
-				courses.add(course);
+				courses.add(course); 
 			});
 		} catch (Exception e) {
 			throw new CourseException(CourseMessage.GET_ERROR);

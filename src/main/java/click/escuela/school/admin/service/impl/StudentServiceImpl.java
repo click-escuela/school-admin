@@ -113,7 +113,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		});
 	}
 
-	public List<CourseStudentsDTO> getCourseStudents(List<CourseStudentsDTO> courses, List<String> listUUIDs) {
+	public List<CourseStudentsDTO> getCourseStudents(List<CourseStudentsDTO> courses) {
 		courses.forEach(p -> p.setStudents(getByCourse(p.getId(), false)));
 		return courses;
 	}
