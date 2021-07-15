@@ -1,11 +1,13 @@
 package click.escuela.school.admin.dto;
 
 import java.time.LocalDate;
+
 import javax.persistence.Column;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.DocumentType;
+import click.escuela.school.admin.model.Teacher;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,19 +17,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TeacherDTO {
 
-	public TeacherDTO(String id, String name, String surname, DocumentType documentType, String document,
-			LocalDate birthday, AdressDTO adress, String cellPhone, String email, Integer schoolId) {
+	public TeacherDTO(String id, Teacher teacher, AdressDTO adress) {
 		super();
 		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.documentType = documentType;
-		this.document = document;
-		this.birthday = birthday;
+		this.name = teacher.getName();
+		this.surname = teacher.getSurname();
+		this.documentType = teacher.getDocumentType();
+		this.document = teacher.getDocument();
+		this.birthday = teacher.getBirthday();
 		this.adress = adress;
-		this.cellPhone = cellPhone;
-		this.email = email;
-		this.schoolId = schoolId;
+		this.cellPhone = teacher.getCellPhone();
+		this.email = teacher.getEmail();
+		this.schoolId = teacher.getSchoolId();
 	}
 
 	@JsonProperty(value = "id")
