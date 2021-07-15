@@ -2,6 +2,7 @@ package click.escuela.school.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
+import click.escuela.school.admin.dto.TeacherDTO;
+import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
@@ -69,7 +72,6 @@ public class TeacherServiceTest {
 		id = UUID.randomUUID();
 		schoolId = 1234;
 		courseId = UUID.randomUUID();
-
 		listStringIds.add(courseId.toString());
 		courses.add(new Course());
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
@@ -153,14 +155,9 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenGetBySchoolIsEmpty() {
-		boolean hasEmpty = false;
 		schoolId = 6666;
-		try {
-			if (teacherServiceImpl.getBySchoolId(schoolId.toString()).isEmpty())
-				;
-		} catch (Exception e) {
-			assertThat(hasEmpty).isFalse();
-		}
+		List<TeacherDTO> listEmpty = teacherServiceImpl.getBySchoolId(schoolId.toString());
+		assertThat(listEmpty).isEmpty();
 	}
 
 	@Test
@@ -170,15 +167,18 @@ public class TeacherServiceTest {
 	}
 
 	@Test
-	public void whenGetByCourseIsEmpty() {
-		boolean hasEmpty = false;
-		courseId = UUID.randomUUID();
-		try {
-			if (teacherServiceImpl.getByCourseId(courseId.toString()).isEmpty())
-				;
-		} catch (Exception e) {
-			assertThat(hasEmpty).isFalse();
-		}
+	public void whenGetByCourseIsEmpty() throws CourseException {
+		courseId = UUID.randomUUID();		
+		List<TeacherDTO> listEmpty = teacherServiceImpl.getByCourseId(courseId.toString());
+		assertThat(listEmpty).isEmpty();;
+	}
+	
+	@Test
+	public void whenGetByCourseIsError() throws CourseException {
+		doThrow(new CourseException(CourseMessage.GET_ERROR)).when(courseService).findById(courseId.toString());
+		assertThatExceptionOfType(CourseException.class).isThrownBy(() -> {
+			teacherServiceImpl.getByCourseId(courseId.toString());
+		}).withMessage(CourseMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
@@ -188,32 +188,31 @@ public class TeacherServiceTest {
 	}
 
 	@Test
-	public void whenExistsIsOk() throws TeacherException {
+	public void whenAddCoursesIsOk() throws TeacherException, CourseException {
+		teacherServiceImpl.addCourses(id.toString(), listStringIds);
+		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
+	}
+	
+	@Test
+	public void whenAddCoursesIsError() throws TransactionException {
+		id = UUID.randomUUID();
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
-			teacherServiceImpl.exists(teacherApi);
-		}).withMessage(TeacherMessage.EXIST.getDescription());
-	}
-
-	@Test
-	public void whenAddCourseIdIsOk() throws TeacherException {
-		boolean hasError = false;
-		try {
 			teacherServiceImpl.addCourses(id.toString(), listStringIds);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
-	public void whenDeleteCourseIdIsOk() throws TeacherException {
-		boolean hasError = false;
-		try {
+	public void whenDeleteCoursesIsOk() throws TeacherException, CourseException {
+		teacherServiceImpl.deleteCourses(id.toString(), listStringIds);
+		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
+	}
+	
+	@Test
+	public void whenDeleteCoursesIsError() throws TransactionException {
+		id = UUID.randomUUID();
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherServiceImpl.deleteCourses(id.toString(), listStringIds);
-		} catch (Exception e) {
-			hasError = true;
-		}
-		assertThat(hasError).isFalse();
+		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
@@ -235,4 +234,5 @@ public class TeacherServiceTest {
 			teacherServiceImpl.exists(teacherApi);
 		}).withMessage(TeacherMessage.EXIST.getDescription());
 	}
+	
 }

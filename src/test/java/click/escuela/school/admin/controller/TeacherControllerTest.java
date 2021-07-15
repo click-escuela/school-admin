@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
+import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.DocumentType;
@@ -97,6 +98,7 @@ public class TeacherControllerTest {
 		teachers.add(teacher);
 
 		Mockito.when(teacherService.getById(id)).thenReturn(Mapper.mapperToTeacherDTO(teacher));
+		Mockito.when(teacherService.getCourseAndStudents(id)).thenReturn(Mapper.mapperToTeacherCourseStudentsDTO(teacher));
 		Mockito.when(teacherService.getBySchoolId(schoolId)).thenReturn(Mapper.mapperToTeachersDTO(teachers));
 		Mockito.when(teacherService.getByCourseId(courseId)).thenReturn(Mapper.mapperToTeachersDTO(teachers));
 		Mockito.when(teacherService.findAll()).thenReturn(Mapper.mapperToTeachersDTO(teachers));
@@ -244,6 +246,15 @@ public class TeacherControllerTest {
 
 		assertThat(mapper.readValue(result(get(URL + "course/{courseId}", schoolId, UUID.randomUUID().toString())),
 				new TypeReference<List<TeacherDTO>>() {})).isEmpty();
+	}
+	
+	@Test
+	public void getByCoursesAndStudentsTests() throws JsonProcessingException, Exception {
+		assertThat(mapper.readValue(result(get(URL + "{teacherId}/courses", schoolId, id)), TeacherCourseStudentsDTO.class))
+		.hasFieldOrPropertyWithValue("id", id);
+
+		doThrow(new TeacherException(TeacherMessage.GET_ERROR)).when(teacherService).getCourseAndStudents(id);
+		assertThat(result(get(URL + "{teacherId}/courses", schoolId, id))).contains(TeacherMessage.GET_ERROR.getDescription());
 	}
 
 	@Test
