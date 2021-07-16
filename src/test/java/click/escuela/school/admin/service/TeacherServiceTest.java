@@ -63,7 +63,7 @@ public class TeacherServiceTest {
 	private List<Teacher> teachers;
 	private List<String> listStringIds = new ArrayList<>();
 	private List<Course> courses = new ArrayList<>();
-	private TeacherCourseStudentsDTO teacherDTO;
+	private TeacherCourseStudentsDTO teacherDTO = new TeacherCourseStudentsDTO();
 
 	@Before
 	public void setUp() {
@@ -80,8 +80,8 @@ public class TeacherServiceTest {
 		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("25897863").gender(GenderType.FEMALE.toString()).schoolId(schoolId)
 				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(new AdressApi()).build();
-		teacherDTO.setCourses(new ArrayList<>());
 		Optional<Teacher> optional = Optional.of(teacher);
+		teacherDTO.setCourses(new ArrayList<>());
 		teachers = new ArrayList<>();
 		teachers.add(teacher);
 
