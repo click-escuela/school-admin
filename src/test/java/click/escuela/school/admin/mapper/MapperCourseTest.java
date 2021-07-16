@@ -28,7 +28,7 @@ public class MapperCourseTest {
 	@InjectMocks
 	private Mapper mapper;
 	
-	private CourseApi courseApi;
+	private CourseApi courseApi = new CourseApi();
 	private List<Course> courses = new ArrayList<>();
 	private List<CourseStudentsDTO> courseStudentsDTOList= new ArrayList<>();
 	private Course course = new Course();
@@ -43,6 +43,7 @@ public class MapperCourseTest {
 		when(modelMapper.map(course, CourseStudentsDTO.class)).thenReturn(courseStudentsDTO);
 		when(modelMapper.map(course, CourseDTO.class)).thenReturn(courseDTO);
 		when(modelMapper.map(courseApi, Course.class)).thenReturn(course);
+		when(modelMapper.map(course, CourseApi.class)).thenReturn(courseApi);
 		ReflectionTestUtils.setField(mapper, "modelMapper", modelMapper);
 	}
 	
@@ -55,11 +56,14 @@ public class MapperCourseTest {
 		assertThat(courseDTOTest).isNotNull();
 		
 		List<CourseStudentsDTO> courseStudentsDTOListTest = new ArrayList<>();
-		courses.stream().forEach(p -> courseStudentsDTOListTest.add(Mapper.mapperToCourseStudentsDTO(p)));
+		courses.forEach(p -> courseStudentsDTOListTest.add(Mapper.mapperToCourseStudentsDTO(p)));
 		assertThat(courseStudentsDTOListTest).isNotEmpty();
 		
 		Course courseTest = Mapper.mapperToCourse(courseApi);
 		assertThat(courseTest).isNotNull();
+		
+		CourseApi courseApiTest = Mapper.mapperToCourseApi(course);
+		assertThat(courseApiTest).isNotNull();
 	}
 	
 	

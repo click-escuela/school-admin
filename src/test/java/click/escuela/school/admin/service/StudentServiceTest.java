@@ -2,6 +2,7 @@ package click.escuela.school.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.StudentApi;
+import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
@@ -58,6 +60,7 @@ public class StudentServiceTest {
 	private Integer idSchool;
 	private List<Student> students;
 	private Student student;
+	private Course course;
 
 	@Before
 	public void setUp() throws CourseException {
@@ -67,7 +70,7 @@ public class StudentServiceTest {
 		idSchool = 1234;
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
-		Course course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
+		course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
 		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();

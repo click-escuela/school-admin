@@ -176,7 +176,6 @@ public class Mapper {
 		teacher.setAdress(mapperToAdress(teacherApi.getAdressApi()));
 		teacher.setGender(mapperToEnum(teacherApi.getGender()));
 		teacher.setDocumentType(mapperToEnumDocument(teacherApi.getDocumentType()));
-		
 		return teacher;
 	}
 
