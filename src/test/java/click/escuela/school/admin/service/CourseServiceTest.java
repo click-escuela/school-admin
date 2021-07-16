@@ -55,7 +55,8 @@ public class CourseServiceTest {
 		Student student = new Student();
 		student.setCourse(course);
 		students.add(Mapper.mapperToStudentDTO(student));
-		CourseStudentsDTO courseDTO = CourseStudentsDTO.builder().students(students).build();
+		CourseStudentsDTO courseDTO = new CourseStudentsDTO();
+		courseDTO.setStudents(students);
 		coursesDTO.add(courseDTO);
 		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(45678).build();
 		Optional<Course> optional = Optional.of(course);
