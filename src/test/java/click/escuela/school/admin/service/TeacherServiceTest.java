@@ -80,7 +80,7 @@ public class TeacherServiceTest {
 		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("25897863").gender(GenderType.FEMALE.toString()).schoolId(schoolId)
 				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(new AdressApi()).build();
-		teacherDTO = TeacherCourseStudentsDTO.builder().courses(new ArrayList<>()).build();
+		teacherDTO.setCourses(new ArrayList<>());
 		Optional<Teacher> optional = Optional.of(teacher);
 		teachers = new ArrayList<>();
 		teachers.add(teacher);

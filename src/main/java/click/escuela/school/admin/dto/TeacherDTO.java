@@ -7,7 +7,8 @@ import javax.persistence.Column;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.DocumentType;
-import click.escuela.school.admin.model.Teacher;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,21 +16,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TeacherDTO {
-
-	public TeacherDTO(String id, Teacher teacher, AdressDTO adress) {
-		super();
-		this.id = id;
-		this.name = teacher.getName();
-		this.surname = teacher.getSurname();
-		this.documentType = teacher.getDocumentType();
-		this.document = teacher.getDocument();
-		this.birthday = teacher.getBirthday();
-		this.adress = adress;
-		this.cellPhone = teacher.getCellPhone();
-		this.email = teacher.getEmail();
-		this.schoolId = teacher.getSchoolId();
-	}
 
 	@JsonProperty(value = "id")
 	private String id;
