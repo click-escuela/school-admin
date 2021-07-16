@@ -10,7 +10,6 @@ import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.api.CourseApi;
-import click.escuela.school.admin.api.CourseApiUpdate;
 import click.escuela.school.admin.api.ExcelApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.SchoolApi;
@@ -161,10 +160,6 @@ public class Mapper {
 
 	public static CourseApi mapperToCourseApi(Course course) {
 		return modelMapper.map(course, CourseApi.class);
-	}
-
-	public static CourseApiUpdate mapperToCourseApiUpdate(Course course) {
-		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
 	// Mapper Teacher

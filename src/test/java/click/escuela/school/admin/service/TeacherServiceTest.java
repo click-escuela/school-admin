@@ -91,6 +91,7 @@ public class TeacherServiceTest {
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
+		Mockito.when(teacherRepository.findByCoursesId(courseId)).thenReturn(teachers);
 		Mockito.when(teacherRepository.findBySchoolId(schoolId)).thenReturn(teachers);
 		Mockito.when(teacherRepository.findAll()).thenReturn(teachers);
 		Mockito.when(Mapper.mapperToEnum(teacherApi.getGender())).thenReturn(teacher.getGender());
@@ -161,9 +162,11 @@ public class TeacherServiceTest {
 	}
 
 	@Test
-	public void whenGetByCourseIsOk() throws CourseException {
+	public void whenGetByCourseIsOk() throws CourseException, TeacherException {
 		teacherServiceImpl.getByCourseId(courseId.toString());
-		verify(courseService).findById(courseId.toString());
+		if(courseService.findById(courseId.toString()).isPresent()) {
+			verify(teacherRepository).findByCoursesId(courseId);
+		}
 	}
 
 	@Test

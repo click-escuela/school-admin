@@ -12,8 +12,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CourseStudentsDTO extends CourseDTO {
 
