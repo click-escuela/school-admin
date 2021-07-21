@@ -2,6 +2,7 @@ package click.escuela.school.admin.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -64,11 +65,15 @@ public class Mapper {
 
 		StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
 		studentDTO.setBills(null);
+		if(!Objects.isNull(student.getCourse()))
+			studentDTO.setCourseId(student.getCourse().getId().toString());
+
 		return studentDTO;
 	}
 
 	public static Student mapperToStudent(StudentDTO studentdto) {
 		return modelMapper.map(studentdto, Student.class);
+		
 	}
 
 	public static StudentApi mapperToStudent(Student student) {
@@ -123,6 +128,7 @@ public class Mapper {
 
 	public static StudentDTO mapperToStudentFullDTO(Student student) {
 		StudentDTO studentFull = modelMapper.map(student, StudentDTO.class);
+		studentFull.setCourseId(student.getCourse().getId().toString());
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
 	}

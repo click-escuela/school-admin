@@ -57,4 +57,7 @@ public class StudentDTO {
 	
 	@JsonProperty(value = "bills")
 	private List<BillDTO> bills;
+	
+	@JsonProperty(value = "courseId")
+	private String courseId;
 }

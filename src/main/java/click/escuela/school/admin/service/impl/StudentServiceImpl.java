@@ -3,6 +3,7 @@ package click.escuela.school.admin.service.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,7 +85,14 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				? Mapper.mapperToStudentsFullDTO(studentRepository.findByCourseId(UUID.fromString(courseId)))
 				: Mapper.mapperToStudentsDTO(studentRepository.findByCourseId(UUID.fromString(courseId)));
 	}
-
+	
+	public List<StudentDTO> getByCourses(List<String> courseId, Boolean fullDetail) {
+		
+		List<UUID> list = courseId.stream().map(p -> UUID.fromString(p)).collect(Collectors.toList());
+		return Boolean.TRUE.equals(fullDetail)
+				? Mapper.mapperToStudentsFullDTO(studentRepository.findByCourseIdIn(list))
+				: Mapper.mapperToStudentsDTO(studentRepository.findByCourseIdIn(list));
+	}
 	public List<StudentDTO> findAll() {
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
 	}
@@ -114,7 +122,15 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	public List<CourseStudentsDTO> getCourseStudents(List<CourseStudentsDTO> courses) {
-		courses.forEach(p -> p.setStudents(getByCourse(p.getId(), false)));
+		List<String> coursesIds = courses.stream().map(CourseStudentsDTO::getId).collect(Collectors.toList());
+		List<StudentDTO> students = getByCourses(coursesIds,false);
+		courses.forEach(p-> p.setStudents(getStudentsByCourse(students, p)));
 		return courses;
+	}
+
+	private List<StudentDTO> getStudentsByCourse(List<StudentDTO> result, CourseStudentsDTO course) {
+		return result.stream()
+				.filter(r -> r.getCourseId().equals(course.getId()))
+				.collect(Collectors.toList());
 	}
 }
