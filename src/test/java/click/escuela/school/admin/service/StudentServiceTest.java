@@ -2,7 +2,6 @@ package click.escuela.school.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
@@ -61,6 +60,7 @@ public class StudentServiceTest {
 	private List<Student> students;
 	private Student student;
 	private Course course;
+	private List<UUID> uuids;
 
 	@Before
 	public void setUp() throws CourseException {
@@ -85,6 +85,8 @@ public class StudentServiceTest {
 		students = new ArrayList<>();
 		students.add(student);
 		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(45678).build();
+		uuids =  new ArrayList<>();
+		uuids.add(idCourse);
 
 		Mockito.when(Mapper.mapperToCourse(courseApi)).thenReturn(course);
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
@@ -95,6 +97,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findById(id)).thenReturn(optional);
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
+		Mockito.when(studentRepository.findByCourseIdIn(uuids)).thenReturn(students);
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
@@ -196,6 +199,24 @@ public class StudentServiceTest {
 	public void whenGetByIdCourseIsError() throws TransactionException {
 		idCourse = UUID.randomUUID();
 		List<StudentDTO> listEmpty = studentServiceImpl.getByCourse(idCourse.toString(), false);
+		assertThat(listEmpty).isEmpty();
+	}
+	
+	@Test
+	public void whenGetStudentsByCourseIsOK() throws TransactionException {
+		List<CourseStudentsDTO> listCoursesStudents = new ArrayList<>();
+		CourseStudentsDTO course = new CourseStudentsDTO();
+		course.setId(idCourse.toString());
+		course.setStudents(Mapper.mapperToStudentsDTO(students));
+		listCoursesStudents.add(course);
+	
+		studentServiceImpl.getCourseStudents(listCoursesStudents);
+		verify(studentRepository).findByCourseIdIn(uuids);
+	}
+	
+	@Test
+	public void whenGetStudentsByCourseIsError() throws TransactionException {
+		List<CourseStudentsDTO> listEmpty = studentServiceImpl.getCourseStudents(new ArrayList<>());
 		assertThat(listEmpty).isEmpty();
 	}
 
