@@ -53,7 +53,7 @@ public class TeacherController {
 	}
 
 	@Operation(summary = "Get course with students", responses = {
-			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherCourseStudentsDTO.class))) })
 	@GetMapping(value = "/{teacherId}/courses", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<TeacherCourseStudentsDTO> getCoursesAndStudents(@PathVariable("teacherId") String teacherId) throws TeacherException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED)

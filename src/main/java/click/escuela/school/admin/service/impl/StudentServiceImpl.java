@@ -87,12 +87,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 	
 	public List<StudentDTO> getByCourses(List<String> courseId, Boolean fullDetail) {
-		
 		List<UUID> list = courseId.stream().map(p -> UUID.fromString(p)).collect(Collectors.toList());
 		return Boolean.TRUE.equals(fullDetail)
 				? Mapper.mapperToStudentsFullDTO(studentRepository.findByCourseIdIn(list))
 				: Mapper.mapperToStudentsDTO(studentRepository.findByCourseIdIn(list));
 	}
+	
 	public List<StudentDTO> findAll() {
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
 	}
