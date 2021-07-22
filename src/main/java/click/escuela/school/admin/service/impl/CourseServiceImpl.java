@@ -11,7 +11,6 @@ import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.CourseException;
-import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.repository.CourseRepository;
@@ -21,10 +20,7 @@ import click.escuela.school.admin.service.CourseServiceGeneric;
 public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 	@Autowired
 	private CourseRepository courseRepository;
-
-	@Autowired
-	private TeacherServiceImpl teacherService;
-
+	
 	@Override
 	public void create(CourseApi courserApi) throws CourseException {
 		try {
@@ -45,20 +41,16 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 				.orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR)));
 	}
 
-	public void addTeacher(String teacherId, String courseId) throws CourseException, TeacherException {
-		Course course = findById(courseId).orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR));
-		course.setTeacher(teacherService.addCourseId(teacherId, courseId));
-		courseRepository.save(course);
+	public List<Course> getCourses(List<Course> courses, List<String> idCourses) throws CourseException {
+		try {
+			idCourses.forEach(p -> { 
+				Course course = courseRepository.findById(UUID.fromString(p)).get();
+				courses.add(course); 
+			});
+		} catch (Exception e) {
+			throw new CourseException(CourseMessage.GET_ERROR);
+		}
+		return courses;
 	}
-
-	public void deleteTeacher(String teacherId, String courseId) throws CourseException, TeacherException {
-		Course course = findById(courseId).orElseThrow(() -> new CourseException(CourseMessage.GET_ERROR));
-		teacherService.deleteCourseId(teacherId);
-		course.setTeacher(null);
-		courseRepository.save(course);
-
-	}
-
-	
 
 }

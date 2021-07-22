@@ -20,7 +20,6 @@ import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.StudentException;
-import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,24 +78,6 @@ public class CourseController {
 	public ResponseEntity<CourseMessage> deleteStudent(@PathVariable("idCourse") String idCourse,
 			@PathVariable("idStudent") String idStudent) throws StudentException {
 		studentService.deleteCourse(idStudent, idCourse);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
-	}
-
-	@Operation(summary = "Add teacher in course", responses = {
-			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
-	@PutMapping(value = "/{idCourse}/teacher/add/{idTeacher}")
-	public ResponseEntity<CourseMessage> addTeacher(@PathVariable("idCourse") String idCourse,
-			@PathVariable("idTeacher") String idTeacher) throws CourseException, TeacherException {
-		courseService.addTeacher(idTeacher, idCourse);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
-	}
-
-	@Operation(summary = "Delete teacher in course", responses = {
-			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
-	@PutMapping(value = "/{idCourse}/teacher/del/{idTeacher}")
-	public ResponseEntity<CourseMessage> deleteTeacher(@PathVariable("idCourse") String idCourse,
-			@PathVariable("idTeacher") String idTeacher) throws CourseException, TeacherException {
-		courseService.deleteTeacher(idTeacher, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
 	}
 

@@ -21,8 +21,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,8 +52,6 @@ public class CourseControllerTest {
 
 	private ObjectMapper mapper;
 	private CourseApi courseApi;
-	private String teacherId;
-	private String id;
 	private String schoolId;
 	private static String EMPTY = "";
 
@@ -67,15 +63,11 @@ public class CourseControllerTest {
 				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		ReflectionTestUtils.setField(courseController, "courseService", courseService);
 
-		id = UUID.randomUUID().toString();
-		teacherId = UUID.randomUUID().toString();
 		schoolId = String.valueOf(1234);
 		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(Integer.valueOf(schoolId))
 				.build();
 
 		doNothing().when(courseService).create(Mockito.any());
-		doNothing().when(courseService).addTeacher(teacherId, id);
-		doNothing().when(courseService).deleteTeacher(teacherId, id);
 	}
 
 	@Test
@@ -188,48 +180,6 @@ public class CourseControllerTest {
 				.andExpect(status().isNotFound()).andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("");
-	}
-
-	@Test
-	public void whenAddTeacherIsOk() throws JsonProcessingException, Exception {
-		MvcResult result = mockMvc
-				.perform(put("/school/{schoolId}/course/{idCourse}/teacher/add/{idTeacher}", schoolId, id, teacherId)
-						.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().is2xxSuccessful()).andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseMessage.UPDATE_OK.name());
-	}
-
-	@Test
-	public void whenAddTeacherIsError() throws JsonProcessingException, Exception {
-		doThrow(new CourseException(CourseMessage.UPDATE_ERROR)).when(courseService).addTeacher(teacherId, id);
-		MvcResult result = mockMvc
-				.perform(put("/school/{schoolId}/course/{idCourse}/teacher/add/{idTeacher}", schoolId, id, teacherId)
-						.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseMessage.UPDATE_ERROR.getDescription());
-	}
-
-	@Test
-	public void whenDeleteTeacherIsOk() throws JsonProcessingException, Exception {
-		MvcResult result = mockMvc
-				.perform(put("/school/{schoolId}/course/{idCourse}/teacher/del/{idTeacher}", schoolId, id, teacherId)
-						.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().is2xxSuccessful()).andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseMessage.UPDATE_OK.name());
-	}
-
-	@Test
-	public void whenDeleteTeacherIsError() throws JsonProcessingException, Exception {
-		doThrow(new CourseException(CourseMessage.UPDATE_ERROR)).when(courseService).deleteTeacher(teacherId, id);
-		MvcResult result = mockMvc
-				.perform(put("/school/{schoolId}/course/{idCourse}/teacher/del/{idTeacher}", schoolId, id, teacherId)
-						.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains(CourseMessage.UPDATE_ERROR.getDescription());
 	}
 
 	private String toJson(final Object obj) throws JsonProcessingException {
