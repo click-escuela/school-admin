@@ -1,6 +1,7 @@
 package click.escuela.school.admin.api;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -39,10 +40,10 @@ public class TeacherApi extends PersonApi {
 	@JsonProperty(value = "documentType", required = true)
 	private String documentType;
 
-	@NotNull(message = "School ID cannot be null")
+	@NotNull(message = "School Id cannot be null")
 	@JsonProperty(value = "schoolId", required = true)
 	private Integer schoolId;
 	
 	@JsonProperty(value = "courseId", required = false)
-	private String courseId;
+	private List<String> courses;
 }

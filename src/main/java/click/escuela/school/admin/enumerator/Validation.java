@@ -3,7 +3,7 @@ package click.escuela.school.admin.enumerator;
 public enum Validation {
 	NAME_EMPTY("Name cannot be empty"), NAME_BAD_SIZE("Name must be less than 50 characters"),
 	SURNAME_EMPTY("Surname cannot be empty"), SURNAME_BAD_SIZE("Surname must be less than 50 characters"),
-	SCHOOL_ID_NULL("School Id cannot be null"), FILE_EMPTY("File cannot be empty"),
+	SCHOOL_ID_NULL("School Id cannot be null"), FILE_EMPTY("File cannot be empty"), DOCUMENT_TYPE_EMPTY("Document type cannot be empty"),
 	DOCUMENT_EMPTY("Document cannot be empty"), DOCUMENT_BAD_SIZE("Document must be between 7 and 9 characters"),
 	STUDENT_COUNT_NULL("StudentCount cannot be null"), GENDER_NULL("Gender cannot be null"),
 	CELL_PHONE_NULL("CellPhone cannot be null"), ADRESS_NULL("Adress cannot be null"),
@@ -15,9 +15,9 @@ public enum Validation {
 		this.description = description;
 	}
 
-	public String getDescription() {
+  public final String getDescription() {
 		return description;
 	}
 
-	private String description;
+	private final String description;
 }
