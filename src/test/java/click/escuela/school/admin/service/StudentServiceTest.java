@@ -71,6 +71,7 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
 		course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
+
 		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();
@@ -99,6 +100,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseIdIn(uuids)).thenReturn(students);
+
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
