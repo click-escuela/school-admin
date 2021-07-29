@@ -2,11 +2,10 @@ package click.escuela.school.admin.dto;
 
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.DocumentType;
+import click.escuela.school.admin.enumerator.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +33,9 @@ public class TeacherDTO {
 
 	@JsonProperty(value = "document")
 	private String document;
+	
+	@JsonProperty(value = "gender")
+	private GenderType gender;
 
 	@JsonProperty(value = "birthday")
 	private LocalDate birthday;
@@ -47,6 +49,6 @@ public class TeacherDTO {
 	@JsonProperty(value = "email")
 	private String email;
 	
-	@Column(name = "school_id", nullable = false)
+	@JsonProperty(value = "schoolId")
 	private Integer schoolId;
 }
