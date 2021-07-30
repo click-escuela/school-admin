@@ -31,11 +31,11 @@ public class TeacherDTO {
 	@JsonProperty(value = "documentType")
 	private DocumentType documentType;
 
+	@JsonProperty(value = "genderType")
+	private GenderType genderType;
+	
 	@JsonProperty(value = "document")
 	private String document;
-	
-	@JsonProperty(value = "gender")
-	private GenderType gender;
 
 	@JsonProperty(value = "birthday")
 	private LocalDate birthday;

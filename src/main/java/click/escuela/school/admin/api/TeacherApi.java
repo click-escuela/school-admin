@@ -1,12 +1,14 @@
 package click.escuela.school.admin.api;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import click.escuela.school.admin.model.Teacher;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,10 +27,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TeacherApi extends PersonApi {
 
-	public TeacherApi(String name, String surname, String document, String gender, LocalDate birthday,
-			AdressApi adressApi, String cellPhone, String email, String documentType) {
-
-		super(name, surname, document, gender, birthday, adressApi, cellPhone, email);
+	public TeacherApi(Teacher teacher, AdressApi adressApi, String documentType) {
+		super(teacher.getName(), teacher.getSurname(), teacher.getDocument(), teacher.getGender().toString(),
+				teacher.getBirthday(), adressApi, teacher.getCellPhone(), teacher.getEmail());
 		this.documentType = documentType;
 	}
 
