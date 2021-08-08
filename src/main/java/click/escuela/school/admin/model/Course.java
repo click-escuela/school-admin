@@ -1,13 +1,13 @@
 package click.escuela.school.admin.model;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -42,10 +42,9 @@ public class Course {
 	@Column(name = "count_student", nullable = false)
 	private Integer countStudent;
 	
-	@OneToOne
-	@JoinColumn(name = "teacher", nullable = true)
-	private Teacher teacher;
-
 	@Column(name = "school_id", nullable = false)
 	private Integer schoolId;
+	
+	@ManyToMany(mappedBy  = "courses")
+	private List<Teacher> teachers;
 }

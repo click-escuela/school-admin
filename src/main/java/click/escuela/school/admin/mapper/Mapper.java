@@ -2,6 +2,7 @@ package click.escuela.school.admin.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,6 @@ import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.api.CourseApi;
-import click.escuela.school.admin.api.CourseApiUpdate;
 import click.escuela.school.admin.api.ExcelApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.SchoolApi;
@@ -18,10 +18,12 @@ import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
+import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.ExcelDTO;
 
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.EducationLevels;
@@ -64,11 +66,15 @@ public class Mapper {
 
 		StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
 		studentDTO.setBills(null);
+		if(!Objects.isNull(student.getCourse()))
+			studentDTO.setCourseId(student.getCourse().getId().toString());
+
 		return studentDTO;
 	}
 
 	public static Student mapperToStudent(StudentDTO studentdto) {
 		return modelMapper.map(studentdto, Student.class);
+		
 	}
 
 	public static StudentApi mapperToStudent(Student student) {
@@ -123,6 +129,7 @@ public class Mapper {
 
 	public static StudentDTO mapperToStudentFullDTO(Student student) {
 		StudentDTO studentFull = modelMapper.map(student, StudentDTO.class);
+		studentFull.setCourseId(student.getCourse().getId().toString());
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
 	}
@@ -141,19 +148,25 @@ public class Mapper {
 	public static CourseDTO mapperToCourseDTO(Course course) {
 		return modelMapper.map(course, CourseDTO.class);
 	}
+	
+	public static CourseStudentsDTO mapperToCourseStudentsDTO(Course course) {
+		return modelMapper.map(course, CourseStudentsDTO.class);
+	}
 
 	public static List<CourseDTO> mapperToCoursesDTO(List<Course> courses) {
 		List<CourseDTO> courseDTOList = new ArrayList<>();
 		courses.stream().forEach(p -> courseDTOList.add(mapperToCourseDTO(p)));
 		return courseDTOList;
 	}
+	
+	public static List<CourseStudentsDTO> mapperToCoursesStudentDTO(List<Course> courses) {
+		List<CourseStudentsDTO> courseDTOList = new ArrayList<>();
+		courses.stream().forEach(p -> courseDTOList.add(mapperToCourseStudentsDTO(p)));
+		return courseDTOList;
+	}
 
 	public static CourseApi mapperToCourseApi(Course course) {
 		return modelMapper.map(course, CourseApi.class);
-	}
-
-	public static CourseApiUpdate mapperToCourseApiUpdate(Course course) {
-		return modelMapper.map(course, CourseApiUpdate.class);
 	}
 
 	// Mapper Teacher
@@ -175,6 +188,10 @@ public class Mapper {
 
 	public static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
 		return modelMapper.map(teacher, TeacherDTO.class);
+	}
+	
+	public static TeacherCourseStudentsDTO mapperToTeacherCourseStudentsDTO(Teacher teacher) {
+		return modelMapper.map(teacher, TeacherCourseStudentsDTO.class);
 	}
 
 	public static List<TeacherDTO> mapperToTeachersDTO(List<Teacher> teachers) {
