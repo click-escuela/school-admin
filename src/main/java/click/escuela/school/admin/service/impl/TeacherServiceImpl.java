@@ -29,18 +29,23 @@ public class TeacherServiceImpl {
 	@Autowired
 	private StudentServiceImpl studentService;
 
-	public void create(TeacherApi teacherApi) throws TeacherException {
+
+	public void create(String schoolId, TeacherApi teacherApi) throws TeacherException {
+		exists(teacherApi);
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);
+			teacher.setSchoolId(Integer.valueOf(schoolId));
 			teacherRepository.save(teacher);
 		} catch (Exception e) {
 			throw new TeacherException(TeacherMessage.CREATE_ERROR);
 		}
 	}
 
-	public void update(TeacherApi teacherApi) throws TeacherException {
-		findById(teacherApi.getId())
-				.ifPresent(teacher -> teacherRepository.save(Mapper.mapperToTeacher(teacherApi, teacher)));
+	public void update(String schoolId, TeacherApi teacherApi) throws TeacherException {
+		Teacher teacher = findById(teacherApi.getId())
+				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
+		teacher.setSchoolId(Integer.valueOf(schoolId));
+		teacherRepository.save(Mapper.mapperToTeacher(teacherApi, teacher));
 	}
 
 	public List<TeacherDTO> findAll() {

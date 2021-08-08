@@ -77,9 +77,11 @@ public class TeacherServiceTest {
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").gender(GenderType.FEMALE).cellPhone("1589632485")
 				.email("mariAna@gmail.com").courses(courses).schoolId(schoolId).adress(new Adress()).build();
-		teacherApi = TeacherApi.builder().id(id.toString()).name("Mariana").surname("Lopez").birthday(LocalDate.now())
-				.documentType("DNI").document("25897863").gender(GenderType.FEMALE.toString()).schoolId(schoolId)
-				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(new AdressApi()).build();
+    
+		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now())
+				.documentType("DNI").document("98623512").gender(GenderType.FEMALE.toString()).cellPhone("1589632485")
+				.email("mariAna@gmail.com").adressApi(new AdressApi()).build();
+    
 		Optional<Teacher> optional = Optional.of(teacher);
 		teacherDTO.setCourses(new ArrayList<>());
 		teachers = new ArrayList<>();
@@ -88,6 +90,7 @@ public class TeacherServiceTest {
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi)).thenReturn(teacher);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi,teacher)).thenReturn(teacher);
+
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
@@ -97,6 +100,7 @@ public class TeacherServiceTest {
 		Mockito.when(Mapper.mapperToEnum(teacherApi.getGender())).thenReturn(teacher.getGender());
 		Mockito.when(teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
 				Mapper.mapperToEnum(teacherApi.getGender()))).thenReturn(optional);
+
 		Mockito.when(Mapper.mapperToTeacherCourseStudentsDTO(teacher)).thenReturn(teacherDTO);
 
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
@@ -107,7 +111,8 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenCreateIsOk() throws TransactionException {
-		teacherServiceImpl.create(teacherApi);
+		teacherApi.setDocument("11111111");
+		teacherServiceImpl.create(schoolId.toString(), teacherApi);
 		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
 	}
 
@@ -115,13 +120,16 @@ public class TeacherServiceTest {
 	public void whenCreateIsError() {
 		Mockito.when(teacherRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
-			teacherServiceImpl.create(new TeacherApi());
+			teacherServiceImpl.create(schoolId.toString(), new TeacherApi());
+
 		}).withMessage(TeacherMessage.CREATE_ERROR.getDescription());
 	}
 
 	@Test
 	public void whenUpdateIsOk() throws TransactionException {
-		teacherServiceImpl.update(teacherApi);
+		teacherApi.setId(id.toString());
+		teacherServiceImpl.update(schoolId.toString(), teacherApi);
+
 		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
 	}
 
@@ -130,7 +138,7 @@ public class TeacherServiceTest {
 		id = UUID.randomUUID();
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherApi.setId(id.toString());
-			teacherServiceImpl.update(teacherApi);
+			teacherServiceImpl.update(schoolId.toString(), teacherApi);
 		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 
@@ -164,7 +172,7 @@ public class TeacherServiceTest {
 	@Test
 	public void whenGetByCourseIsOk() throws CourseException, TeacherException {
 		teacherServiceImpl.getByCourseId(courseId.toString());
-		if(courseService.findById(courseId.toString()).isPresent()) {
+		if (courseService.findById(courseId.toString()).isPresent()) {
 			verify(teacherRepository).findByCoursesId(courseId);
 		}
 	}
@@ -195,7 +203,6 @@ public class TeacherServiceTest {
 		teacherServiceImpl.addCourses(id.toString(), listStringIds);
 		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
 	}
-	
 	@Test
 	public void whenAddCoursesIsError() throws TransactionException {
 		id = UUID.randomUUID();
@@ -233,6 +240,12 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenTeacherExistsIsOk() throws TeacherException {
+
+		Optional<Teacher> optional = Optional.of(teacher);
+		Mockito.when(Mapper.mapperToEnum(teacherApi.getGender())).thenReturn(teacher.getGender());
+		Mockito.when(teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
+				Mapper.mapperToEnum(teacherApi.getGender()))).thenReturn(optional);
+
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherServiceImpl.exists(teacherApi);
 		}).withMessage(TeacherMessage.EXIST.getDescription());
