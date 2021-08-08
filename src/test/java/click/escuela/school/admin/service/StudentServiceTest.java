@@ -99,6 +99,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseIdIn(uuids)).thenReturn(students);
+
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);

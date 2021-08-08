@@ -15,7 +15,7 @@ public enum Validation {
 		this.description = description;
 	}
 
-	public final String getDescription() {
+  public final String getDescription() {
 		return description;
 	}
 
