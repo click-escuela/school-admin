@@ -19,7 +19,6 @@ import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.dto.CourseStudentsDTO;
-
 import click.escuela.school.admin.dto.ExcelDTO;
 
 import click.escuela.school.admin.dto.SchoolDTO;
@@ -131,7 +130,6 @@ public class Mapper {
 	public static StudentDTO mapperToStudentFullDTO(Student student) {
 		StudentDTO studentFull = modelMapper.map(student, StudentDTO.class);
 		studentFull.setCourseId(student.getCourse().getId().toString());
-
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
 	}

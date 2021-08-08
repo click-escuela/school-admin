@@ -97,6 +97,7 @@ public class TeacherControllerTest {
 		teachers.add(teacher);
 
 		Mockito.when(teacherService.getById(id)).thenReturn(Mapper.mapperToTeacherDTO(teacher));
+
 		Mockito.when(teacherService.getCourseAndStudents(id))
 				.thenReturn(Mapper.mapperToTeacherCourseStudentsDTO(teacher));
 		Mockito.when(teacherService.getBySchoolId(schoolId)).thenReturn(Mapper.mapperToTeachersDTO(teachers));
@@ -110,7 +111,7 @@ public class TeacherControllerTest {
 
 		doThrow(new TeacherException(TeacherMessage.CREATE_ERROR)).when(teacherService).create(Mockito.anyString(),
 				Mockito.any());
-    
+
 		assertThat(result(post(URL, schoolId).content(toJson(teacherApi))))
 				.contains(TeacherMessage.CREATE_ERROR.getDescription());
 	}
@@ -210,7 +211,6 @@ public class TeacherControllerTest {
 	public void whenUpdateTests() throws JsonProcessingException, Exception {
 		assertThat(result(put(URL, schoolId, id).content(toJson(teacherApi))))
 				.contains(TeacherMessage.UPDATE_OK.name());
-
 		doThrow(new TeacherException(TeacherMessage.UPDATE_ERROR)).when(teacherService).update(Mockito.anyString(),
 				Mockito.any());
 		assertThat(result(put(URL, schoolId, id).content(toJson(teacherApi))))
@@ -268,7 +268,6 @@ public class TeacherControllerTest {
 		doThrow(new CourseException(CourseMessage.GET_ERROR)).when(teacherService).addCourses(id, listStringIds);
 		assertThat(result(put(URL + "{idTeacher}/add/courses", schoolId, id).content(toJson(listStringIds))))
 				.contains(CourseMessage.GET_ERROR.getDescription());
-    
 	}
 	
 	@Test
@@ -287,8 +286,8 @@ public class TeacherControllerTest {
 
 	@Test
 	public void whenGetAllTest() throws JsonProcessingException, Exception {
-		assertThat(mapper.readValue(result(get(URL + "getAll", schoolId)), new TypeReference<List<TeacherDTO>>() {
-		}).get(0).getId()).contains(id.toString());
+		assertThat(mapper.readValue(result(get(URL + "getAll", schoolId)), 
+				new TypeReference<List<TeacherDTO>>() {}).get(0).getId()).contains(id.toString());
 
 	}
 	

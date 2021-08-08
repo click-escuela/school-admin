@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.DocumentType;
+
 import click.escuela.school.admin.enumerator.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

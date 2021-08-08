@@ -1,5 +1,6 @@
 package click.escuela.school.admin.api;
 
+
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -39,7 +40,7 @@ public class TeacherApi extends PersonApi {
 	@NotBlank(message = "Document type cannot be empty")
 	@JsonProperty(value = "documentType", required = true)
 	private String documentType;
-
+  
 	@JsonProperty(value = "courseId", required = false)
 	private List<String> courses;
 }
