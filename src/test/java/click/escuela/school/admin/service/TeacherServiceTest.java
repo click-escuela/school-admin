@@ -77,9 +77,11 @@ public class TeacherServiceTest {
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").gender(GenderType.FEMALE).cellPhone("1589632485")
 				.email("mariAna@gmail.com").courses(courses).schoolId(schoolId).adress(new Adress()).build();
+    
 		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("98623512").gender(GenderType.FEMALE.toString()).cellPhone("1589632485")
 				.email("mariAna@gmail.com").adressApi(new AdressApi()).build();
+    
 		Optional<Teacher> optional = Optional.of(teacher);
 		teacherDTO.setCourses(new ArrayList<>());
 		teachers = new ArrayList<>();
@@ -172,7 +174,6 @@ public class TeacherServiceTest {
 		courseId = UUID.randomUUID();
 		List<TeacherDTO> listEmpty = teacherServiceImpl.getByCourseId(courseId.toString());
 		assertThat(listEmpty).isEmpty();
-		;
 	}
 
 	@Test
@@ -194,7 +195,6 @@ public class TeacherServiceTest {
 		teacherServiceImpl.addCourses(id.toString(), listStringIds);
 		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
 	}
-
 	@Test
 	public void whenAddCoursesIsError() throws TransactionException {
 		id = UUID.randomUUID();
@@ -240,5 +240,4 @@ public class TeacherServiceTest {
 			teacherServiceImpl.exists(teacherApi);
 		}).withMessage(TeacherMessage.EXIST.getDescription());
 	}
-
 }

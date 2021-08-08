@@ -115,4 +115,22 @@ public class TeacherController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
 	}
 
+	@Operation(summary = "Add courses in Teacher", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
+	@PutMapping(value = "/{idTeacher}/add/courses")
+	public ResponseEntity<TeacherMessage> addCourses(@PathVariable("idTeacher") String idTeacher,
+			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
+		teacherService.addCourses(idTeacher, listUUIDs);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
+	}
+
+	@Operation(summary = "Delete courses from Teacher", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
+	@PutMapping(value = "/{idTeacher}/del/courses")
+	public ResponseEntity<TeacherMessage> deleteCourses(@PathVariable("idTeacher") String idTeacher,
+			@RequestBody @Validated List<String> listUUIDs) throws TeacherException, CourseException {
+		teacherService.deleteCourses(idTeacher, listUUIDs);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.UPDATE_OK);
+	}
+
 }
