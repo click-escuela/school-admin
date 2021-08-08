@@ -2,8 +2,6 @@ package click.escuela.school.admin.dto;
 
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import click.escuela.school.admin.enumerator.DocumentType;
