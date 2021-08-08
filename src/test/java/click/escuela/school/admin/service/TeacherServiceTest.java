@@ -111,6 +111,7 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenCreateIsOk() throws TransactionException {
+		teacherApi.setDocument("11111111");
 		teacherServiceImpl.create(schoolId.toString(), teacherApi);
 		verify(teacherRepository).save(Mapper.mapperToTeacher(teacherApi));
 	}

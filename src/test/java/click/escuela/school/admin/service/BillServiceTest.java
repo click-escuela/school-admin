@@ -66,7 +66,6 @@ public class BillServiceTest {
 
 	@Mock
 	private TypedQuery<Bill> typedQuery;
-
 	private BillServiceImpl billServiceImpl = new BillServiceImpl();
 	private BillApi billApi;
 	private Bill bill;

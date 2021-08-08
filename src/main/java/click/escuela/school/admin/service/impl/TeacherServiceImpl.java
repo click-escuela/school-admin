@@ -30,9 +30,6 @@ public class TeacherServiceImpl {
 	private StudentServiceImpl studentService;
 
 
-	@Autowired
-	private StudentServiceImpl studentService;
-
 	public void create(String schoolId, TeacherApi teacherApi) throws TeacherException {
 		exists(teacherApi);
 		try {
