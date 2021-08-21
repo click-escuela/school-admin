@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import click.escuela.school.admin.api.TeacherApi;
-import click.escuela.school.admin.dto.CourseDTO;
+import click.escuela.school.admin.dto.CourseStudentsShortDTO;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
@@ -106,10 +106,10 @@ public class TeacherServiceImpl {
 		return teacherDTO;
 	}
 
-	public List<CourseDTO> getCoursesByTeacherId(String teacherId) throws TeacherException {
+	public List<CourseStudentsShortDTO> getCoursesByTeacherId(String teacherId) throws TeacherException {
 		Teacher teacher = findById(teacherId)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
-		return Mapper.mapperToCoursesDTO(teacher.getCourses());
+		return studentService.getCourseStudentsShort(Mapper.mapperToCoursesStudentsShortDTO(teacher.getCourses()));
 	}
 
 }

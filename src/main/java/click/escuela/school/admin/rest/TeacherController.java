@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.TeacherApi;
-import click.escuela.school.admin.dto.CourseDTO;
+import click.escuela.school.admin.dto.CourseStudentsShortDTO;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
@@ -117,9 +117,9 @@ public class TeacherController {
 	}
 
 	@Operation(summary = "Get courses by teacherId", responses = {
-			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CourseDTO.class))) })
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CourseStudentsShortDTO.class))) })
 	@GetMapping(value = "/{teacherId}/coursesList")
-	public ResponseEntity<List<CourseDTO>> getCoursesByTeacherId(@Parameter(name = "Teacher Id", required = true) @PathVariable("teacherId") String teacherId) throws TeacherException {
+	public ResponseEntity<List<CourseStudentsShortDTO>> getCoursesByTeacherId(@Parameter(name = "Teacher Id", required = true) @PathVariable("teacherId") String teacherId) throws TeacherException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getCoursesByTeacherId(teacherId));
 	}
 	

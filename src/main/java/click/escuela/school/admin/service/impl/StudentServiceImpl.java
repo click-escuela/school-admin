@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.CourseStudentsDTO;
+import click.escuela.school.admin.dto.CourseStudentsShortDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
@@ -140,6 +141,19 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	}
 
 	private List<StudentDTO> getStudentsByCourse(List<StudentDTO> result, CourseStudentsDTO course) {
+		return result.stream()
+				.filter(r -> r.getCourseId().equals(course.getId()))
+				.collect(Collectors.toList());
+	}
+	
+	public List<CourseStudentsShortDTO> getCourseStudentsShort(List<CourseStudentsShortDTO> courses) {
+		List<String> coursesIds = courses.stream().map(CourseStudentsShortDTO::getId).collect(Collectors.toList());
+		List<StudentDTO> students = getByCourses(coursesIds,false);
+		courses.forEach(p-> p.setStudents(Mapper.mapperToStudentShort(getStudentsShortByCourse(students, p))));
+		return courses;
+	}
+	
+	private List<StudentDTO> getStudentsShortByCourse(List<StudentDTO> result, CourseStudentsShortDTO course) {
 		return result.stream()
 				.filter(r -> r.getCourseId().equals(course.getId()))
 				.collect(Collectors.toList());
