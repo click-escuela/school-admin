@@ -19,10 +19,13 @@ import click.escuela.school.admin.api.TeacherApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.dto.CourseStudentsDTO;
+import click.escuela.school.admin.dto.CourseStudentsShortDTO;
+
 import click.escuela.school.admin.dto.ExcelDTO;
 
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.StudentShortDTO;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.DocumentType;
@@ -164,6 +167,16 @@ public class Mapper {
 		courses.stream().forEach(p -> courseDTOList.add(mapperToCourseStudentsDTO(p)));
 		return courseDTOList;
 	}
+	
+	public static List<CourseStudentsShortDTO> mapperToCoursesStudentsShortDTO(List<Course> courses) {
+		List<CourseStudentsShortDTO> courseDTOList = new ArrayList<>();
+		courses.stream().forEach(p -> courseDTOList.add(mapperToCourseStudentsShortDTO(p)));
+		return courseDTOList;
+	}
+	
+	public static CourseStudentsShortDTO mapperToCourseStudentsShortDTO(Course course) {
+		return modelMapper.map(course, CourseStudentsShortDTO.class);
+	}
 
 	public static CourseApi mapperToCourseApi(Course course) {
 		return modelMapper.map(course, CourseApi.class);
@@ -247,6 +260,16 @@ public class Mapper {
 		List<ExcelDTO> excelsDTO = new ArrayList<>();
 		excels.stream().forEach(p -> excelsDTO.add(mapperToExcel(p)));
 		return excelsDTO;
+	}
+
+	public static List<StudentShortDTO> mapperToStudentShort(List<StudentDTO> studentsShortByCourse) {
+		 List<StudentShortDTO> students = new ArrayList<>();
+		 studentsShortByCourse.stream().forEach(s -> students.add(mapperToStudentShort(s)));
+		 return students;
+	}
+
+	private static StudentShortDTO mapperToStudentShort(StudentDTO student) {
+		return modelMapper.map(student, StudentShortDTO.class);
 	}
 
 }
