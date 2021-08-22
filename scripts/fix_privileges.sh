@@ -5,3 +5,4 @@ chmod +x /home/ec2-user/server/school-admin/server_start.sh
 chmod +x /home/ec2-user/server/school-admin/server_stop.sh
 chmod +x /home/ec2-user/server/school-admin/server_clear.sh
 chmod +x /home/ec2-user/server/school-admin/fix_privileges.sh
+chmod +x /home/ec2-user/server/school-admin/school-service.pid
