@@ -23,6 +23,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
+import click.escuela.school.admin.dto.CourseStudentsShortDTO;
+import click.escuela.school.admin.dto.StudentShortDTO;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
@@ -64,16 +66,25 @@ public class TeacherServiceTest {
 	private List<String> listStringIds = new ArrayList<>();
 	private List<Course> courses = new ArrayList<>();
 	private TeacherCourseStudentsDTO teacherDTO = new TeacherCourseStudentsDTO();
+	private List<CourseStudentsShortDTO> coursesStudents = new ArrayList<>();
+	private UUID studentId;
 
 	@Before
 	public void setUp() {
 		PowerMockito.mockStatic(Mapper.class);
 
 		id = UUID.randomUUID();
+		studentId = UUID.randomUUID();
 		schoolId = 1234;
 		courseId = UUID.randomUUID();
 		listStringIds.add(courseId.toString());
-		courses.add(new Course());
+		Course courseEntity = new Course();
+		courseEntity.setCountStudent(20);
+		courseEntity.setDivision("B");
+		courseEntity.setId(courseId);
+		courseEntity.setYear(10);
+		
+		courses.add(courseEntity);
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").gender(GenderType.FEMALE).cellPhone("1589632485")
 				.email("mariAna@gmail.com").courses(courses).schoolId(schoolId).adress(new Adress()).build();
@@ -86,7 +97,21 @@ public class TeacherServiceTest {
 		teacherDTO.setCourses(new ArrayList<>());
 		teachers = new ArrayList<>();
 		teachers.add(teacher);
-
+		
+		CourseStudentsShortDTO course = new CourseStudentsShortDTO();
+		course.setCountStudent(20);
+		course.setDivision("B");
+		course.setId(courseId.toString());
+		course.setYear(10);
+		StudentShortDTO student = new StudentShortDTO();
+		student.setId(studentId.toString());
+		student.setName("Anotnio");
+		student.setSurname("Liendro");
+		List<StudentShortDTO> students = new ArrayList<>();
+		students.add(student);
+		course.setStudents(students);
+		coursesStudents.add(course);
+		
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi)).thenReturn(teacher);
 		Mockito.when(Mapper.mapperToTeacher(teacherApi,teacher)).thenReturn(teacher);
@@ -103,6 +128,8 @@ public class TeacherServiceTest {
 
 		Mockito.when(Mapper.mapperToTeacherCourseStudentsDTO(teacher)).thenReturn(teacherDTO);
 
+		Mockito.when(studentService.getCourseStudentsShort(Mockito.any())).thenReturn(coursesStudents);
+		
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 		ReflectionTestUtils.setField(teacherServiceImpl, "courseService", courseService);
 		ReflectionTestUtils.setField(teacherServiceImpl, "studentService", studentService);
@@ -249,6 +276,20 @@ public class TeacherServiceTest {
 		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
 			teacherServiceImpl.exists(teacherApi);
 		}).withMessage(TeacherMessage.EXIST.getDescription());
+	}
+	
+	@Test
+	public void whengGetCoursesByTeacherIdIsOk() throws TeacherException {
+		List<CourseStudentsShortDTO> courseStudents = teacherServiceImpl.getCoursesByTeacherId(id.toString());
+		verify(teacherRepository).findById(id);
+		assertThat(courseStudents).isNotEmpty();
+	}
+	
+	@Test
+	public void whenGetCoursesByTeacherIdIsError() {
+		assertThatExceptionOfType(TeacherException.class).isThrownBy(() -> {
+			teacherServiceImpl.getCoursesByTeacherId(UUID.randomUUID().toString());
+		}).withMessage(TeacherMessage.GET_ERROR.getDescription());
 	}
 	
 }
