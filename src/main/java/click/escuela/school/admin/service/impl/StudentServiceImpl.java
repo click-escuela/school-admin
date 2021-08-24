@@ -146,7 +146,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				.collect(Collectors.toList());
 	}
 	
-	public List<CourseStudentsShortDTO> getCourseStudentsShort(List<CourseStudentsShortDTO> courses) {
+	public List<CourseStudentsShortDTO> setStudentToCourseStudentsShort(List<CourseStudentsShortDTO> courses) {
 		List<String> coursesIds = courses.stream().map(CourseStudentsShortDTO::getId).collect(Collectors.toList());
 		List<StudentDTO> students = getByCourses(coursesIds,false);
 		courses.forEach(p-> p.setStudents(Mapper.mapperToStudentShort(getStudentsShortByCourse(students, p))));

@@ -109,7 +109,8 @@ public class TeacherServiceImpl {
 	public List<CourseStudentsShortDTO> getCoursesByTeacherId(String teacherId) throws TeacherException {
 		Teacher teacher = findById(teacherId)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
-		return studentService.getCourseStudentsShort(Mapper.mapperToCoursesStudentsShortDTO(teacher.getCourses()));
+		List<CourseStudentsShortDTO> courseStudentsShortDTO = Mapper.mapperToCoursesStudentsShortDTO(teacher.getCourses());
+		return studentService.setStudentToCourseStudentsShort(courseStudentsShortDTO);
 	}
 
 }

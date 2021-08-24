@@ -128,7 +128,7 @@ public class TeacherServiceTest {
 
 		Mockito.when(Mapper.mapperToTeacherCourseStudentsDTO(teacher)).thenReturn(teacherDTO);
 
-		Mockito.when(studentService.getCourseStudentsShort(Mockito.any())).thenReturn(coursesStudents);
+		Mockito.when(studentService.setStudentToCourseStudentsShort(Mockito.any())).thenReturn(coursesStudents);
 		
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 		ReflectionTestUtils.setField(teacherServiceImpl, "courseService", courseService);
