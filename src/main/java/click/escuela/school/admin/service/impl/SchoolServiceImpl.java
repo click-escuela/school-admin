@@ -1,6 +1,7 @@
 package click.escuela.school.admin.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,11 @@ public class SchoolServiceImpl implements SchoolServiceGeneric<SchoolApi,SchoolD
 			throw new TransactionException(SchoolMessage.CREATE_ERROR.getCode(),
 					SchoolMessage.CREATE_ERROR.getDescription());
 		}
-		
+	}
+	
+	public School findById(String schoolId) throws TransactionException {
+		return schoolRepository.findById(UUID.fromString(schoolId))
+				.orElseThrow(() -> new TransactionException(SchoolMessage.GET_ERROR.getCode(),
+						SchoolMessage.GET_ERROR.getDescription()));
 	}
 }
