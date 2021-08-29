@@ -46,10 +46,10 @@ public class BillController {
 	@Operation(summary = "Get bill by billtId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BillDTO.class))) })
 	@GetMapping(value = "/{billId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BillDTO> getById(
+	public ResponseEntity<BillDTO> getById(@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
 			@Parameter(name = "Bill id", required = true) @PathVariable("billId") String billId)
 			throws BillException {
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.getById(billId));
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.getById(billId,schoolId));
 	}
 
 	@Operation(summary = "Get bill by studentId", responses = {

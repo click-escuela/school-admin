@@ -39,9 +39,6 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	@Autowired
 	private StudentServiceImpl studentService;
 
-	@Autowired
-	private SchoolServiceImpl schoolService;
-
 	@Override
 	public void create(String schoolId, String id, BillApi billApi) throws BillException {
 		try {
@@ -58,8 +55,8 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	}
 
 	@Override
-	public BillDTO getById(String billId) throws BillException {
-		return Mapper.mapperToBillDTO(findById(billId));
+	public BillDTO getById(String billId, String schoolId) throws BillException {
+		return Mapper.mapperToBillDTO(findById(billId, schoolId));
 	}
 
 	@Override
@@ -67,8 +64,8 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 		return Mapper.mapperToBillsDTO(billRepository.findAll());
 	}
 
-	public Bill findById(String billId) throws BillException {
-		return billRepository.findById(UUID.fromString(billId))
+	public Bill findById(String billId, String schoolId) throws BillException {
+		return billRepository.findByIdAndSchoolId(UUID.fromString(billId), Integer.valueOf(schoolId))
 				.orElseThrow(() -> new BillException(BillEnum.GET_ERROR));
 	}
 
@@ -99,8 +96,8 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	}
 
 	public void updatePayment(String schoolId, String billId) throws TransactionException {
-		schoolService.findById(schoolId);
-		Bill bill = findById(billId);
+		Bill bill = findById(billId, schoolId);
+		bill.setSchoolId(Integer.valueOf(schoolId));
 		bill.setStatus(PaymentStatus.COMPLETE);
 		bill.setYear(LocalDate.now().getYear());
 		bill.setMonth(LocalDate.now().getMonthValue());

@@ -94,8 +94,8 @@ public class Student {
 	@JoinColumn(name = "course", nullable = true)
 	private Course course;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id", nullable = true)
+	@OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+	@JoinColumn(name = "id_bill", nullable = true)
 	private List<Bill> bills;
 
 }
