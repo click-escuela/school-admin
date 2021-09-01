@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
@@ -40,6 +41,7 @@ import click.escuela.school.admin.service.impl.BillServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
+@PowerMockIgnore("javax.management.*")
 @PrepareForTest({ Mapper.class })
 public class BillServiceTest {
 
