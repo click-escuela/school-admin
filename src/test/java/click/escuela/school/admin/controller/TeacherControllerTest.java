@@ -32,6 +32,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.school.admin.api.AdressApi;
 import click.escuela.school.admin.api.TeacherApi;
+import click.escuela.school.admin.dto.CourseStudentsShortDTO;
+import click.escuela.school.admin.dto.StudentShortDTO;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
@@ -67,9 +69,11 @@ public class TeacherControllerTest {
 	private static String EMPTY = "";
 	private String id;
 	private String schoolId;
+	private String studentId;
 	private String courseId;
 	private final static String URL = "/school/{schoolId}/teacher/";
 	private List<String> listStringIds = new ArrayList<String>();
+	private List<CourseStudentsShortDTO> courses = new ArrayList<>();
 
 	@Before
 	public void setUp() throws TeacherException, CourseException {
@@ -83,9 +87,15 @@ public class TeacherControllerTest {
 		schoolId = "1234";
 		courseId = UUID.randomUUID().toString();
 		adressApi = new AdressApi("Calle falsa", "6458", "Nogues");
+		studentId = UUID.randomUUID().toString();
 		List<Course> course = new ArrayList<>();
 		listStringIds.add(courseId);
-		course.add(new Course());
+		Course courseEntity = new Course();
+		courseEntity.setCountStudent(20);
+		courseEntity.setDivision("B");
+		courseEntity.setId(UUID.fromString(courseId));
+		courseEntity.setYear(10);
+		course.add(courseEntity);
 		teacherApi = TeacherApi.builder().id(id).gender(GenderType.FEMALE.toString()).name("Mariana").surname("Lopez")
 				.birthday(LocalDate.now()).documentType(DocumentType.DNI.toString()).document("25897863")
 				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(adressApi).build();
@@ -95,9 +105,23 @@ public class TeacherControllerTest {
 				.adress(new Adress()).build();
 		List<Teacher> teachers = new ArrayList<>();
 		teachers.add(teacher);
+		
+		CourseStudentsShortDTO courseStudent = new CourseStudentsShortDTO();
+		courseStudent.setCountStudent(20);
+		courseStudent.setDivision("B");
+		courseStudent.setId(courseId);
+		courseStudent.setYear(10);
+		StudentShortDTO student = new StudentShortDTO();
+		student.setId(studentId);
+		student.setName("Anotnio");
+		student.setSurname("Liendro");
+		List<StudentShortDTO> students = new ArrayList<>();
+		students.add(student);
+		courseStudent.setStudents(students);
+		courses.add(courseStudent);
 
 		Mockito.when(teacherService.getById(id)).thenReturn(Mapper.mapperToTeacherDTO(teacher));
-
+		Mockito.when(teacherService.getCoursesByTeacherId(id)).thenReturn(courses);
 		Mockito.when(teacherService.getCourseAndStudents(id))
 				.thenReturn(Mapper.mapperToTeacherCourseStudentsDTO(teacher));
 		Mockito.when(teacherService.getBySchoolId(schoolId)).thenReturn(Mapper.mapperToTeachersDTO(teachers));
@@ -253,6 +277,16 @@ public class TeacherControllerTest {
 
 		doThrow(new TeacherException(TeacherMessage.GET_ERROR)).when(teacherService).getCourseAndStudents(id);
 		assertThat(result(get(URL + "{teacherId}/courses", schoolId, id)))
+				.contains(TeacherMessage.GET_ERROR.getDescription());
+	}
+	
+	@Test
+	public void getCoursesByTeacherIdTests() throws JsonProcessingException, Exception {
+		assertThat(mapper.readValue(result(get(URL + "{teacherId}/coursesList", schoolId, id)),
+				new TypeReference<List<CourseStudentsShortDTO>>() {}).get(0).getId()).contains(courseId);
+
+		doThrow(new TeacherException(TeacherMessage.GET_ERROR)).when(teacherService).getCoursesByTeacherId(id);
+		assertThat(result(get(URL + "{teacherId}/coursesList", schoolId, id)))
 				.contains(TeacherMessage.GET_ERROR.getDescription());
 	}
 
