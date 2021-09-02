@@ -1,0 +1,6 @@
+2021-09-01 19:10:38 [restartedMain] INFO  c.e.s.admin.SchoolAdminApplication -
+				Starting SchoolAdminApplication using Java 1.8.0_181 on DESKTOP-0R60B0M with PID 14428 (C:\Users\oscar\Documents\Proyectos\APIS\school-admin\target\classes started by oscar in C:\Users\oscar\Documents\Proyectos\APIS\school-admin)
+2021-09-01 19:10:38 [restartedMain] DEBUG c.e.s.admin.SchoolAdminApplication -
+				Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-09-01 19:10:38 [restartedMain] INFO  c.e.s.admin.SchoolAdminApplication -
+				No active profile set, falling back to default profiles: default
