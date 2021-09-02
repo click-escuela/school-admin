@@ -1,6 +1,8 @@
 package click.escuela.school.admin.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -33,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import click.escuela.school.admin.api.BillApi;
+import click.escuela.school.admin.api.BillStatusApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.enumerator.CourseMessage;
@@ -66,6 +70,7 @@ public class BillControllerTest {
 	private Integer schoolId;
 	private List<Bill> bills;
 	private static String EMPTY = "";
+	private BillStatusApi billStatus = new BillStatusApi();
 
 	@Before
 	public void setup() throws BillException, StudentException {
@@ -80,12 +85,17 @@ public class BillControllerTest {
 		schoolId = 1234;
 		bill = Bill.builder().id(id).schoolId(schoolId).year(2021).month(6).status(PaymentStatus.PENDING)
 				.student(new Student()).file("Mayo").amount((double) 12000).build();
+		billStatus.setStatus(PaymentStatus.CANCELED.name());
 		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
 		bills = new ArrayList<>();
 		bills.add(bill);
+		BillDTO billDTO = Mapper.mapperToBillDTO(bill);		
+		List<BillDTO> billsDTO = new ArrayList<>();
+		billsDTO.add(billDTO);
 		Mockito.when(billService.findBills(schoolId.toString(), studentId.toString(), PaymentStatus.PENDING.toString(),
 				6, 2021)).thenReturn(Mapper.mapperToBillsDTO(bills));
-
+		Mockito.when(billService.getById(id.toString(), schoolId.toString())).thenReturn(billDTO);
+		Mockito.when(billService.findAll()).thenReturn(billsDTO);
 		doNothing().when(billService).create(Mockito.anyString(), Mockito.anyString(), Mockito.any());
 	}
 
@@ -227,9 +237,58 @@ public class BillControllerTest {
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("");
 	}
+	
+	@Test
+	public void getByIdIsOk() throws JsonProcessingException, Exception {
+		assertThat(mapper.readValue(resultBillApi(get("/school/{schoolId}/bill/{billId}", schoolId, id.toString())),
+				BillDTO.class)).hasFieldOrPropertyWithValue("id", id.toString());
+	}
+
+	@Test
+	public void getByIdIsError() throws JsonProcessingException, Exception {
+		id = UUID.randomUUID();
+		doThrow(new BillException(BillEnum.GET_ERROR)).when(billService).getById(id.toString(), schoolId.toString());
+		assertThat(resultBillApi(get("/school/{schoolId}/bill/{billId}", schoolId, id.toString())))
+				.contains(BillEnum.GET_ERROR.getDescription());
+	}
+
+	@Test
+	public void getUpdatePaymentIsOk() throws JsonProcessingException, Exception {
+		MvcResult result = mockMvc
+				.perform(put("/school/{schoolId}/bill/{billId}", schoolId, id.toString())
+						.contentType(MediaType.APPLICATION_JSON).content(toJson(billStatus)))
+				.andExpect(status().is2xxSuccessful()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(BillEnum.PAYMENT_STATUS_CHANGED.name());
+	}
+
+	@Test
+	public void whenUpdatePaymentIsError() throws JsonProcessingException, Exception {
+
+		doThrow(new BillException(BillEnum.GET_ERROR)).when(billService).updatePayment(Mockito.anyString(),
+				Mockito.anyString(), Mockito.any());
+		MvcResult result = mockMvc
+				.perform(put("/school/{schoolId}/bill/{billId}", schoolId, id.toString())
+						.contentType(MediaType.APPLICATION_JSON).content(toJson(billStatus)))
+				.andExpect(status().isBadRequest()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(BillEnum.GET_ERROR.getDescription());
+	}
+	
+	@Test
+	public void whenGetAllTest() throws JsonProcessingException, Exception {
+		assertThat(mapper.readValue(resultBillApi(get("/school/{schoolId}/bill/getAll", schoolId)),
+				new TypeReference<List<BillDTO>>() {}).get(0).getId()).contains(id.toString());
+	}
 
 	private String toJson(final Object obj) throws JsonProcessingException {
 		return mapper.writeValueAsString(obj);
+	}
+
+	private String resultBillApi(MockHttpServletRequestBuilder requestBuilder)
+			throws JsonProcessingException, Exception {
+		return mockMvc.perform(requestBuilder.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
+				.andReturn().getResponse().getContentAsString();
 	}
 
 }
