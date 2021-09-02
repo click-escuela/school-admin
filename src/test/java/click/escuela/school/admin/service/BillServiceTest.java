@@ -28,7 +28,9 @@ import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.api.BillApi;
+import click.escuela.school.admin.api.BillStatusApi;
 import click.escuela.school.admin.dto.BillDTO;
+import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.PaymentStatus;
@@ -78,23 +80,22 @@ public class BillServiceTest {
 	private UUID studentId = UUID.randomUUID();
 	private Integer schoolId = 1234;
 	private List<Bill> bills;
+	private BillStatusApi billStatus = new BillStatusApi();
 
 	@Before
 	public void setUp() throws TransactionException, StudentException {
 		PowerMockito.mockStatic(Mapper.class);
+		
 		Student student = Student.builder().id(studentId).schoolId(schoolId).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(new Course()).build();
-
 		bill = Bill.builder().id(id).year(2021).month(6).status(PaymentStatus.PENDING).student(student).file("Mayo")
 				.amount((double) 12000).build();
-
 		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
-
+		billStatus.setStatus(PaymentStatus.CANCELED.name());
 		Optional<Bill> optional = Optional.of(bill);
 		bills = new ArrayList<>();
 		bills.add(bill);
-
 		BillDTO billDTO = BillDTO.builder().id(id.toString()).year(2021).month(6).status(PaymentStatus.PENDING)
 				.file("Mayo").amount((double) 12000).build();
 		List<BillDTO> billsDTO = new ArrayList<>();
@@ -182,4 +183,26 @@ public class BillServiceTest {
 		billServiceImpl.findById(id.toString(), schoolId.toString());
 		verify(billRepository).findByIdAndSchoolId(id, schoolId);
 	}
+	
+	@Test
+	public void whenGetByIdIsOk() throws BillException {
+		billServiceImpl.getById(id.toString(), schoolId.toString());
+		verify(billRepository).findByIdAndSchoolId(id, schoolId);
+	}
+	
+	@Test
+	public void whenUpdatePaymentIsOk() throws TransactionException {
+		billServiceImpl.updatePayment(schoolId.toString(), id.toString(), billStatus);
+		verify(billRepository).findByIdAndSchoolId(id, schoolId);
+
+	}
+	
+	@Test
+	public void whenUpdatePaymentIsError() throws TransactionException {
+		id = UUID.randomUUID();
+		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
+			billServiceImpl.updatePayment(schoolId.toString(), id.toString(), billStatus);
+		}).withMessage(BillEnum.GET_ERROR.getDescription());
+	}
+	
 }
