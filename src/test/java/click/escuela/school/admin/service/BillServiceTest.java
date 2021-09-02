@@ -2,9 +2,9 @@ package click.escuela.school.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +29,17 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.api.BillApi;
 import click.escuela.school.admin.dto.BillDTO;
+import click.escuela.school.admin.enumerator.EducationLevels;
+import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.exception.BillException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
+import click.escuela.school.admin.model.Course;
+import click.escuela.school.admin.model.Parent;
+import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.BillRepository;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
@@ -69,17 +74,19 @@ public class BillServiceTest {
 	private BillServiceImpl billServiceImpl = new BillServiceImpl();
 	private BillApi billApi;
 	private Bill bill;
-	private UUID id;
-	private UUID studentId;
+	private UUID id = UUID.randomUUID();
+	private UUID studentId = UUID.randomUUID();
+	private Integer schoolId = 1234;
 	private List<Bill> bills;
 
 	@Before
 	public void setUp() throws TransactionException, StudentException {
 		PowerMockito.mockStatic(Mapper.class);
-		studentId = UUID.randomUUID();
-		id = UUID.randomUUID();
+		Student student = Student.builder().id(studentId).schoolId(schoolId).absences(3).birthday(LocalDate.now()).cellPhone("535435")
+				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
+				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(new Course()).build();
 
-		bill = Bill.builder().id(id).year(2021).month(6).status(PaymentStatus.PENDING).studentId(studentId).file("Mayo")
+		bill = Bill.builder().id(id).year(2021).month(6).status(PaymentStatus.PENDING).student(student).file("Mayo")
 				.amount((double) 12000).build();
 
 		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
@@ -92,12 +99,14 @@ public class BillServiceTest {
 				.file("Mayo").amount((double) 12000).build();
 		List<BillDTO> billsDTO = new ArrayList<>();
 		billsDTO.add(billDTO);
-
+		
+		Mockito.when(studentService.findById(studentId.toString())).thenReturn(Optional.of(student));
+		Mockito.when(studentService.findByIdAndSchoolId(schoolId.toString(),studentId.toString())).thenReturn(Optional.of(student));
 		Mockito.when(Mapper.mapperToBill(billApi)).thenReturn(bill);
 		Mockito.when(Mapper.mapperToBillsDTO(bills)).thenReturn(billsDTO);
 		Mockito.when(billRepository.save(bill)).thenReturn(bill);
-		Mockito.when(billRepository.findById(id)).thenReturn(optional);
-		doNothing().when(studentService).addBill(bill, studentId);
+		Mockito.when(billRepository.findByIdAndSchoolId(id,schoolId)).thenReturn(optional);
+		Mockito.when(billRepository.findAll()).thenReturn(bills);
 
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(billServiceImpl, "billRepository", billRepository);
@@ -111,15 +120,13 @@ public class BillServiceTest {
 	@Test
 	public void whenCreateIsOk() throws BillException, StudentException {
 		billServiceImpl.create("1234", studentId.toString(), billApi);
-
 		verify(billRepository).save(bill);
-		verify(studentService).addBill(bill, studentId);
-
 	}
 
 	@Test
 	public void whenCreateIsError() {
 		UUID idStudentOther = UUID.randomUUID();
+
 		Mockito.when(billRepository.save(null)).thenThrow(IllegalArgumentException.class);
 
 		assertThatExceptionOfType(BillException.class).isThrownBy(() -> {
@@ -155,5 +162,24 @@ public class BillServiceTest {
 			hasError = true;
 		}
 		assertThat(hasError).isTrue();
+	}
+	
+	@Test
+	public void whenFindAllIsOk() {
+		billServiceImpl.findAll();
+		verify(billRepository).findAll();
+	}
+	
+	@Test
+	public void whenFindAllIsEmty() {
+		Mockito.when(billRepository.findAll()).thenReturn(new ArrayList<>());
+		List<BillDTO> bills= billServiceImpl.findAll();
+		assertThat(bills).isEmpty();
+	}
+	
+	@Test
+	public void whenFindByIdIsOk() throws BillException {
+		billServiceImpl.findById(id.toString(), schoolId.toString());
+		verify(billRepository).findByIdAndSchoolId(id, schoolId);
 	}
 }

@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.BillApi;
+import click.escuela.school.admin.api.BillStatusApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.exception.BillException;
+import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,7 +62,7 @@ public class BillController {
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
 			@RequestParam(required = false, value = "status") String status,
 			@RequestParam(required = false, value = "month") Integer month,
-			@RequestParam(required = false, value ="year") Integer year){
+			@RequestParam(required = false, value ="year") Integer year) throws StudentException{
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.findBills(schoolId, studentId, status, month, year));
 	}
 
@@ -81,9 +83,9 @@ public class BillController {
 	@PutMapping(value = "/{billId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BillEnum> updatePayment(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
-			@Parameter(name = "Student id", required = true) @PathVariable("billId") String billId) throws TransactionException {
-		billService.updatePayment(schoolId, billId);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.PAYMENT_DONE);
+			@Parameter(name = "Student id", required = true) @PathVariable("billId") String billId, @RequestBody @Validated BillStatusApi billStatusApi) throws TransactionException {
+		billService.updatePayment(schoolId, billId,billStatusApi);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.PAYMENT_STATUS_CHANGED);
 	}
 	
 

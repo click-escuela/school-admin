@@ -38,8 +38,10 @@ import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.enumerator.PaymentStatus;
 import click.escuela.school.admin.exception.BillException;
+import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
+import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.rest.BillController;
 import click.escuela.school.admin.rest.handler.Handler;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
@@ -66,7 +68,7 @@ public class BillControllerTest {
 	private static String EMPTY = "";
 
 	@Before
-	public void setup() throws BillException {
+	public void setup() throws BillException, StudentException {
 		mockMvc = MockMvcBuilders.standaloneSetup(billController).setControllerAdvice(new Handler()).build();
 		mapper = new ObjectMapper().findAndRegisterModules().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 				.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false)
@@ -77,7 +79,7 @@ public class BillControllerTest {
 		id = UUID.randomUUID();
 		schoolId = 1234;
 		bill = Bill.builder().id(id).schoolId(schoolId).year(2021).month(6).status(PaymentStatus.PENDING)
-				.studentId(studentId).file("Mayo").amount((double) 12000).build();
+				.student(new Student()).file("Mayo").amount((double) 12000).build();
 		billApi = BillApi.builder().year(2021).month(6).file("Mayo").amount((double) 12000).build();
 		bills = new ArrayList<>();
 		bills.add(bill);

@@ -2,12 +2,15 @@ package click.escuela.school.admin.model;
 
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -26,7 +29,7 @@ import lombok.Setter;
 @Table(name = "bill")
 @Entity
 @Builder
-public class Bill {
+public class Bill  {
 	@Id
 	@Column(name = "id", columnDefinition = "BINARY(16)")
 	@GeneratedValue(generator = "uuid2")
@@ -48,8 +51,9 @@ public class Bill {
 	@Column(name = "file", nullable = false)
 	private String file;
 	
-	@Column(name = "id_student", columnDefinition = "BINARY(16)", nullable = false)
-	private UUID studentId;
+	@ManyToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name="id_student")
+    private Student student; 
 	
 	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
