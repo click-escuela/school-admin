@@ -21,12 +21,14 @@
 			</Pattern>
 		</encoder>
 
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		 <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
 		    <FileNamePattern>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-		    <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-		         <maxFileSize>1000KB</maxFileSize>
-		    </timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
+            <maxFileSize>1000KB</maxFileSize>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>100000GB</totalSizeCap>
+        </rollingPolicy>
 
 	</appender>
 
@@ -40,12 +42,14 @@
 			</Pattern>
 		</encoder>
 
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
 		    <FileNamePattern>${DEV_HOME}/archived/error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-		    <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-		         <maxFileSize>1000KB</maxFileSize>
-		    </timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
+            <maxFileSize>1000KB</maxFileSize>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>100000GB</totalSizeCap>
+        </rollingPolicy>
 
 	</appender>
 

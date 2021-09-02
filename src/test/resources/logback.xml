@@ -10,9 +10,12 @@
 			</Pattern>
 		</layout>
 	</appender>
+	
+	
 
 	<appender name="FILE-AUDIT"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		 <append>true</append>
 		<file>${DEV_HOME}/src/test/java/debug.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>
@@ -21,12 +24,14 @@
 			</Pattern>
 		</encoder>
 
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		 <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
 		    <FileNamePattern>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-		    <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-		         <maxFileSize>1000KB</maxFileSize>
-		    </timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
+            <maxFileSize>1000KB</maxFileSize>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>100000GB</totalSizeCap>
+        </rollingPolicy>
 
 	</appender>
 
@@ -39,13 +44,15 @@
 				%msg%n
 			</Pattern>
 		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
 		    <FileNamePattern>${DEV_HOME}/archived/error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-		    <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-		         <maxFileSize>1000KB</maxFileSize>
-		    </timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
+            <maxFileSize>1000KB</maxFileSize>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>100000GB</totalSizeCap>
+        </rollingPolicy>
 	</appender>
 
 	<!-- Send logs to both console and file audit -->
