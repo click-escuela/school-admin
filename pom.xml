@@ -20,6 +20,7 @@
   		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
   		<java.version>1.8</java.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
+		<jvm.options>--illegal-access=permit</jvm.options>
 	</properties>
 	
 	<dependencies>
@@ -128,6 +129,11 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<mainClass>com.something.PreMain</mainClass>
+				    <compilerArgs>
+				       <arg>${jvm.options}</arg>
+				    </compilerArgs>
+					
 				</configuration>
 			</plugin>
 
