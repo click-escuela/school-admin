@@ -83,7 +83,7 @@ public class BillController {
 	@PutMapping(value = "/{billId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BillEnum> updatePayment(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
-			@Parameter(name = "Student id", required = true) @PathVariable("billId") String billId, @RequestBody @Validated BillStatusApi billStatusApi) throws TransactionException {
+			@Parameter(name = "Bill id", required = true) @PathVariable("billId") String billId, @RequestBody @Validated BillStatusApi billStatusApi) throws TransactionException {
 		billService.updatePayment(schoolId, billId,billStatusApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.PAYMENT_STATUS_CHANGED);
 	}
