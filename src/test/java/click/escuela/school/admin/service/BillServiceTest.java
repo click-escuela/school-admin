@@ -42,7 +42,7 @@ import click.escuela.school.admin.service.impl.BillServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
-@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.parsers.*"})
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*"})
 @PrepareForTest({ Mapper.class })
 //@Ignore
 public class BillServiceTest {
