@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -31,7 +30,6 @@ import click.escuela.school.admin.service.impl.ExcelServiceImpl;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Mapper.class })
-@Ignore
 public class ExcelServiceTest {
 
 	@Mock
