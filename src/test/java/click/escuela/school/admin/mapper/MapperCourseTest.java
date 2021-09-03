@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.model.Course;
 
 @RunWith(PowerMockRunner.class)
+@Ignore
 public class MapperCourseTest {
 
 	@Mock
