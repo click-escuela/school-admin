@@ -42,7 +42,7 @@ import click.escuela.school.admin.service.impl.BillServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
-@PowerMockIgnore("javax.management.*")
+@PowerMockIgnore({"javax.net.ssl.*"})
 @PrepareForTest({ Mapper.class })
 //@Ignore
 public class BillServiceTest {
