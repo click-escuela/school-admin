@@ -130,8 +130,11 @@ public class Mapper {
 
 	public static StudentDTO mapperToStudentFullDTO(Student student) {
 		StudentDTO studentFull = modelMapper.map(student, StudentDTO.class);
-		studentFull.setCourseId(student.getCourse().getId().toString());
-		studentFull.setBills(mapperToBillsDTO(student.getBills()));
+		if(student.getCourse() != null) {
+			studentFull.setCourseId(student.getCourse().getId().toString());
+		}
+		List<Bill> bills = student.getBills();
+		studentFull.setBills(mapperToBillsDTO(bills));
 		return studentFull;
 	}
 

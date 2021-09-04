@@ -34,6 +34,5 @@ public class SchoolServiceImpl implements SchoolServiceGeneric<SchoolApi,SchoolD
 			throw new TransactionException(SchoolMessage.CREATE_ERROR.getCode(),
 					SchoolMessage.CREATE_ERROR.getDescription());
 		}
-		
 	}
 }
