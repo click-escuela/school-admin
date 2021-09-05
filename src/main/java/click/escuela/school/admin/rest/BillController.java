@@ -10,15 +10,19 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.BillApi;
+import click.escuela.school.admin.api.BillStatusApi;
 import click.escuela.school.admin.dto.BillDTO;
 import click.escuela.school.admin.enumerator.BillEnum;
 import click.escuela.school.admin.exception.BillException;
+import click.escuela.school.admin.exception.StudentException;
+import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,10 +48,10 @@ public class BillController {
 	@Operation(summary = "Get bill by billtId", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BillDTO.class))) })
 	@GetMapping(value = "/{billId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BillDTO> getById(
+	public ResponseEntity<BillDTO> getById(@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
 			@Parameter(name = "Bill id", required = true) @PathVariable("billId") String billId)
 			throws BillException {
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.getById(billId));
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.getById(billId,schoolId));
 	}
 
 	@Operation(summary = "Get bill by studentId", responses = {
@@ -58,7 +62,7 @@ public class BillController {
 			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId,
 			@RequestParam(required = false, value = "status") String status,
 			@RequestParam(required = false, value = "month") Integer month,
-			@RequestParam(required = false, value ="year") Integer year){
+			@RequestParam(required = false, value ="year") Integer year) throws StudentException{
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(billService.findBills(schoolId, studentId, status, month, year));
 	}
 
@@ -73,5 +77,16 @@ public class BillController {
 		billService.create(schoolId, studentId, billApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.CREATE_OK);
 	}
+	
+	@Operation(summary = "Update Payment Bill", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
+	@PutMapping(value = "/{billId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BillEnum> updatePayment(
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
+			@Parameter(name = "Bill id", required = true) @PathVariable("billId") String billId, @RequestBody @Validated BillStatusApi billStatusApi) throws TransactionException {
+		billService.updatePayment(schoolId, billId,billStatusApi);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.PAYMENT_STATUS_CHANGED);
+	}
+	
 
 }

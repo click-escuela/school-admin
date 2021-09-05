@@ -8,7 +8,7 @@ public interface BillServiceGeneric <T, S>{
 
 	public void create(String idSchool, String id, T entity) throws BillException;
 	
-	public S getById(String id) throws BillException;
+	public S getById(String id,String schoolId) throws BillException;
 	
 	public List<S> findAll()  throws BillException;
 
