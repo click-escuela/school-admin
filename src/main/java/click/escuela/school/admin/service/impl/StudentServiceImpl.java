@@ -11,6 +11,7 @@ import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.CourseStudentsShortDTO;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.StudentException;
@@ -144,6 +145,12 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return result.stream()
 				.filter(r -> r.getCourseId().equals(course.getId()))
 				.collect(Collectors.toList());
+	}
+	
+	public List<StudentParentDTO> getStudentsByParentId(String parentId, Boolean fullDetail) {
+		return Boolean.TRUE.equals(fullDetail)
+				? Mapper.mapperToStudentsParentFullDTO(studentRepository.findByParentId(UUID.fromString(parentId)))
+				: Mapper.mapperToStudentsParentDTO(studentRepository.findByParentId(UUID.fromString(parentId)));
 	}
 	
 	public List<CourseStudentsShortDTO> setStudentToCourseStudentsShort(List<CourseStudentsShortDTO> courses) {
