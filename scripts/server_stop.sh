@@ -1,2 +1,5 @@
 #!/bin/bash
-sudo kill -9 $(sudo lsof -t -i:8090)
+var="$(cat /home/ec2-user/server/school-admin/school-service.pid)"
+sudo kill $var
+sudo rm -rf /home/ec2-user/server/school-admin/school-service.pid
+

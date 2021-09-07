@@ -94,8 +94,7 @@ public class Student {
 	@JoinColumn(name = "course", nullable = true)
 	private Course course;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id", nullable = true)
+	@OneToMany(mappedBy="student", cascade={CascadeType.ALL})
 	private List<Bill> bills;
 
 }
