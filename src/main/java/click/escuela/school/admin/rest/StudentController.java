@@ -67,8 +67,11 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentParentDTO.class))) })
 	@GetMapping(value = "/parent/{parentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<StudentParentDTO>> getStudentsByParentId(
-			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,@Parameter(name = "Parent id", required = true) @PathVariable("parentId") String parentId, @RequestParam("fullDetail") Boolean fullDetail) {
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getStudentsByParentId(parentId, fullDetail));
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
+			@Parameter(name = "Parent id", required = true) @PathVariable("parentId") String parentId,
+			@RequestParam("fullDetail") Boolean fullDetail) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(studentService.getStudentsByParentId(parentId, fullDetail));
 	}
 
 	@Operation(summary = "Get student by courseId", responses = {
