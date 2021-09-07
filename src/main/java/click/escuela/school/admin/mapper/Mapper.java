@@ -150,7 +150,7 @@ public class Mapper {
 		return studentFullList;
 	}
 
-	private static StudentParentDTO mapperToStudentParentFullDTO(Student student) {
+	public static StudentParentDTO mapperToStudentParentFullDTO(Student student) {
 		StudentParentDTO studentFull = modelMapper.map(student, StudentParentDTO.class);
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
 		return studentFull;
@@ -162,7 +162,7 @@ public class Mapper {
 		return studentFullList;
 	}
 
-	private static StudentParentDTO mapperToStudentParentDTO(Student student) {
+	public static StudentParentDTO mapperToStudentParentDTO(Student student) {
 		StudentParentDTO studentFull = modelMapper.map(student, StudentParentDTO.class);
 		studentFull.setBills(null);
 		return studentFull;
