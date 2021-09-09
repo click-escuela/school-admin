@@ -1,0 +1,310 @@
+2021-09-08 23:32:44 [background-preinit] INFO  o.h.validator.internal.util.Version -
+				HV000001: Hibernate Validator 6.2.0.Final
+2021-09-08 23:32:44 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor -
+				Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-09-08 23:32:44 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor -
+				For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-09-08 23:32:48 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate -
+				Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-09-08 23:32:48 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate -
+				Finished Spring Data repository scanning in 425 ms. Found 6 JPA repository interfaces.
+2021-09-08 23:32:49 [restartedMain] INFO  o.s.cloud.context.scope.GenericScope -
+				BeanFactory id=7436f399-eeda-3d00-81df-cc4712873a4c
+2021-09-08 23:32:51 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer -
+				Tomcat initialized with port(s): 0 (http)
+2021-09-08 23:32:52 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol -
+				Initializing ProtocolHandler ["http-nio-auto-1"]
+2021-09-08 23:32:52 [restartedMain] INFO  o.a.catalina.core.StandardService -
+				Starting service [Tomcat]
+2021-09-08 23:32:52 [restartedMain] INFO  o.a.catalina.core.StandardEngine -
+				Starting Servlet engine: [Apache Tomcat/9.0.44]
+2021-09-08 23:32:52 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] -
+				Initializing Spring embedded WebApplicationContext
+2021-09-08 23:32:52 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext -
+				Root WebApplicationContext: initialization completed in 8184 ms
+2021-09-08 23:32:53 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -
+				HikariPool-1 - Starting...
+2021-09-08 23:32:55 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -
+				HikariPool-1 - Start completed.
+2021-09-08 23:32:55 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper -
+				HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-09-08 23:32:56 [restartedMain] INFO  org.hibernate.Version -
+				HHH000412: Hibernate ORM core version 5.4.29.Final
+2021-09-08 23:32:56 [restartedMain] INFO  o.h.annotations.common.Version -
+				HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-09-08 23:32:57 [restartedMain] INFO  org.hibernate.dialect.Dialect -
+				HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2021-09-08 23:33:00 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator -
+				HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-09-08 23:33:00 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean -
+				Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-09-08 23:33:01 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration -
+				spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-09-08 23:33:01 [restartedMain] INFO  o.s.s.c.ThreadPoolTaskExecutor -
+				Initializing ExecutorService 'applicationTaskExecutor'
+2021-09-08 23:33:02 [restartedMain] WARN  o.s.b.d.a.OptionalLiveReloadServer -
+				Unable to start LiveReload server
+2021-09-08 23:33:04 [restartedMain] INFO  o.s.cloud.commons.util.InetUtils -
+				Cannot determine local hostname
+2021-09-08 23:33:05 [restartedMain] INFO  o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration -
+				Eureka HTTP Client uses RestTemplate.
+2021-09-08 23:33:08 [restartedMain] INFO  o.s.cloud.commons.util.InetUtils -
+				Cannot determine local hostname
+2021-09-08 23:33:09 [restartedMain] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger -
+				Spring Cloud LoadBalancer is currently working with the default cache. You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2021-09-08 23:33:09 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol -
+				Starting ProtocolHandler ["http-nio-auto-1"]
+2021-09-08 23:33:09 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer -
+				Tomcat started on port(s): 63625 (http) with context path ''
+2021-09-08 23:33:09 [restartedMain] INFO  o.s.c.n.e.s.EurekaAutoServiceRegistration -
+				Updating port to 63625
+2021-09-08 23:33:09 [restartedMain] INFO  o.s.c.n.eureka.InstanceInfoFactory -
+				Setting initial instance status as: STARTING
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Initializing Eureka in region us-east-1
+2021-09-08 23:33:09 [restartedMain] INFO  c.n.d.s.r.aws.ConfigClusterResolver -
+				Resolving eureka endpoints via configuration
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Disable delta property : false
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Single vip registry refresh property : null
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Force full registry fetch : false
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Application is null : false
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Registered Applications size is zero : true
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Application version is -1: true
+2021-09-08 23:33:09 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Getting all instance registry info from the eureka server
+2021-09-08 23:33:10 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				The response status is 200
+2021-09-08 23:33:10 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Starting heartbeat executor: renew interval is: 30
+2021-09-08 23:33:10 [restartedMain] INFO  c.n.discovery.InstanceInfoReplicator -
+				InstanceInfoReplicator onDemand update allowed rate per min is 4
+2021-09-08 23:33:10 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Discovery Client initialized at timestamp 1631154790903 with initial instances count: 1
+2021-09-08 23:33:10 [restartedMain] INFO  o.s.c.n.e.s.EurekaServiceRegistry -
+				Registering application SCHOOL-ADMIN with eureka with status UP
+2021-09-08 23:33:10 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Saw local status change event StatusChangeEvent [timestamp=1631154790918, current=UP, previous=STARTING]
+2021-09-08 23:33:10 [DiscoveryClient-InstanceInfoReplicator-0] INFO  c.netflix.discovery.DiscoveryClient -
+				DiscoveryClient_SCHOOL-ADMIN/school-admin:632f21b2a9e0c2190177daecea52b5de: registering service...
+2021-09-08 23:33:11 [DiscoveryClient-InstanceInfoReplicator-0] INFO  c.netflix.discovery.DiscoveryClient -
+				DiscoveryClient_SCHOOL-ADMIN/school-admin:632f21b2a9e0c2190177daecea52b5de - registration status: 204
+2021-09-08 23:33:13 [restartedMain] INFO  o.s.cloud.commons.util.InetUtils -
+				Cannot determine local hostname
+2021-09-08 23:36:14 [http-nio-auto-1-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] -
+				Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-09-08 23:36:14 [http-nio-auto-1-exec-1] INFO  o.s.web.servlet.DispatcherServlet -
+				Initializing Servlet 'dispatcherServlet'
+2021-09-08 23:36:14 [http-nio-auto-1-exec-1] INFO  o.s.web.servlet.DispatcherServlet -
+				Completed initialization in 8 ms
+2021-09-08 23:36:15 [http-nio-auto-1-exec-1] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_, course0_.count_student as count_st2_2_, course0_.division as division3_2_, course0_.school_id as school_i4_2_, course0_.year as year5_2_ from course course0_
+2021-09-08 23:36:37 [http-nio-auto-1-exec-2] DEBUG org.hibernate.SQL -
+				insert into course (count_student, division, school_id, year, id) values (?, ?, ?, ?, ?)
+2021-09-08 23:36:43 [http-nio-auto-1-exec-3] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_, course0_.count_student as count_st2_2_, course0_.division as division3_2_, course0_.school_id as school_i4_2_, course0_.year as year5_2_ from course course0_
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_, student0_.absences as absences2_6_, student0_.id_adress as id_adre14_6_, student0_.birthday as birthday3_6_, student0_.cell_phone as cell_pho4_6_, student0_.course as course15_6_, student0_.division as division5_6_, student0_.document as document6_6_, student0_.email as email7_6_, student0_.gender as gender8_6_, student0_.grade as grade9_6_, student0_.level as level10_6_, student0_.name as name11_6_, student0_.id_parent as id_pare16_6_, student0_.school_id as school_12_6_, student0_.surname as surname13_6_ from student student0_
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select adress0_.id_adress as id_adres1_0_0_, adress0_.locality as locality2_0_0_, adress0_.number as number3_0_0_, adress0_.street as street4_0_0_ from adress adress0_ where adress0_.id_adress=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select parent0_.id_parent as id_paren1_4_0_, parent0_.id_adress as id_adre10_4_0_, parent0_.birthday as birthday2_4_0_, parent0_.cell_phone as cell_pho3_4_0_, parent0_.document as document4_4_0_, parent0_.email as email5_4_0_, parent0_.gender as gender6_4_0_, parent0_.has_profile as has_prof7_4_0_, parent0_.name as name8_4_0_, parent0_.surname as surname9_4_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_ from parent parent0_ inner join adress adress1_ on parent0_.id_adress=adress1_.id_adress where parent0_.id_parent=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select adress0_.id_adress as id_adres1_0_0_, adress0_.locality as locality2_0_0_, adress0_.number as number3_0_0_, adress0_.street as street4_0_0_ from adress adress0_ where adress0_.id_adress=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_0_, course0_.count_student as count_st2_2_0_, course0_.division as division3_2_0_, course0_.school_id as school_i4_2_0_, course0_.year as year5_2_0_ from course course0_ where course0_.id=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select parent0_.id_parent as id_paren1_4_0_, parent0_.id_adress as id_adre10_4_0_, parent0_.birthday as birthday2_4_0_, parent0_.cell_phone as cell_pho3_4_0_, parent0_.document as document4_4_0_, parent0_.email as email5_4_0_, parent0_.gender as gender6_4_0_, parent0_.has_profile as has_prof7_4_0_, parent0_.name as name8_4_0_, parent0_.surname as surname9_4_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_ from parent parent0_ inner join adress adress1_ on parent0_.id_adress=adress1_.id_adress where parent0_.id_parent=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select adress0_.id_adress as id_adres1_0_0_, adress0_.locality as locality2_0_0_, adress0_.number as number3_0_0_, adress0_.street as street4_0_0_ from adress adress0_ where adress0_.id_adress=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select parent0_.id_parent as id_paren1_4_0_, parent0_.id_adress as id_adre10_4_0_, parent0_.birthday as birthday2_4_0_, parent0_.cell_phone as cell_pho3_4_0_, parent0_.document as document4_4_0_, parent0_.email as email5_4_0_, parent0_.gender as gender6_4_0_, parent0_.has_profile as has_prof7_4_0_, parent0_.name as name8_4_0_, parent0_.surname as surname9_4_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_ from parent parent0_ inner join adress adress1_ on parent0_.id_adress=adress1_.id_adress where parent0_.id_parent=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select bills0_.id_student as id_stude8_1_0_, bills0_.id as id1_1_0_, bills0_.id as id1_1_1_, bills0_.amount as amount2_1_1_, bills0_.file as file3_1_1_, bills0_.month as month4_1_1_, bills0_.id_school as id_schoo5_1_1_, bills0_.status as status6_1_1_, bills0_.id_student as id_stude8_1_1_, bills0_.year as year7_1_1_ from bill bills0_ where bills0_.id_student=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select bills0_.id_student as id_stude8_1_0_, bills0_.id as id1_1_0_, bills0_.id as id1_1_1_, bills0_.amount as amount2_1_1_, bills0_.file as file3_1_1_, bills0_.month as month4_1_1_, bills0_.id_school as id_schoo5_1_1_, bills0_.status as status6_1_1_, bills0_.id_student as id_stude8_1_1_, bills0_.year as year7_1_1_ from bill bills0_ where bills0_.id_student=?
+2021-09-08 23:37:11 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select bills0_.id_student as id_stude8_1_0_, bills0_.id as id1_1_0_, bills0_.id as id1_1_1_, bills0_.amount as amount2_1_1_, bills0_.file as file3_1_1_, bills0_.month as month4_1_1_, bills0_.id_school as id_schoo5_1_1_, bills0_.status as status6_1_1_, bills0_.id_student as id_stude8_1_1_, bills0_.year as year7_1_1_ from bill bills0_ where bills0_.id_student=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_0_, student0_.absences as absences2_6_0_, student0_.id_adress as id_adre14_6_0_, student0_.birthday as birthday3_6_0_, student0_.cell_phone as cell_pho4_6_0_, student0_.course as course15_6_0_, student0_.division as division5_6_0_, student0_.document as document6_6_0_, student0_.email as email7_6_0_, student0_.gender as gender8_6_0_, student0_.grade as grade9_6_0_, student0_.level as level10_6_0_, student0_.name as name11_6_0_, student0_.id_parent as id_pare16_6_0_, student0_.school_id as school_12_6_0_, student0_.surname as surname13_6_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_, course2_.id as id1_2_2_, course2_.count_student as count_st2_2_2_, course2_.division as division3_2_2_, course2_.school_id as school_i4_2_2_, course2_.year as year5_2_2_, parent3_.id_parent as id_paren1_4_3_, parent3_.id_adress as id_adre10_4_3_, parent3_.birthday as birthday2_4_3_, parent3_.cell_phone as cell_pho3_4_3_, parent3_.document as document4_4_3_, parent3_.email as email5_4_3_, parent3_.gender as gender6_4_3_, parent3_.has_profile as has_prof7_4_3_, parent3_.name as name8_4_3_, parent3_.surname as surname9_4_3_, adress4_.id_adress as id_adres1_0_4_, adress4_.locality as locality2_0_4_, adress4_.number as number3_0_4_, adress4_.street as street4_0_4_ from student student0_ inner join adress adress1_ on student0_.id_adress=adress1_.id_adress left outer join course course2_ on student0_.course=course2_.id inner join parent parent3_ on student0_.id_parent=parent3_.id_parent inner join adress adress4_ on parent3_.id_adress=adress4_.id_adress where student0_.id=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_0_, course0_.count_student as count_st2_2_0_, course0_.division as division3_2_0_, course0_.school_id as school_i4_2_0_, course0_.year as year5_2_0_ from course course0_ where course0_.id=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_, student0_.absences as absences2_6_, student0_.id_adress as id_adre14_6_, student0_.birthday as birthday3_6_, student0_.cell_phone as cell_pho4_6_, student0_.course as course15_6_, student0_.division as division5_6_, student0_.document as document6_6_, student0_.email as email7_6_, student0_.gender as gender8_6_, student0_.grade as grade9_6_, student0_.level as level10_6_, student0_.name as name11_6_, student0_.id_parent as id_pare16_6_, student0_.school_id as school_12_6_, student0_.surname as surname13_6_ from student student0_
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select adress0_.id_adress as id_adres1_0_0_, adress0_.locality as locality2_0_0_, adress0_.number as number3_0_0_, adress0_.street as street4_0_0_ from adress adress0_ where adress0_.id_adress=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_0_, course0_.count_student as count_st2_2_0_, course0_.division as division3_2_0_, course0_.school_id as school_i4_2_0_, course0_.year as year5_2_0_ from course course0_ where course0_.id=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select parent0_.id_parent as id_paren1_4_0_, parent0_.id_adress as id_adre10_4_0_, parent0_.birthday as birthday2_4_0_, parent0_.cell_phone as cell_pho3_4_0_, parent0_.document as document4_4_0_, parent0_.email as email5_4_0_, parent0_.gender as gender6_4_0_, parent0_.has_profile as has_prof7_4_0_, parent0_.name as name8_4_0_, parent0_.surname as surname9_4_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_ from parent parent0_ inner join adress adress1_ on parent0_.id_adress=adress1_.id_adress where parent0_.id_parent=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select adress0_.id_adress as id_adres1_0_0_, adress0_.locality as locality2_0_0_, adress0_.number as number3_0_0_, adress0_.street as street4_0_0_ from adress adress0_ where adress0_.id_adress=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select parent0_.id_parent as id_paren1_4_0_, parent0_.id_adress as id_adre10_4_0_, parent0_.birthday as birthday2_4_0_, parent0_.cell_phone as cell_pho3_4_0_, parent0_.document as document4_4_0_, parent0_.email as email5_4_0_, parent0_.gender as gender6_4_0_, parent0_.has_profile as has_prof7_4_0_, parent0_.name as name8_4_0_, parent0_.surname as surname9_4_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_ from parent parent0_ inner join adress adress1_ on parent0_.id_adress=adress1_.id_adress where parent0_.id_parent=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				update student set absences=?, id_adress=?, birthday=?, cell_phone=?, course=?, division=?, document=?, email=?, gender=?, grade=?, level=?, name=?, id_parent=?, school_id=?, surname=? where id=?
+2021-09-08 23:37:47 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				update course set count_student=?, division=?, school_id=?, year=? where id=?
+2021-09-08 23:37:54 [http-nio-auto-1-exec-6] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_, course0_.count_student as count_st2_2_, course0_.division as division3_2_, course0_.school_id as school_i4_2_, course0_.year as year5_2_ from course course0_
+2021-09-08 23:38:09 [AsyncResolver-bootstrap-executor-0] INFO  c.n.d.s.r.aws.ConfigClusterResolver -
+				Resolving eureka endpoints via configuration
+2021-09-08 23:39:27 [Thread-1] INFO  o.s.c.n.e.s.EurekaServiceRegistry -
+				Unregistering application SCHOOL-ADMIN with eureka with status DOWN
+2021-09-08 23:39:27 [Thread-1] INFO  c.netflix.discovery.DiscoveryClient -
+				Saw local status change event StatusChangeEvent [timestamp=1631155167403, current=DOWN, previous=UP]
+2021-09-08 23:39:27 [DiscoveryClient-InstanceInfoReplicator-0] INFO  c.netflix.discovery.DiscoveryClient -
+				DiscoveryClient_SCHOOL-ADMIN/school-admin:632f21b2a9e0c2190177daecea52b5de: registering service...
+2021-09-08 23:39:27 [DiscoveryClient-InstanceInfoReplicator-0] INFO  c.netflix.discovery.DiscoveryClient -
+				DiscoveryClient_SCHOOL-ADMIN/school-admin:632f21b2a9e0c2190177daecea52b5de - registration status: 204
+2021-09-08 23:39:28 [Thread-1] INFO  o.s.s.c.ThreadPoolTaskExecutor -
+				Shutting down ExecutorService 'applicationTaskExecutor'
+2021-09-08 23:39:28 [Thread-1] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean -
+				Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-09-08 23:39:28 [Thread-1] INFO  com.zaxxer.hikari.HikariDataSource -
+				HikariPool-1 - Shutdown initiated...
+2021-09-08 23:39:28 [Thread-1] INFO  com.zaxxer.hikari.HikariDataSource -
+				HikariPool-1 - Shutdown completed.
+2021-09-08 23:39:28 [Thread-1] INFO  c.netflix.discovery.DiscoveryClient -
+				Shutting down DiscoveryClient ...
+2021-09-08 23:39:50 [background-preinit] INFO  o.h.validator.internal.util.Version -
+				HV000001: Hibernate Validator 6.2.0.Final
+2021-09-08 23:39:51 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor -
+				Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-09-08 23:39:51 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor -
+				For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-09-08 23:39:55 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate -
+				Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-09-08 23:39:55 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate -
+				Finished Spring Data repository scanning in 354 ms. Found 6 JPA repository interfaces.
+2021-09-08 23:39:56 [restartedMain] INFO  o.s.cloud.context.scope.GenericScope -
+				BeanFactory id=7436f399-eeda-3d00-81df-cc4712873a4c
+2021-09-08 23:39:58 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer -
+				Tomcat initialized with port(s): 0 (http)
+2021-09-08 23:39:58 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol -
+				Initializing ProtocolHandler ["http-nio-auto-1"]
+2021-09-08 23:39:58 [restartedMain] INFO  o.a.catalina.core.StandardService -
+				Starting service [Tomcat]
+2021-09-08 23:39:58 [restartedMain] INFO  o.a.catalina.core.StandardEngine -
+				Starting Servlet engine: [Apache Tomcat/9.0.44]
+2021-09-08 23:39:58 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] -
+				Initializing Spring embedded WebApplicationContext
+2021-09-08 23:39:58 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext -
+				Root WebApplicationContext: initialization completed in 7036 ms
+2021-09-08 23:39:58 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -
+				HikariPool-1 - Starting...
+2021-09-08 23:39:59 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource -
+				HikariPool-1 - Start completed.
+2021-09-08 23:40:00 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper -
+				HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-09-08 23:40:01 [restartedMain] INFO  org.hibernate.Version -
+				HHH000412: Hibernate ORM core version 5.4.29.Final
+2021-09-08 23:40:01 [restartedMain] INFO  o.h.annotations.common.Version -
+				HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-09-08 23:40:02 [restartedMain] INFO  org.hibernate.dialect.Dialect -
+				HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2021-09-08 23:40:05 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator -
+				HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-09-08 23:40:05 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean -
+				Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-09-08 23:40:07 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration -
+				spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-09-08 23:40:07 [restartedMain] INFO  o.s.s.c.ThreadPoolTaskExecutor -
+				Initializing ExecutorService 'applicationTaskExecutor'
+2021-09-08 23:40:08 [restartedMain] WARN  o.s.b.d.a.OptionalLiveReloadServer -
+				Unable to start LiveReload server
+2021-09-08 23:40:11 [restartedMain] INFO  o.s.cloud.commons.util.InetUtils -
+				Cannot determine local hostname
+2021-09-08 23:40:11 [restartedMain] INFO  o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration -
+				Eureka HTTP Client uses RestTemplate.
+2021-09-08 23:40:15 [restartedMain] INFO  o.s.cloud.commons.util.InetUtils -
+				Cannot determine local hostname
+2021-09-08 23:40:15 [restartedMain] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger -
+				Spring Cloud LoadBalancer is currently working with the default cache. You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2021-09-08 23:40:16 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol -
+				Starting ProtocolHandler ["http-nio-auto-1"]
+2021-09-08 23:40:16 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer -
+				Tomcat started on port(s): 58916 (http) with context path ''
+2021-09-08 23:40:16 [restartedMain] INFO  o.s.c.n.e.s.EurekaAutoServiceRegistration -
+				Updating port to 58916
+2021-09-08 23:40:16 [restartedMain] INFO  o.s.c.n.eureka.InstanceInfoFactory -
+				Setting initial instance status as: STARTING
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Initializing Eureka in region us-east-1
+2021-09-08 23:40:16 [restartedMain] INFO  c.n.d.s.r.aws.ConfigClusterResolver -
+				Resolving eureka endpoints via configuration
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Disable delta property : false
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Single vip registry refresh property : null
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Force full registry fetch : false
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Application is null : false
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Registered Applications size is zero : true
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Application version is -1: true
+2021-09-08 23:40:16 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Getting all instance registry info from the eureka server
+2021-09-08 23:40:18 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				The response status is 200
+2021-09-08 23:40:18 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Starting heartbeat executor: renew interval is: 30
+2021-09-08 23:40:18 [restartedMain] INFO  c.n.discovery.InstanceInfoReplicator -
+				InstanceInfoReplicator onDemand update allowed rate per min is 4
+2021-09-08 23:40:18 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Discovery Client initialized at timestamp 1631155218904 with initial instances count: 2
+2021-09-08 23:40:18 [restartedMain] INFO  o.s.c.n.e.s.EurekaServiceRegistry -
+				Registering application SCHOOL-ADMIN with eureka with status UP
+2021-09-08 23:40:18 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient -
+				Saw local status change event StatusChangeEvent [timestamp=1631155218932, current=UP, previous=STARTING]
+2021-09-08 23:40:18 [DiscoveryClient-InstanceInfoReplicator-0] INFO  c.netflix.discovery.DiscoveryClient -
+				DiscoveryClient_SCHOOL-ADMIN/school-admin:aadd5f48fc9090ef281c58ebaea9c659: registering service...
+2021-09-08 23:40:19 [DiscoveryClient-InstanceInfoReplicator-0] INFO  c.netflix.discovery.DiscoveryClient -
+				DiscoveryClient_SCHOOL-ADMIN/school-admin:aadd5f48fc9090ef281c58ebaea9c659 - registration status: 204
+2021-09-08 23:40:22 [restartedMain] INFO  o.s.cloud.commons.util.InetUtils -
+				Cannot determine local hostname
+2021-09-08 23:40:45 [http-nio-auto-1-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] -
+				Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-09-08 23:40:45 [http-nio-auto-1-exec-1] INFO  o.s.web.servlet.DispatcherServlet -
+				Initializing Servlet 'dispatcherServlet'
+2021-09-08 23:40:45 [http-nio-auto-1-exec-1] INFO  o.s.web.servlet.DispatcherServlet -
+				Completed initialization in 7 ms
+2021-09-08 23:40:47 [http-nio-auto-1-exec-1] DEBUG org.hibernate.SQL -
+				insert into course (count_student, division, school_id, year, id) values (?, ?, ?, ?, ?)
+2021-09-08 23:40:51 [http-nio-auto-1-exec-2] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_, course0_.count_student as count_st2_2_, course0_.division as division3_2_, course0_.school_id as school_i4_2_, course0_.year as year5_2_ from course course0_
+2021-09-08 23:41:33 [http-nio-auto-1-exec-3] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_0_, student0_.absences as absences2_6_0_, student0_.id_adress as id_adre14_6_0_, student0_.birthday as birthday3_6_0_, student0_.cell_phone as cell_pho4_6_0_, student0_.course as course15_6_0_, student0_.division as division5_6_0_, student0_.document as document6_6_0_, student0_.email as email7_6_0_, student0_.gender as gender8_6_0_, student0_.grade as grade9_6_0_, student0_.level as level10_6_0_, student0_.name as name11_6_0_, student0_.id_parent as id_pare16_6_0_, student0_.school_id as school_12_6_0_, student0_.surname as surname13_6_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_, course2_.id as id1_2_2_, course2_.count_student as count_st2_2_2_, course2_.division as division3_2_2_, course2_.school_id as school_i4_2_2_, course2_.year as year5_2_2_, parent3_.id_parent as id_paren1_4_3_, parent3_.id_adress as id_adre10_4_3_, parent3_.birthday as birthday2_4_3_, parent3_.cell_phone as cell_pho3_4_3_, parent3_.document as document4_4_3_, parent3_.email as email5_4_3_, parent3_.gender as gender6_4_3_, parent3_.has_profile as has_prof7_4_3_, parent3_.name as name8_4_3_, parent3_.surname as surname9_4_3_, adress4_.id_adress as id_adres1_0_4_, adress4_.locality as locality2_0_4_, adress4_.number as number3_0_4_, adress4_.street as street4_0_4_ from student student0_ inner join adress adress1_ on student0_.id_adress=adress1_.id_adress left outer join course course2_ on student0_.course=course2_.id inner join parent parent3_ on student0_.id_parent=parent3_.id_parent inner join adress adress4_ on parent3_.id_adress=adress4_.id_adress where student0_.id=?
+2021-09-08 23:41:33 [http-nio-auto-1-exec-3] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_0_, course0_.count_student as count_st2_2_0_, course0_.division as division3_2_0_, course0_.school_id as school_i4_2_0_, course0_.year as year5_2_0_ from course course0_ where course0_.id=?
+2021-09-08 23:41:33 [http-nio-auto-1-exec-3] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver -
+				Resolved [click.escuela.school.admin.exception.CourseException: No se pudo encontrar el curso]
+2021-09-08 23:41:42 [http-nio-auto-1-exec-4] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_, course0_.count_student as count_st2_2_, course0_.division as division3_2_, course0_.school_id as school_i4_2_, course0_.year as year5_2_ from course course0_
+2021-09-08 23:41:56 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_0_, student0_.absences as absences2_6_0_, student0_.id_adress as id_adre14_6_0_, student0_.birthday as birthday3_6_0_, student0_.cell_phone as cell_pho4_6_0_, student0_.course as course15_6_0_, student0_.division as division5_6_0_, student0_.document as document6_6_0_, student0_.email as email7_6_0_, student0_.gender as gender8_6_0_, student0_.grade as grade9_6_0_, student0_.level as level10_6_0_, student0_.name as name11_6_0_, student0_.id_parent as id_pare16_6_0_, student0_.school_id as school_12_6_0_, student0_.surname as surname13_6_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_, course2_.id as id1_2_2_, course2_.count_student as count_st2_2_2_, course2_.division as division3_2_2_, course2_.school_id as school_i4_2_2_, course2_.year as year5_2_2_, parent3_.id_parent as id_paren1_4_3_, parent3_.id_adress as id_adre10_4_3_, parent3_.birthday as birthday2_4_3_, parent3_.cell_phone as cell_pho3_4_3_, parent3_.document as document4_4_3_, parent3_.email as email5_4_3_, parent3_.gender as gender6_4_3_, parent3_.has_profile as has_prof7_4_3_, parent3_.name as name8_4_3_, parent3_.surname as surname9_4_3_, adress4_.id_adress as id_adres1_0_4_, adress4_.locality as locality2_0_4_, adress4_.number as number3_0_4_, adress4_.street as street4_0_4_ from student student0_ inner join adress adress1_ on student0_.id_adress=adress1_.id_adress left outer join course course2_ on student0_.course=course2_.id inner join parent parent3_ on student0_.id_parent=parent3_.id_parent inner join adress adress4_ on parent3_.id_adress=adress4_.id_adress where student0_.id=?
+2021-09-08 23:41:56 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_0_, course0_.count_student as count_st2_2_0_, course0_.division as division3_2_0_, course0_.school_id as school_i4_2_0_, course0_.year as year5_2_0_ from course course0_ where course0_.id=?
+2021-09-08 23:41:57 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_, student0_.absences as absences2_6_, student0_.id_adress as id_adre14_6_, student0_.birthday as birthday3_6_, student0_.cell_phone as cell_pho4_6_, student0_.course as course15_6_, student0_.division as division5_6_, student0_.document as document6_6_, student0_.email as email7_6_, student0_.gender as gender8_6_, student0_.grade as grade9_6_, student0_.level as level10_6_, student0_.name as name11_6_, student0_.id_parent as id_pare16_6_, student0_.school_id as school_12_6_, student0_.surname as surname13_6_ from student student0_ left outer join course course1_ on student0_.course=course1_.id where course1_.id=?
+2021-09-08 23:41:57 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				update student set absences=?, id_adress=?, birthday=?, cell_phone=?, course=?, division=?, document=?, email=?, gender=?, grade=?, level=?, name=?, id_parent=?, school_id=?, surname=? where id=?
+2021-09-08 23:41:57 [http-nio-auto-1-exec-5] DEBUG org.hibernate.SQL -
+				update course set count_student=?, division=?, school_id=?, year=? where id=?
+2021-09-08 23:42:01 [http-nio-auto-1-exec-6] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_, course0_.count_student as count_st2_2_, course0_.division as division3_2_, course0_.school_id as school_i4_2_, course0_.year as year5_2_ from course course0_
+2021-09-08 23:43:16 [http-nio-auto-1-exec-8] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_0_, student0_.absences as absences2_6_0_, student0_.id_adress as id_adre14_6_0_, student0_.birthday as birthday3_6_0_, student0_.cell_phone as cell_pho4_6_0_, student0_.course as course15_6_0_, student0_.division as division5_6_0_, student0_.document as document6_6_0_, student0_.email as email7_6_0_, student0_.gender as gender8_6_0_, student0_.grade as grade9_6_0_, student0_.level as level10_6_0_, student0_.name as name11_6_0_, student0_.id_parent as id_pare16_6_0_, student0_.school_id as school_12_6_0_, student0_.surname as surname13_6_0_, adress1_.id_adress as id_adres1_0_1_, adress1_.locality as locality2_0_1_, adress1_.number as number3_0_1_, adress1_.street as street4_0_1_, course2_.id as id1_2_2_, course2_.count_student as count_st2_2_2_, course2_.division as division3_2_2_, course2_.school_id as school_i4_2_2_, course2_.year as year5_2_2_, parent3_.id_parent as id_paren1_4_3_, parent3_.id_adress as id_adre10_4_3_, parent3_.birthday as birthday2_4_3_, parent3_.cell_phone as cell_pho3_4_3_, parent3_.document as document4_4_3_, parent3_.email as email5_4_3_, parent3_.gender as gender6_4_3_, parent3_.has_profile as has_prof7_4_3_, parent3_.name as name8_4_3_, parent3_.surname as surname9_4_3_, adress4_.id_adress as id_adres1_0_4_, adress4_.locality as locality2_0_4_, adress4_.number as number3_0_4_, adress4_.street as street4_0_4_ from student student0_ inner join adress adress1_ on student0_.id_adress=adress1_.id_adress left outer join course course2_ on student0_.course=course2_.id inner join parent parent3_ on student0_.id_parent=parent3_.id_parent inner join adress adress4_ on parent3_.id_adress=adress4_.id_adress where student0_.id=?
+2021-09-08 23:43:17 [http-nio-auto-1-exec-8] DEBUG org.hibernate.SQL -
+				select student0_.id as id1_6_, student0_.absences as absences2_6_, student0_.id_adress as id_adre14_6_, student0_.birthday as birthday3_6_, student0_.cell_phone as cell_pho4_6_, student0_.course as course15_6_, student0_.division as division5_6_, student0_.document as document6_6_, student0_.email as email7_6_, student0_.gender as gender8_6_, student0_.grade as grade9_6_, student0_.level as level10_6_, student0_.name as name11_6_, student0_.id_parent as id_pare16_6_, student0_.school_id as school_12_6_, student0_.surname as surname13_6_ from student student0_ left outer join course course1_ on student0_.course=course1_.id where course1_.id=?
+2021-09-08 23:43:17 [http-nio-auto-1-exec-8] DEBUG org.hibernate.SQL -
+				update student set absences=?, id_adress=?, birthday=?, cell_phone=?, course=?, division=?, document=?, email=?, gender=?, grade=?, level=?, name=?, id_parent=?, school_id=?, surname=? where id=?
+2021-09-08 23:43:17 [http-nio-auto-1-exec-8] DEBUG org.hibernate.SQL -
+				update course set count_student=?, division=?, school_id=?, year=? where id=?
