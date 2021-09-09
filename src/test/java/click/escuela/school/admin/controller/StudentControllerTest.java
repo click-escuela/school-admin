@@ -99,8 +99,7 @@ public class StudentControllerTest {
 		List<Student> students = new ArrayList<>();
 		students.add(student);
 		List<StudentDTO> studentsDTO = new ArrayList<>();
-		CourseApi courseApi = CourseApi.builder().id(idCourse.toString()).year(6).division("C").countStudent(20)
-				.schoolId(12345).build();
+		CourseApi courseApi = CourseApi.builder().id(idCourse.toString()).year(6).division("C").build();
 		studentApi.setId(idStudent.toString());
 		studentApi.setCourseApi(courseApi);
 		studentsDTO.add(Mapper.mapperToStudentDTO(studentApi));

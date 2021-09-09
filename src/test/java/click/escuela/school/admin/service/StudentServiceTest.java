@@ -84,7 +84,7 @@ public class StudentServiceTest {
 		Optional<Course> optionalCourse = Optional.of(course);
 		students = new ArrayList<>();
 		students.add(student);
-		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(45678).build();
+		courseApi = CourseApi.builder().year(8).division("B").build();
 		uuids =  new ArrayList<>();
 		uuids.add(idCourse);
 
@@ -152,7 +152,7 @@ public class StudentServiceTest {
 	}
 
 	@Test
-	public void whenDeleteCourseOk() throws StudentException {
+	public void whenDeleteCourseOk() throws StudentException, CourseException {
 		studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
 		verify(studentRepository).save(student);
 	}

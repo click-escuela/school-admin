@@ -326,3 +326,267 @@
 				update student set absences=?, id_adress=?, birthday=?, cell_phone=?, course=?, division=?, document=?, email=?, gender=?, grade=?, level=?, name=?, id_parent=?, school_id=?, surname=? where id=?
 2021-09-08 23:43:17 [http-nio-auto-1-exec-8] DEBUG org.hibernate.SQL -
 				update course set count_student=?, division=?, school_id=?, year=? where id=?
+2021-09-08 23:43:26 [http-nio-auto-1-exec-9] DEBUG org.hibernate.SQL -
+				select course0_.id as id1_2_, course0_.count_student as count_st2_2_, course0_.division as division3_2_, course0_.school_id as school_i4_2_, course0_.year as year5_2_ from course course0_
+2021-09-08 23:45:16 [AsyncResolver-bootstrap-executor-0] INFO  c.n.d.s.r.aws.ConfigClusterResolver -
+				Resolving eureka endpoints via configuration
+2021-09-08 23:50:16 [AsyncResolver-bootstrap-executor-0] INFO  c.n.d.s.r.aws.ConfigClusterResolver -
+				Resolving eureka endpoints via configuration
+2021-09-08 23:50:30 [main] INFO  o.h.validator.internal.util.Version -
+				HV000001: Hibernate Validator 6.2.0.Final
+2021-09-08 23:50:33 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:33 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:33 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 6 ms
+2021-09-08 23:50:34 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:50:34 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.CourseMessage> click.escuela.school.admin.rest.CourseController.create(java.lang.String,click.escuela.school.admin.api.CourseApi) throws click.escuela.school.admin.exception.CourseException: [Field error in object 'courseApi' on field 'year': rejected value [null]; codes [NotNull.courseApi.year,NotNull.year,NotNull.java.lang.Integer,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [courseApi.year,year]; arguments []; default message [year]]; default message [Year cannot be empty]] 
+2021-09-08 23:50:34 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:50:34 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:50:35 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:50:35 [main] WARN  o.s.web.servlet.PageNotFound -
+				No mapping for PUT /school/123/course//student/del/a09a4db4-4787-42f8-8130-5ef8cc2a3e88
+2021-09-08 23:50:35 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:50:35 [main] WARN  o.s.web.servlet.PageNotFound -
+				No mapping for PUT /school/123/course//student/add/443bcd9b-cafa-4806-81dd-a0910ea021c7
+2021-09-08 23:50:35 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:50:35 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.CourseMessage> click.escuela.school.admin.rest.CourseController.create(java.lang.String,click.escuela.school.admin.api.CourseApi) throws click.escuela.school.admin.exception.CourseException: [Field error in object 'courseApi' on field 'division': rejected value [null]; codes [NotBlank.courseApi.division,NotBlank.division,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [courseApi.division,division]; arguments []; default message [division]]; default message [Division cannot be empty]] 
+2021-09-08 23:50:35 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:50:35 [main] WARN  o.s.web.servlet.PageNotFound -
+				No mapping for PUT /school/123/course/baadf4cd-c976-49f8-bd6c-c095f825e785/student/add/
+2021-09-08 23:50:35 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:50:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:50:35 [main] WARN  o.s.web.servlet.PageNotFound -
+				No mapping for PUT /school/123/course/4774f838-6414-48c3-a405-350202b0e0b8/student/del/
+2021-09-08 23:51:46 [main] INFO  o.h.validator.internal.util.Version -
+				HV000001: Hibernate Validator 6.2.0.Final
+2021-09-08 23:51:48 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:48 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:48 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 6 ms
+2021-09-08 23:51:50 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException with 2 errors: [Field error in object 'studentApi' on field 'parentApi.adressApi.number': rejected value [null]; codes [NotBlank.studentApi.parentApi.adressApi.number,NotBlank.parentApi.adressApi.number,NotBlank.number,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.parentApi.adressApi.number,parentApi.adressApi.number]; arguments []; default message [parentApi.adressApi.number]]; default message [Number cannot be null]] [Field error in object 'studentApi' on field 'adressApi.number': rejected value [null]; codes [NotBlank.studentApi.adressApi.number,NotBlank.adressApi.number,NotBlank.number,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.adressApi.number,adressApi.number]; arguments []; default message [adressApi.number]]; default message [Number cannot be null]] 
+2021-09-08 23:51:50 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:50 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:50 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException with 2 errors: [Field error in object 'studentApi' on field 'adressApi.locality': rejected value [null]; codes [NotBlank.studentApi.adressApi.locality,NotBlank.adressApi.locality,NotBlank.locality,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.adressApi.locality,adressApi.locality]; arguments []; default message [adressApi.locality]]; default message [Locality cannot be null]] [Field error in object 'studentApi' on field 'parentApi.adressApi.locality': rejected value [null]; codes [NotBlank.studentApi.parentApi.adressApi.locality,NotBlank.parentApi.adressApi.locality,NotBlank.locality,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.parentApi.adressApi.locality,parentApi.adressApi.locality]; arguments []; default message [parentApi.adressApi.locality]]; default message [Locality cannot be null]] 
+2021-09-08 23:51:50 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:50 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException with 2 errors: [Field error in object 'studentApi' on field 'adressApi.street': rejected value [null]; codes [NotBlank.studentApi.adressApi.street,NotBlank.adressApi.street,NotBlank.street,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.adressApi.street,adressApi.street]; arguments []; default message [adressApi.street]]; default message [Street cannot be null]] [Field error in object 'studentApi' on field 'parentApi.adressApi.street': rejected value [null]; codes [NotBlank.studentApi.parentApi.adressApi.street,NotBlank.parentApi.adressApi.street,NotBlank.street,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.parentApi.adressApi.street,parentApi.adressApi.street]; arguments []; default message [parentApi.adressApi.street]]; default message [Street cannot be null]] 
+2021-09-08 23:51:50 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:51:50 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:51 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'document': rejected value [53454646546456564]; codes [Size.studentApi.document,Size.document,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.document,document]; arguments []; default message [document],9,7]; default message [Document must be between 7 and 9 characters]] 
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:51 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'cellPhone': rejected value [null]; codes [NotBlank.studentApi.cellPhone,NotBlank.cellPhone,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.cellPhone,cellPhone]; arguments []; default message [cellPhone]]; default message [CellPhone cannot be null]] 
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:51:51 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'document': rejected value [null]; codes [NotBlank.studentApi.document,NotBlank.document,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.document,document]; arguments []; default message [document]]; default message [Document cannot be empty]] 
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:51 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'grade': rejected value [null]; codes [NotBlank.studentApi.grade,NotBlank.grade,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.grade,grade]; arguments []; default message [grade]]; default message [Grade cannot be null]] 
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:51:51 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				El estudiante no existe
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:51 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				No se pudo crear el estudiante correctamente
+2021-09-08 23:51:51 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:51 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:51:51 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'document': rejected value [3453]; codes [Size.studentApi.document,Size.document,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.document,document]; arguments []; default message [document],9,7]; default message [Document must be between 7 and 9 characters]] 
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:52 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'surname': rejected value [null]; codes [NotBlank.studentApi.surname,NotBlank.surname,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.surname,surname]; arguments []; default message [surname]]; default message [Surname cannot be empty]] 
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:52 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'gender': rejected value [null]; codes [NotBlank.studentApi.gender,NotBlank.gender,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.gender,gender]; arguments []; default message [gender]]; default message [Gender cannot be null]] 
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:52 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'parentApi': rejected value [null]; codes [NotNull.studentApi.parentApi,NotNull.parentApi,NotNull.click.escuela.school.admin.api.ParentApi,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.parentApi,parentApi]; arguments []; default message [parentApi]]; default message [Parent cannot be null]] 
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:52 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'name': rejected value [null]; codes [NotBlank.studentApi.name,NotBlank.name,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.name,name]; arguments []; default message [name]]; default message [Name cannot be empty]] 
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:52 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException with 2 errors: [Field error in object 'studentApi' on field 'parentApi.adressApi.number': rejected value [544546546464]; codes [Size.studentApi.parentApi.adressApi.number,Size.parentApi.adressApi.number,Size.number,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.parentApi.adressApi.number,parentApi.adressApi.number]; arguments []; default message [parentApi.adressApi.number],6,2]; default message [Number must be between 2 and 6 characters]] [Field error in object 'studentApi' on field 'adressApi.number': rejected value [544546546464]; codes [Size.studentApi.adressApi.number,Size.adressApi.number,Size.number,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.adressApi.number,adressApi.number]; arguments []; default message [adressApi.number],6,2]; default message [Number must be between 2 and 6 characters]] 
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 1 ms
+2021-09-08 23:51:52 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'adressApi': rejected value [null]; codes [NotNull.studentApi.adressApi,NotNull.adressApi,NotNull.click.escuela.school.admin.api.AdressApi,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.adressApi,adressApi]; arguments []; default message [adressApi]]; default message [Adress cannot be null]] 
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:52 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				No se pudo modificar el estudiante correctamente
+2021-09-08 23:51:52 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:52 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:53 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:53 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:53 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:53 [main] INFO  o.s.mock.web.MockServletContext -
+				Initializing Spring TestDispatcherServlet ''
+2021-09-08 23:51:53 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Initializing Servlet ''
+2021-09-08 23:51:53 [main] INFO  o.s.t.w.s.TestDispatcherServlet -
+				Completed initialization in 0 ms
+2021-09-08 23:51:53 [main] ERROR c.e.s.admin.rest.handler.Handler -
+				Validation failed for argument [1] in public org.springframework.http.ResponseEntity<click.escuela.school.admin.enumerator.StudentMessage> click.escuela.school.admin.rest.StudentController.create(java.lang.String,click.escuela.school.admin.api.StudentApi) throws click.escuela.school.admin.exception.StudentException: [Field error in object 'studentApi' on field 'division': rejected value [null]; codes [NotBlank.studentApi.division,NotBlank.division,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [studentApi.division,division]; arguments []; default message [division]]; default message [Division cannot be null]] 
+2021-09-08 23:55:16 [AsyncResolver-bootstrap-executor-0] INFO  c.n.d.s.r.aws.ConfigClusterResolver -
+				Resolving eureka endpoints via configuration
