@@ -28,8 +28,10 @@ import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
+import click.escuela.school.admin.enumerator.ParentMessage;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.ParentException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
@@ -39,6 +41,7 @@ import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.StudentRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
+import click.escuela.school.admin.service.impl.ParentServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
@@ -50,6 +53,9 @@ public class StudentServiceTest {
 
 	@Mock
 	private CourseServiceImpl courseService;
+	
+	@Mock
+	private ParentServiceImpl parentService;
 
 	private StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
 	private StudentApi studentApi;
@@ -64,7 +70,7 @@ public class StudentServiceTest {
 	private List<UUID> uuids;
 
 	@Before
-	public void setUp() throws CourseException {
+	public void setUp() throws CourseException, ParentException {
 
 		PowerMockito.mockStatic(Mapper.class);
 
@@ -86,6 +92,7 @@ public class StudentServiceTest {
 				.parentApi(parentApi).build();
 		Optional<Student> optional = Optional.of(student);
 		Optional<Course> optionalCourse = Optional.of(course);
+		Optional<Parent> optionalParent = Optional.of(parent);
 		students = new ArrayList<>();
 		students.add(student);
 		courseApi = CourseApi.builder().year(8).division("B").build();
@@ -104,10 +111,12 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseIdIn(uuids)).thenReturn(students);
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
+		Mockito.when(parentService.findById(parentId.toString())).thenReturn(optionalParent);
 		Mockito.when(studentRepository.findByParentId(parentId)).thenReturn(students);
 		
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
 		ReflectionTestUtils.setField(studentServiceImpl, "courseService", courseService);
+		ReflectionTestUtils.setField(studentServiceImpl, "parentService", parentService);
 	}
 
 	@Test
@@ -228,14 +237,22 @@ public class StudentServiceTest {
 	}
 	
 	@Test
-	public void whenGetStudentsByParentIdIsOk() {
+	public void whenGetStudentsByParentIdIsOk() throws ParentException {
 		studentServiceImpl.getStudentsByParentId(parentId.toString(), false);
 		verify(studentRepository).findByParentId(parentId);
 	}
 
 	@Test
-	public void whenGetStudentsByParentIdWithBillIsOk() {
+	public void whenGetStudentsByParentIdWithBillIsOk() throws ParentException {
 		studentServiceImpl.getStudentsByParentId(parentId.toString(), true);
 		verify(studentRepository).findByParentId(parentId);
+	}
+	
+	@Test
+	public void whenGetByParentIdIsError() {
+		parentId = UUID.randomUUID();
+		assertThatExceptionOfType(ParentException.class).isThrownBy(() -> {
+			studentServiceImpl.getStudentsByParentId(parentId.toString(), true);
+		}).withMessage(ParentMessage.GET_ERROR.getDescription());
 	}
 }
