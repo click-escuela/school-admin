@@ -157,7 +157,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				.collect(Collectors.toList());
 	}
 	
-
 	public List<StudentParentDTO> getStudentsByParentId(String parentId, Boolean fullDetail) throws ParentException {
 		Optional<Parent> parent = parentService.findById(parentId);
 		if(parent.isPresent()) {

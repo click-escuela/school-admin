@@ -255,4 +255,5 @@ public class StudentServiceTest {
 			studentServiceImpl.getStudentsByParentId(parentId.toString(), true);
 		}).withMessage(ParentMessage.GET_ERROR.getDescription());
 	}
+
 }
