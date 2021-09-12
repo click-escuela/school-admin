@@ -23,6 +23,7 @@ import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,22 +46,13 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(courseService.findAll());
 	}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<String> getCourse() {
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
-	}
-
 	@Operation(summary = "Create Course", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<CourseMessage> create(@RequestBody @Validated CourseApi courseApi) throws CourseException {
-		courseService.create(courseApi);
+	public ResponseEntity<CourseMessage> create(@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
+			@RequestBody @Validated CourseApi courseApi) throws CourseException {
+		courseService.create(schoolId,courseApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.CREATE_OK);
-	}
-
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<String> update() {
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
 	}
 
 	@Operation(summary = "Update/Add course in student", responses = {
@@ -76,7 +68,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{idCourse}/student/del/{idStudent}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CourseMessage> deleteStudent(@PathVariable("idCourse") String idCourse,
-			@PathVariable("idStudent") String idStudent) throws StudentException {
+			@PathVariable("idStudent") String idStudent) throws StudentException, CourseException {
 		studentService.deleteCourse(idStudent, idCourse);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.UPDATE_OK);
 	}

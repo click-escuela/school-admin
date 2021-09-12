@@ -77,14 +77,26 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		Student student = findById(idStudent).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		Optional<Course> optional = courseService.findById(idCourse);
 		if (optional.isPresent()) {
+			optional.get().setCountStudent(studentRepository.findByCourseId(UUID.fromString(idCourse)).size()+1);
 			student.setCourse(optional.get());
+		}
+		studentRepository.save(student);
+	}
+	
+	public void deleteCourse(String idStudent, String idCourse) throws StudentException, CourseException {
+		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
+				.orElseThrow(() -> new StudentException(StudentMessage.UPDATE_ERROR));
+		
+		Optional<Course> optional = courseService.findById(idCourse);
+		if (optional.isPresent()) {
+			optional.get().setCountStudent(studentRepository.findByCourseId(UUID.fromString(idCourse)).size()-1);
+			student.setCourse(null);
 		}
 		studentRepository.save(student);
 	}
 
 	@Override
 	public void delete(String id) throws StudentException {
-
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 
@@ -119,14 +131,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		if (studentExist.isPresent()) {
 			throw new StudentException(StudentMessage.EXIST);
 		}
-	}
-
-	public void deleteCourse(String idStudent, String idCourse) throws StudentException {
-		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
-				.orElseThrow(() -> new StudentException(StudentMessage.UPDATE_ERROR));
-
-		student.setCourse(null);
-		studentRepository.save(student);
 	}
 
 	public void addBill(Bill bill, UUID studentId) throws StudentException {
