@@ -21,6 +21,7 @@ import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
+import click.escuela.school.admin.exception.ParentException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
@@ -69,7 +70,7 @@ public class StudentController {
 	public ResponseEntity<List<StudentParentDTO>> getStudentsByParentId(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
 			@Parameter(name = "Parent id", required = true) @PathVariable("parentId") String parentId,
-			@RequestParam("fullDetail") Boolean fullDetail) {
+			@RequestParam("fullDetail") Boolean fullDetail) throws ParentException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED)
 				.body(studentService.getStudentsByParentId(parentId, fullDetail));
 	}

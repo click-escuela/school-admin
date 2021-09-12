@@ -14,6 +14,7 @@ import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.ParentException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
@@ -30,6 +31,9 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Autowired
 	private CourseServiceImpl courseService;
+	
+	@Autowired
+	private ParentServiceImpl parentService;
 
 	@Override
 	public void create(String schoolId, StudentApi studentApi) throws StudentException {
@@ -147,7 +151,9 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 				.collect(Collectors.toList());
 	}
 	
-	public List<StudentParentDTO> getStudentsByParentId(String parentId, Boolean fullDetail) {
+
+	public List<StudentParentDTO> getStudentsByParentId(String parentId, Boolean fullDetail) throws ParentException {
+		parentService.findById(parentId);
 		return Boolean.TRUE.equals(fullDetail)
 				? Mapper.mapperToStudentsParentFullDTO(studentRepository.findByParentId(UUID.fromString(parentId)))
 				: Mapper.mapperToStudentsParentDTO(studentRepository.findByParentId(UUID.fromString(parentId)));
