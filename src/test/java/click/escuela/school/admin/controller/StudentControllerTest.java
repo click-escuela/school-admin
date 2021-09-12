@@ -36,6 +36,7 @@ import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.api.ParentApi;
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.StudentMessage;
@@ -69,6 +70,7 @@ public class StudentControllerTest {
 	private AdressApi adressApi;
 	private UUID idStudent;
 	private UUID idCourse;
+	private UUID parentId;
 	private Integer schoolId;
 	private static String EMPTY = "";
 	private final static String URL = "/school/{schoolId}/student";
@@ -83,6 +85,7 @@ public class StudentControllerTest {
 
 		idStudent = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
+		parentId = UUID.randomUUID();
 		schoolId = 1234;
 		adressApi = new AdressApi("Calle falsa", "6458", "Nogues");
 		parentApi = ParentApi.builder().adressApi(adressApi).birthday(LocalDate.now()).cellPhone("3534543")
@@ -104,6 +107,13 @@ public class StudentControllerTest {
 		studentApi.setId(idStudent.toString());
 		studentApi.setCourseApi(courseApi);
 		studentsDTO.add(Mapper.mapperToStudentDTO(studentApi));
+		
+		StudentParentDTO studentParent = new StudentParentDTO();
+		studentParent.setId(student.getId().toString());
+		studentParent.setName(student.getName());
+		studentParent.setSurname(student.getSurname());
+		List<StudentParentDTO> studentsParent = new ArrayList<>();
+		studentsParent.add(studentParent);
 
 		Mockito.when(studentService.getBySchool(schoolId.toString(), false))
 				.thenReturn(Mapper.mapperToStudentsDTO(students));
@@ -111,6 +121,7 @@ public class StudentControllerTest {
 		Mockito.when(studentService.getByCourse(idCourse.toString(), false)).thenReturn(studentsDTO);
 		Mockito.when(studentService.getById(schoolId.toString(),idStudent.toString(), false))
 				.thenReturn(Mapper.mapperToStudentDTO(student));
+		Mockito.when(studentService.getStudentsByParentId(parentId.toString(), false)).thenReturn(studentsParent);
 	}
 
 	@Test
@@ -275,6 +286,14 @@ public class StudentControllerTest {
 				resultStudentApi(
 						get(URL + "/course/{courseId}?fullDetail=false", schoolId.toString(), idCourse.toString())),
 				new TypeReference<List<StudentDTO>>() {})).isEmpty();
+	}
+	
+	@Test
+	public void getStudentByParentIdIsOk() throws JsonProcessingException, Exception {
+		assertThat(mapper.readValue(
+				resultStudentApi(
+						get(URL + "/parent/{parentId}?fullDetail=false", schoolId.toString(), parentId.toString())),
+				new TypeReference<List<StudentDTO>>() {}).get(0).getId()).contains(idStudent.toString());
 	}
 
 	private String toJson(final Object obj) throws JsonProcessingException {
