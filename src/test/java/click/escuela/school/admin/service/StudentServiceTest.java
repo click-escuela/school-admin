@@ -57,6 +57,7 @@ public class StudentServiceTest {
 	private UUID id;
 	private UUID idCourse;
 	private Integer idSchool;
+	private UUID parentId;
 	private List<Student> students;
 	private Student student;
 	private Course course;
@@ -70,10 +71,13 @@ public class StudentServiceTest {
 		idSchool = 1234;
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
+		parentId = UUID.randomUUID();
+		Parent parent = new Parent();
+		parent.setId(parentId);
 		course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
 		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
-				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();
+				.name("oscar").level(EducationLevels.SECUNDARIO).parent(parent).course(course).build();
 		ParentApi parentApi = new ParentApi();
 		parentApi.setAdressApi(new AdressApi());
 		studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now()).cellPhone("4534543")
@@ -99,9 +103,9 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseIdIn(uuids)).thenReturn(students);
-
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
-
+		Mockito.when(studentRepository.findByParentId(parentId)).thenReturn(students);
+		
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
 		ReflectionTestUtils.setField(studentServiceImpl, "courseService", courseService);
 	}
@@ -222,5 +226,16 @@ public class StudentServiceTest {
 		List<CourseStudentsDTO> listEmpty = studentServiceImpl.getCourseStudents(new ArrayList<>());
 		assertThat(listEmpty).isEmpty();
 	}
+	
+	@Test
+	public void whenGetStudentsByParentIdIsOk() {
+		studentServiceImpl.getStudentsByParentId(parentId.toString(), false);
+		verify(studentRepository).findByParentId(parentId);
+	}
 
+	@Test
+	public void whenGetStudentsByParentIdWithBillIsOk() {
+		studentServiceImpl.getStudentsByParentId(parentId.toString(), true);
+		verify(studentRepository).findByParentId(parentId);
+	}
 }
