@@ -22,9 +22,11 @@ public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
 	private CourseRepository courseRepository;
 	
 	@Override
-	public void create(CourseApi courserApi) throws CourseException {
+	public void create(String schoolId, CourseApi courserApi) throws CourseException {
 		try {
 			Course course = Mapper.mapperToCourse(courserApi);
+			course.setSchoolId(Integer.valueOf(schoolId));
+			course.setCountStudent(0);
 			courseRepository.save(course);
 		} catch (Exception e) {
 			throw new CourseException(CourseMessage.CREATE_ERROR);
