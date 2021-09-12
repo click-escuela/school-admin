@@ -52,7 +52,6 @@ public class CourseControllerTest {
 
 	private ObjectMapper mapper;
 	private CourseApi courseApi;
-	private String schoolId;
 	private static String EMPTY = "";
 
 	@Before
@@ -63,11 +62,9 @@ public class CourseControllerTest {
 				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		ReflectionTestUtils.setField(courseController, "courseService", courseService);
 
-		schoolId = String.valueOf(1234);
-		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(Integer.valueOf(schoolId))
-				.build();
+		courseApi = CourseApi.builder().year(8).division("B").build();
 
-		doNothing().when(courseService).create(Mockito.any());
+		doNothing().when(courseService).create(Mockito.anyString(),Mockito.any());
 	}
 
 	@Test
@@ -97,26 +94,6 @@ public class CourseControllerTest {
 				.andReturn();
 		String response = result.getResponse().getContentAsString();
 		assertThat(response).contains("Division cannot be empty");
-	}
-
-	@Test
-	public void whenCreateCoutStudentEmpty() throws JsonProcessingException, Exception {
-		courseApi.setCountStudent(null);
-		MvcResult result = mockMvc.perform(post("/school/{schoolId}/course", "123")
-				.contentType(MediaType.APPLICATION_JSON).content(toJson(courseApi))).andExpect(status().isBadRequest())
-				.andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("CountStudent cannot be null");
-	}
-
-	@Test
-	public void whenCreateSchoolEmpty() throws JsonProcessingException, Exception {
-		courseApi.setSchoolId(null);
-		MvcResult result = mockMvc.perform(post("/school/{schoolId}/course", "123")
-				.contentType(MediaType.APPLICATION_JSON).content(toJson(courseApi))).andExpect(status().isBadRequest())
-				.andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("School cannot be null");
 	}
 
 	@Test
