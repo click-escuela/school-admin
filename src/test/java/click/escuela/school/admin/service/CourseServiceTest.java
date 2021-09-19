@@ -40,7 +40,8 @@ public class CourseServiceTest {
 	private CourseServiceImpl courseServiceImpl = new CourseServiceImpl();
 	private CourseApi courseApi;
 	private UUID id;
-	private List<String> ids = new ArrayList<>();
+	private String schoolId = "1234";
+ 	private List<String> ids = new ArrayList<>();
 	private List<Course> courses= new ArrayList<>();
 	private List<CourseStudentsDTO> coursesDTO= new ArrayList<>();
 	private List<StudentDTO> students= new ArrayList<>();
@@ -58,7 +59,7 @@ public class CourseServiceTest {
 		CourseStudentsDTO courseDTO = new CourseStudentsDTO();
 		courseDTO.setStudents(students);
 		coursesDTO.add(courseDTO);
-		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(45678).build();
+		courseApi = CourseApi.builder().year(8).division("B").build();
 		Optional<Course> optional = Optional.of(course);
 		id = UUID.randomUUID();
 		courses.add(course);
@@ -75,16 +76,16 @@ public class CourseServiceTest {
 
 	@Test
 	public void whenCreateIsOk() throws CourseException   {
-		courseServiceImpl.create(courseApi);
+		courseServiceImpl.create(schoolId, courseApi);
 		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
 	@Test
 	public void whenCreateIsError() {
-		CourseApi courseApi = CourseApi.builder().year(10).division("C").countStudent(40).schoolId(85252).build();
+		CourseApi courseApi = CourseApi.builder().year(10).division("C").build();
 		Mockito.when(courseRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		assertThatExceptionOfType(CourseException.class).isThrownBy(() -> {
-			courseServiceImpl.create(courseApi);
+			courseServiceImpl.create(schoolId, courseApi);
 		}).withMessage(CourseMessage.CREATE_ERROR.getDescription());
 	}
 	

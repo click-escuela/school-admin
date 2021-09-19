@@ -23,6 +23,7 @@ import click.escuela.school.admin.dto.CourseStudentsShortDTO;
 import click.escuela.school.admin.dto.ExcelDTO;
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.dto.StudentShortDTO;
 import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
@@ -133,8 +134,8 @@ public class Mapper {
 		if(student.getCourse() != null) {
 			studentFull.setCourseId(student.getCourse().getId().toString());
 		}
-		List<Bill> bills = student.getBills();
-		studentFull.setBills(mapperToBillsDTO(bills));
+		studentFull.setBills(mapperToBillsDTO(student.getBills()));
+
 		return studentFull;
 	}
 
@@ -142,6 +143,30 @@ public class Mapper {
 		List<StudentDTO> studentFullList = new ArrayList<>();
 		students.stream().forEach(p -> studentFullList.add(mapperToStudentFullDTO(p)));
 		return studentFullList;
+	}
+	
+	public static List<StudentParentDTO> mapperToStudentsParentFullDTO(List<Student> students) {
+		List<StudentParentDTO> studentFullList = new ArrayList<>();
+		students.stream().forEach(p -> studentFullList.add(mapperToStudentParentFullDTO(p)));
+		return studentFullList;
+	}
+
+	public static StudentParentDTO mapperToStudentParentFullDTO(Student student) {
+		StudentParentDTO studentFull = modelMapper.map(student, StudentParentDTO.class);
+		studentFull.setBills(mapperToBillsDTO(student.getBills()));
+		return studentFull;
+	}
+	
+	public static List<StudentParentDTO> mapperToStudentsParentDTO(List<Student> students) {
+		List<StudentParentDTO> studentFullList = new ArrayList<>();
+		students.stream().forEach(p -> studentFullList.add(mapperToStudentParentDTO(p)));
+		return studentFullList;
+	}
+
+	public static StudentParentDTO mapperToStudentParentDTO(Student student) {
+		StudentParentDTO studentFull = modelMapper.map(student, StudentParentDTO.class);
+		studentFull.setBills(null);
+		return studentFull;
 	}
 
 	// All mapper courses
@@ -272,5 +297,7 @@ public class Mapper {
 	private static StudentShortDTO mapperToStudentShort(StudentDTO student) {
 		return modelMapper.map(student, StudentShortDTO.class);
 	}
+
+	
 
 }

@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
+import click.escuela.school.admin.exception.ParentException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
@@ -60,6 +62,17 @@ public class StudentController {
 	public ResponseEntity<List<StudentDTO>> getBySchool(
 			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId, @RequestParam("fullDetail") Boolean fullDetail) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getBySchool(schoolId, fullDetail));
+	}
+	
+	@Operation(summary = "Get student by parentId", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentParentDTO.class))) })
+	@GetMapping(value = "/parent/{parentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<StudentParentDTO>> getStudentsByParentId(
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId,
+			@Parameter(name = "Parent id", required = true) @PathVariable("parentId") String parentId,
+			@RequestParam("fullDetail") Boolean fullDetail) throws ParentException {
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(studentService.getStudentsByParentId(parentId, fullDetail));
 	}
 
 	@Operation(summary = "Get student by courseId", responses = {

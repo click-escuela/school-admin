@@ -28,8 +28,10 @@ import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
+import click.escuela.school.admin.enumerator.ParentMessage;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.ParentException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
@@ -39,6 +41,7 @@ import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.StudentRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
+import click.escuela.school.admin.service.impl.ParentServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
@@ -50,6 +53,9 @@ public class StudentServiceTest {
 
 	@Mock
 	private CourseServiceImpl courseService;
+	
+	@Mock
+	private ParentServiceImpl parentService;
 
 	private StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
 	private StudentApi studentApi;
@@ -57,23 +63,27 @@ public class StudentServiceTest {
 	private UUID id;
 	private UUID idCourse;
 	private Integer idSchool;
+	private UUID parentId;
 	private List<Student> students;
 	private Student student;
 	private Course course;
 	private List<UUID> uuids;
 
 	@Before
-	public void setUp() throws CourseException {
+	public void setUp() throws CourseException, ParentException {
 
 		PowerMockito.mockStatic(Mapper.class);
 
 		idSchool = 1234;
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
+		parentId = UUID.randomUUID();
+		Parent parent = new Parent();
+		parent.setId(parentId);
 		course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
 		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
-				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course).build();
+				.name("oscar").level(EducationLevels.SECUNDARIO).parent(parent).course(course).build();
 		ParentApi parentApi = new ParentApi();
 		parentApi.setAdressApi(new AdressApi());
 		studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now()).cellPhone("4534543")
@@ -82,9 +92,10 @@ public class StudentServiceTest {
 				.parentApi(parentApi).build();
 		Optional<Student> optional = Optional.of(student);
 		Optional<Course> optionalCourse = Optional.of(course);
+		Optional<Parent> optionalParent = Optional.of(parent);
 		students = new ArrayList<>();
 		students.add(student);
-		courseApi = CourseApi.builder().year(8).division("B").countStudent(35).schoolId(45678).build();
+		courseApi = CourseApi.builder().year(8).division("B").build();
 		uuids =  new ArrayList<>();
 		uuids.add(idCourse);
 
@@ -99,11 +110,13 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findBySchoolId(idSchool)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseId(idCourse)).thenReturn(students);
 		Mockito.when(studentRepository.findByCourseIdIn(uuids)).thenReturn(students);
-
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
-
+		Mockito.when(parentService.findById(parentId.toString())).thenReturn(optionalParent);
+		Mockito.when(studentRepository.findByParentId(parentId)).thenReturn(students);
+		
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
 		ReflectionTestUtils.setField(studentServiceImpl, "courseService", courseService);
+		ReflectionTestUtils.setField(studentServiceImpl, "parentService", parentService);
 	}
 
 	@Test
@@ -152,7 +165,7 @@ public class StudentServiceTest {
 	}
 
 	@Test
-	public void whenDeleteCourseOk() throws StudentException {
+	public void whenDeleteCourseOk() throws StudentException, CourseException {
 		studentServiceImpl.deleteCourse(id.toString(), idCourse.toString());
 		verify(studentRepository).save(student);
 	}
@@ -221,6 +234,26 @@ public class StudentServiceTest {
 	public void whenGetStudentsByCourseIsError() throws TransactionException {
 		List<CourseStudentsDTO> listEmpty = studentServiceImpl.getCourseStudents(new ArrayList<>());
 		assertThat(listEmpty).isEmpty();
+	}
+	
+	@Test
+	public void whenGetStudentsByParentIdIsOk() throws ParentException {
+		studentServiceImpl.getStudentsByParentId(parentId.toString(), false);
+		verify(studentRepository).findByParentId(parentId);
+	}
+
+	@Test
+	public void whenGetStudentsByParentIdWithBillIsOk() throws ParentException {
+		studentServiceImpl.getStudentsByParentId(parentId.toString(), true);
+		verify(studentRepository).findByParentId(parentId);
+	}
+	
+	@Test
+	public void whenGetByParentIdIsError() {
+		parentId = UUID.randomUUID();
+		assertThatExceptionOfType(ParentException.class).isThrownBy(() -> {
+			studentServiceImpl.getStudentsByParentId(parentId.toString(), true);
+		}).withMessage(ParentMessage.GET_ERROR.getDescription());
 	}
 
 }

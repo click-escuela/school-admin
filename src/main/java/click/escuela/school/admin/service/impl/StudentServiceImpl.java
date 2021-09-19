@@ -11,12 +11,16 @@ import click.escuela.school.admin.api.StudentApi;
 import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.CourseStudentsShortDTO;
 import click.escuela.school.admin.dto.StudentDTO;
+import click.escuela.school.admin.dto.StudentParentDTO;
+import click.escuela.school.admin.enumerator.ParentMessage;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.ParentException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
+import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.StudentRepository;
 import click.escuela.school.admin.service.ServiceGeneric;
@@ -29,6 +33,9 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 
 	@Autowired
 	private CourseServiceImpl courseService;
+	
+	@Autowired
+	private ParentServiceImpl parentService;
 
 	@Override
 	public void create(String schoolId, StudentApi studentApi) throws StudentException {
@@ -72,14 +79,26 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		Student student = findById(idStudent).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		Optional<Course> optional = courseService.findById(idCourse);
 		if (optional.isPresent()) {
+			optional.get().setCountStudent(studentRepository.findByCourseId(UUID.fromString(idCourse)).size()+1);
 			student.setCourse(optional.get());
+		}
+		studentRepository.save(student);
+	}
+	
+	public void deleteCourse(String idStudent, String idCourse) throws StudentException, CourseException {
+		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
+				.orElseThrow(() -> new StudentException(StudentMessage.UPDATE_ERROR));
+		
+		Optional<Course> optional = courseService.findById(idCourse);
+		if (optional.isPresent()) {
+			optional.get().setCountStudent(studentRepository.findByCourseId(UUID.fromString(idCourse)).size()-1);
+			student.setCourse(null);
 		}
 		studentRepository.save(student);
 	}
 
 	@Override
 	public void delete(String id) throws StudentException {
-
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 
@@ -116,14 +135,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		}
 	}
 
-	public void deleteCourse(String idStudent, String idCourse) throws StudentException {
-		Student student = findById(idStudent).filter(p -> p.getCourse().getId().toString().equals(idCourse))
-				.orElseThrow(() -> new StudentException(StudentMessage.UPDATE_ERROR));
-
-		student.setCourse(null);
-		studentRepository.save(student);
-	}
-
 	public void addBill(Bill bill, UUID studentId) throws StudentException {
 		findById(studentId.toString()).ifPresent(student -> {
 			List<Bill> bills = student.getBills();
@@ -144,6 +155,18 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		return result.stream()
 				.filter(r -> r.getCourseId().equals(course.getId()))
 				.collect(Collectors.toList());
+	}
+	
+	public List<StudentParentDTO> getStudentsByParentId(String parentId, Boolean fullDetail) throws ParentException {
+		Optional<Parent> parent = parentService.findById(parentId);
+		if(parent.isPresent()) {
+			return Boolean.TRUE.equals(fullDetail)
+					? Mapper.mapperToStudentsParentFullDTO(studentRepository.findByParentId(UUID.fromString(parentId)))
+					: Mapper.mapperToStudentsParentDTO(studentRepository.findByParentId(UUID.fromString(parentId)));
+		}
+		else {
+			throw new ParentException(ParentMessage.GET_ERROR);
+		}
 	}
 	
 	public List<CourseStudentsShortDTO> setStudentToCourseStudentsShort(List<CourseStudentsShortDTO> courses) {
