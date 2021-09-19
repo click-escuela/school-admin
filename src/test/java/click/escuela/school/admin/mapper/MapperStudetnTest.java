@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.UUID;
 
 import org.junit.Before;
@@ -19,6 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.StudentParentDTO;
+
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.model.Course;
@@ -40,6 +42,7 @@ public class MapperStudetnTest {
 	private UUID id = UUID.randomUUID();
 	private List<Student> students = new ArrayList<>();
 
+
 	@Before
 	public void setUp() {
 		Course course = new Course();
@@ -53,6 +56,7 @@ public class MapperStudetnTest {
 
 		when(modelMapper.map(student, StudentDTO.class)).thenReturn(studentDTO);
 		when(modelMapper.map(student, StudentParentDTO.class)).thenReturn(studenParent);
+
 		ReflectionTestUtils.setField(mapper, "modelMapper", modelMapper);
 	}
 
@@ -76,6 +80,7 @@ public class MapperStudetnTest {
 		
 		List<StudentParentDTO> studentsParent2 = Mapper.mapperToStudentsParentFullDTO(students);
 		assertThat(studentsParent2).isNotEmpty();
+
 	}
 
 }

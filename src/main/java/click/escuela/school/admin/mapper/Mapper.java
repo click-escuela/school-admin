@@ -135,6 +135,7 @@ public class Mapper {
 			studentFull.setCourseId(student.getCourse().getId().toString());
 		}
 		studentFull.setBills(mapperToBillsDTO(student.getBills()));
+
 		return studentFull;
 	}
 
