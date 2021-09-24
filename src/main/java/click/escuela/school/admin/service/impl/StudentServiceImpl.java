@@ -43,10 +43,20 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		try {
 			Student student = Mapper.mapperToStudent(studentApi);
 			student.setSchoolId(Integer.valueOf(schoolId));
+			student = checkParent(student); 
 			studentRepository.save(student);
 		} catch (Exception e) {
 			throw new StudentException(StudentMessage.CREATE_ERROR);
 		}
+	}
+	
+	private Student checkParent(Student student) {
+		Parent parent = student.getParent();
+		Optional<Parent> optionalParent = parentService.findByOptions(parent.getName(), parent.getSurname(), parent.getDocument(), parent.getGender());
+		if(optionalParent.isPresent()) {
+			student.setParent(optionalParent.get());
+		}
+		return student;
 	}
 
 	@Override
@@ -72,7 +82,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public void update(String schoolId, StudentApi studentApi) throws StudentException {
 		Student student = findById(studentApi.getId()).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		student.setSchoolId(Integer.valueOf(schoolId));
-		studentRepository.save(Mapper.mapperToStudent(studentApi, student));
+		studentRepository.save(Mapper.mapperToStudent(studentApi, checkParent(student)));
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws StudentException, CourseException {
