@@ -1,6 +1,8 @@
 package click.escuela.school.admin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,9 +10,10 @@ import org.springframework.stereotype.Service;
 import click.escuela.school.admin.api.SchoolApi;
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.enumerator.SchoolMessage;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.School;
+import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.SchoolRepository;
 import click.escuela.school.admin.service.SchoolServiceGeneric;
 
@@ -26,13 +29,36 @@ public class SchoolServiceImpl implements SchoolServiceGeneric<SchoolApi,SchoolD
 	}
 	
 	@Override
-	public void create(SchoolApi schoolApi) throws TransactionException {
+	public void create(SchoolApi schoolApi) throws SchoolException {
 		try {
 			School school=Mapper.mapperToSchool(schoolApi);
 			schoolRepository.save(school);
 		} catch (Exception e) {
-			throw new TransactionException(SchoolMessage.CREATE_ERROR.getCode(),
-					SchoolMessage.CREATE_ERROR.getDescription());
+			throw new SchoolException(SchoolMessage.CREATE_ERROR);
+		}
+	}
+	
+	public Optional<School> findById(Long id) throws SchoolException {
+		return Optional.of(schoolRepository.findById(id))
+				.orElseThrow(() -> new SchoolException(SchoolMessage.GET_ERROR));
+	}
+	
+	public void update(Student student, String schoolId) throws SchoolException {
+		Optional<School> schoolOptional = findById(Long.valueOf(schoolId));
+		if(schoolOptional.isPresent()) {
+			School school = schoolOptional.get();
+			if(school.getStudents() == null) {
+				List<Student> students = new ArrayList<>();
+				students.add(student);
+				schoolRepository.save(school);
+			}
+			else {
+				school.getStudents().add(student);
+				schoolRepository.save(school);
+			}
+		}
+		else {
+			throw new SchoolException(SchoolMessage.GET_ERROR);
 		}
 	}
 }

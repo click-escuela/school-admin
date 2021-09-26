@@ -16,6 +16,7 @@ import click.escuela.school.admin.enumerator.ParentMessage;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.ParentException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
@@ -23,10 +24,9 @@ import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.StudentRepository;
-import click.escuela.school.admin.service.ServiceGeneric;
 
 @Service
-public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO> {
+public class StudentServiceImpl {
 
 	@Autowired
 	private StudentRepository studentRepository;
@@ -36,20 +36,22 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	
 	@Autowired
 	private ParentServiceImpl parentService;
+	
+	@Autowired
+	private SchoolServiceImpl schoolService;
 
-	@Override
-	public void create(String schoolId, StudentApi studentApi) throws StudentException {
+	public void create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
 		exists(studentApi);
-		try {
-			Student student = Mapper.mapperToStudent(studentApi);
-			student.setSchoolId(Integer.valueOf(schoolId));
-			studentRepository.save(student);
-		} catch (Exception e) {
-			throw new StudentException(StudentMessage.CREATE_ERROR);
-		}
+		Student student = Mapper.mapperToStudent(studentApi);
+		schoolService.update(student, schoolId);
+	}
+	
+	
+	public void update(String schoolId, StudentApi studentApi) throws StudentException {
+		Student student = findByIdAndSchoolId(schoolId,studentApi.getId()).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
+		studentRepository.save(Mapper.mapperToStudent(studentApi, student));
 	}
 
-	@Override
 	public StudentDTO getById(String schoolId, String id, Boolean fullDetail) throws StudentException {
 		Student student = findByIdAndSchoolId(schoolId, id)
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
@@ -66,13 +68,6 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 	public Optional<Student> findByIdAndSchoolId(String schoolId, String id) throws StudentException {
 		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Integer.valueOf(schoolId))
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
-	}
-
-	@Override
-	public void update(String schoolId, StudentApi studentApi) throws StudentException {
-		Student student = findById(studentApi.getId()).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
-		student.setSchoolId(Integer.valueOf(schoolId));
-		studentRepository.save(Mapper.mapperToStudent(studentApi, student));
 	}
 
 	public void addCourse(String idStudent, String idCourse) throws StudentException, CourseException {
@@ -97,7 +92,7 @@ public class StudentServiceImpl implements ServiceGeneric<StudentApi, StudentDTO
 		studentRepository.save(student);
 	}
 
-	@Override
+	
 	public void delete(String id) throws StudentException {
 		studentRepository.deleteById(UUID.fromString(id));
 	}

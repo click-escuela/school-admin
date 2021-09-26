@@ -22,6 +22,7 @@ import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.ParentException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
@@ -88,7 +89,7 @@ public class StudentController {
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> create(
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
-			@RequestBody @Validated StudentApi studentApi) throws StudentException {
+			@RequestBody @Validated StudentApi studentApi) throws StudentException, SchoolException {
 		studentService.create(schoolId, studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.CREATE_OK);
 	}
@@ -98,7 +99,7 @@ public class StudentController {
 	@PutMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> update(
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
-			@RequestBody @Validated StudentApi studentApi) throws StudentException {
+			@RequestBody @Validated StudentApi studentApi) throws StudentException, SchoolException {
 		studentService.update(schoolId, studentApi);
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.UPDATE_OK);

@@ -1,14 +1,15 @@
 package click.escuela.school.admin.model;
 
-import java.util.UUID;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,11 +25,11 @@ import lombok.Setter;
 @Entity
 @Builder
 public class School {
+
 	@Id
-	@Column(name = "id_school", columnDefinition = "BINARY(16)")
-	@GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-	private UUID id;
+	@Column(name = "id_school")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -42,9 +43,12 @@ public class School {
 	@Column(name = "adrees", nullable = false)
 	private String adress;
 
-	@Column(name = "count_student", nullable = false)
-	private Integer countStudent;
+	/*/@Column(name = "count_student", nullable = false)
+	private Integer countStudent;*/
 
 	@Column(name = "count_courses", nullable = false)
 	private Integer countCourses;
+	
+	@OneToMany(mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Student> students;
 }
