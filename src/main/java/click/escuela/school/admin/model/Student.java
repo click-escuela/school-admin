@@ -59,7 +59,7 @@ public class Student {
 	private GenderType gender;
 	
 	@ManyToOne()
-    @JoinColumn(name = "school_id")
+    @JoinColumn(name = "id_school", referencedColumnName="id_school")
     private School school;
 
 	@Column(name = "grade", nullable = false)

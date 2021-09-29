@@ -38,10 +38,6 @@ public class SchoolApi {
 	@JsonProperty(value = "adress", required = false)
 	private String adress;
 	
-	@NotNull(message = "CountStudent cannot be null")
-	@JsonProperty(value = "countStudent", required = true)
-	private Integer countStudent;
-	
 	@NotNull(message = "CountCourses cannot be null")
 	@JsonProperty(value = "countCourses", required = true)
 	private Integer countCourses;

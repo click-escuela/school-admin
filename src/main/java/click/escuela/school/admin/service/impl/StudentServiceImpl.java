@@ -66,7 +66,7 @@ public class StudentServiceImpl {
 	}
 
 	public Optional<Student> findByIdAndSchoolId(String schoolId, String id) throws StudentException {
-		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Integer.valueOf(schoolId))
+		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Long.valueOf(schoolId))
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
 	}
 
@@ -93,14 +93,14 @@ public class StudentServiceImpl {
 	}
 
 	
-	public void delete(String id) throws StudentException {
+	public void delete(String id){
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 
-	public List<StudentDTO> getBySchool(String school, Boolean fullDetail) {
+	public List<StudentDTO> getBySchool(String school, Boolean fullDetail) throws SchoolException {
 		return Boolean.TRUE.equals(fullDetail)
-				? Mapper.mapperToStudentsFullDTO(studentRepository.findBySchoolId((Integer.valueOf(school))))
-				: Mapper.mapperToStudentsDTO(studentRepository.findBySchoolId((Integer.valueOf(school))));
+				? Mapper.mapperToStudentsFullDTO(schoolService.getStudentsById(school))
+				: Mapper.mapperToStudentsDTO(schoolService.getStudentsById(school));
 	}
 
 	public List<StudentDTO> getByCourse(String courseId, Boolean fullDetail) {

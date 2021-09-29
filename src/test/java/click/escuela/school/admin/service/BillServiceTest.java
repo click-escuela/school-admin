@@ -41,6 +41,7 @@ import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Parent;
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.BillRepository;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
@@ -85,8 +86,9 @@ public class BillServiceTest {
 	@Before
 	public void setUp() throws TransactionException, StudentException {
 		PowerMockito.mockStatic(Mapper.class);
-		
-		Student student = Student.builder().id(studentId).schoolId(schoolId).absences(3).birthday(LocalDate.now()).cellPhone("535435")
+		School school = new School();
+		school.setId(schoolId.longValue());
+		Student student = Student.builder().id(studentId).school(school).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(new Course()).build();
 		bill = Bill.builder().id(id).year(2021).month(6).status(PaymentStatus.PENDING).student(student).file("Mayo")

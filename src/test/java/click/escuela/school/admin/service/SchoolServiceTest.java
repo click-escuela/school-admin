@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,18 +38,18 @@ public class SchoolServiceTest {
 	private SchoolServiceImpl schoolServiceImpl = new SchoolServiceImpl();
 	private SchoolApi schoolApi;
 	private School school;
-	private UUID id;
+	private Long id;
 
 	@Before
 	public void setUp() {
 		PowerMockito.mockStatic(Mapper.class);
 
-		id = UUID.randomUUID();
+		id = 1L;
 		school = School.builder().id(id).name("Colegio Nacional").cellPhone("47589869")
-				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10).countStudent(20)
+				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10)
 				.build();
 		schoolApi = SchoolApi.builder().name("Colegio Nacional").cellPhone("47589869")
-				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10).countStudent(20)
+				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10)
 				.build();
 		List<School> schools = new ArrayList<>();
 		schools.add(school);

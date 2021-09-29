@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +34,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import click.escuela.school.admin.api.SchoolApi;
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.enumerator.SchoolMessage;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.School;
@@ -67,12 +67,12 @@ public class SchoolControllerTest {
 				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		ReflectionTestUtils.setField(schoolController, "schoolService", schoolService);
 
-		id = UUID.randomUUID().toString();
-		school = School.builder().id(UUID.fromString(id)).name("Colegio Nacional").cellPhone("47589869")
-				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10).countStudent(20)
+		id = "1234";
+		school = School.builder().id(Long.valueOf(id)).name("Colegio Nacional").cellPhone("47589869")
+				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10)
 				.build();
 		schoolApi = SchoolApi.builder().name("Colegio Nacional").cellPhone("1534567890").email("nacio@edu.com.ar")
-				.adress("Zuviria 2412").countCourses(23).countStudent(120).build();
+				.adress("Zuviria 2412").countCourses(23).build();
 		List<School> schools = new ArrayList<>();
 		schools.add(school);
 
@@ -110,16 +110,6 @@ public class SchoolControllerTest {
 	}
 
 	@Test
-	public void whenCountStudentEmpty() throws JsonProcessingException, Exception {
-		schoolApi.setCountStudent(null);
-		MvcResult result = mockMvc
-				.perform(post("/school").contentType(MediaType.APPLICATION_JSON).content(toJson(schoolApi)))
-				.andExpect(status().isBadRequest()).andReturn();
-		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("CountStudent cannot be null");
-	}
-
-	@Test
 	public void whenCountCourseEmpty() throws JsonProcessingException, Exception {
 		schoolApi.setCountCourses(null);
 		MvcResult result = mockMvc
@@ -131,14 +121,13 @@ public class SchoolControllerTest {
 
 	@Test
 	public void whenCreateErrorService() throws JsonProcessingException, Exception {
-		doThrow(new TransactionException(SchoolMessage.CREATE_ERROR.getCode(),
-				SchoolMessage.CREATE_ERROR.getDescription())).when(schoolService).create(Mockito.any());
+		doThrow(new SchoolException(SchoolMessage.CREATE_ERROR)).when(schoolService).create(Mockito.any());
 
 		MvcResult result = mockMvc
 				.perform(post("/school").contentType(MediaType.APPLICATION_JSON).content(toJson(schoolApi)))
 				.andExpect(status().isBadRequest()).andReturn();
 		String response = result.getResponse().getContentAsString();
-		assertThat(response).contains("");
+		assertThat(response).contains(SchoolMessage.CREATE_ERROR.getDescription());
 	}
 
 	@Test
