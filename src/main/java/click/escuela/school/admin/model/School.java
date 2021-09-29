@@ -43,12 +43,12 @@ public class School {
 	@Column(name = "adrees", nullable = false)
 	private String adress;
 
-	/*/@Column(name = "count_student", nullable = false)
-	private Integer countStudent;*/
-
 	@Column(name = "count_courses", nullable = false)
 	private Integer countCourses;
 	
 	@OneToMany(mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Student> students;
+	
+	@OneToMany(mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Course> courses;
 }

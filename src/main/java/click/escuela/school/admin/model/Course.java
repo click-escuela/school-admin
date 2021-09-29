@@ -7,7 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -42,8 +44,9 @@ public class Course {
 	@Column(name = "count_student", nullable = false)
 	private Integer countStudent;
 	
-	@Column(name = "school_id", nullable = false)
-	private Integer schoolId;
+	@ManyToOne()
+    @JoinColumn(name = "id_school", referencedColumnName="id_school")
+    private School school;
 	
 	@ManyToMany(mappedBy  = "courses")
 	private List<Teacher> teachers;
