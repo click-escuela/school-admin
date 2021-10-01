@@ -11,10 +11,10 @@ import click.escuela.school.admin.model.Teacher;
 
 public interface TeacherRepository extends JpaRepository<Teacher, UUID> {
 
-	public List<Teacher> findBySchoolId(Integer school);
-
 	public Optional<Teacher> findByDocumentAndGender(String document, GenderType gender);
 	
 	public List<Teacher> findByCoursesId(UUID id);
+
+	public Optional<Teacher> findByIdAndSchoolId(UUID id, Long schoolId);
 	
 }

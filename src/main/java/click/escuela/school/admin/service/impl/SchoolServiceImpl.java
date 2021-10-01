@@ -13,6 +13,7 @@ import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.model.Student;
+import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.SchoolRepository;
 import click.escuela.school.admin.service.SchoolServiceGeneric;
 
@@ -53,5 +54,9 @@ public class SchoolServiceImpl implements SchoolServiceGeneric<SchoolApi,SchoolD
 	
 	public List<Student> getStudentsById(String schoolId) throws SchoolException{
 		return  getById(schoolId).getStudents();
+	}
+	
+	public List<Teacher> getTeachersById(String schoolId) throws SchoolException{
+		return  getById(schoolId).getTeachers();
 	}
 }

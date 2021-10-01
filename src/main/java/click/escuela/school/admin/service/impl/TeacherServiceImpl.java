@@ -13,8 +13,10 @@ import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.mapper.Mapper;
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.TeacherRepository;
 
@@ -29,13 +31,16 @@ public class TeacherServiceImpl {
 
 	@Autowired
 	private StudentServiceImpl studentService;
+	
+	@Autowired
+	private SchoolServiceImpl schoolService;
 
-
-	public void create(String schoolId, TeacherApi teacherApi) throws TeacherException {
+	public void create(String schoolId, TeacherApi teacherApi) throws TeacherException, SchoolException {
 		exists(teacherApi);
+		School school = schoolService.getById(schoolId);
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);
-			teacher.setSchoolId(Integer.valueOf(schoolId));
+			teacher.setSchool(school);
 			teacherRepository.save(teacher);
 		} catch (Exception e) {
 			throw new TeacherException(TeacherMessage.CREATE_ERROR);
@@ -43,9 +48,8 @@ public class TeacherServiceImpl {
 	}
 
 	public void update(String schoolId, TeacherApi teacherApi) throws TeacherException {
-		Teacher teacher = findById(teacherApi.getId())
+		Teacher teacher = findByIdAndSchoolId(teacherApi.getId(), schoolId)
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
-		teacher.setSchoolId(Integer.valueOf(schoolId));
 		teacherRepository.save(Mapper.mapperToTeacher(teacherApi, teacher));
 	}
 
@@ -58,14 +62,19 @@ public class TeacherServiceImpl {
 		return Optional.of(teacherRepository.findById(UUID.fromString(idTeacher))
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR)));
 	}
+	
+	public Optional<Teacher> findByIdAndSchoolId(String idTeacher, String schoolId) throws TeacherException {
+		return Optional.of(teacherRepository.findByIdAndSchoolId(UUID.fromString(idTeacher),  Long.valueOf(schoolId))
+				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR)));
+	}
 
 	public TeacherDTO getById(String id) throws TeacherException {
 		Teacher teacher = findById(id).orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR));
 		return Mapper.mapperToTeacherDTO(teacher);
 	}
 
-	public List<TeacherDTO> getBySchoolId(String schoolId) {
-		return Mapper.mapperToTeachersDTO(teacherRepository.findBySchoolId(Integer.valueOf(schoolId)));
+	public List<TeacherDTO> getBySchoolId(String schoolId) throws SchoolException {
+		return Mapper.mapperToTeachersDTO(schoolService.getTeachersById(schoolId));
 	}
 
 	public List<TeacherDTO> getByCourseId(String courseId) throws CourseException {

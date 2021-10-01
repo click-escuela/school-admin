@@ -32,14 +32,17 @@ import click.escuela.school.admin.enumerator.DocumentType;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
 import click.escuela.school.admin.model.Course;
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.model.Teacher;
 import click.escuela.school.admin.repository.TeacherRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
+import click.escuela.school.admin.service.impl.SchoolServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 
@@ -55,13 +58,16 @@ public class TeacherServiceTest {
 
 	@Mock
 	private StudentServiceImpl studentService;
+	
+	@Mock
+	private SchoolServiceImpl schoolService;
 
 	private TeacherServiceImpl teacherServiceImpl = new TeacherServiceImpl();
 	private TeacherApi teacherApi;
 	private Teacher teacher;
 	private UUID id;
 	private UUID courseId;
-	private Integer schoolId;
+	private Long schoolId;
 	private List<Teacher> teachers;
 	private List<String> listStringIds = new ArrayList<>();
 	private List<Course> courses = new ArrayList<>();
@@ -70,12 +76,12 @@ public class TeacherServiceTest {
 	private UUID studentId;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws SchoolException {
 		PowerMockito.mockStatic(Mapper.class);
 
 		id = UUID.randomUUID();
 		studentId = UUID.randomUUID();
-		schoolId = 1234;
+		schoolId = 1L;
 		courseId = UUID.randomUUID();
 		listStringIds.add(courseId.toString());
 		Course courseEntity = new Course();
@@ -83,11 +89,12 @@ public class TeacherServiceTest {
 		courseEntity.setDivision("B");
 		courseEntity.setId(courseId);
 		courseEntity.setYear(10);
-		
 		courses.add(courseEntity);
+		School school = new School();
+		school.setId(schoolId);
 		teacher = Teacher.builder().id(id).name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType(DocumentType.DNI).document("25897863").gender(GenderType.FEMALE).cellPhone("1589632485")
-				.email("mariAna@gmail.com").courses(courses).schoolId(schoolId).adress(new Adress()).build();
+				.email("mariAna@gmail.com").courses(courses).school(school).adress(new Adress()).build();
     
 		teacherApi = TeacherApi.builder().name("Mariana").surname("Lopez").birthday(LocalDate.now())
 				.documentType("DNI").document("98623512").gender(GenderType.FEMALE.toString()).cellPhone("1589632485")
@@ -119,20 +126,21 @@ public class TeacherServiceTest {
 		Mockito.when(Mapper.mapperToAdress(Mockito.any())).thenReturn(new Adress());
 		Mockito.when(teacherRepository.save(teacher)).thenReturn(teacher);
 		Mockito.when(teacherRepository.findById(id)).thenReturn(optional);
+		Mockito.when(teacherRepository.findByIdAndSchoolId(id,schoolId)).thenReturn(optional);
 		Mockito.when(teacherRepository.findByCoursesId(courseId)).thenReturn(teachers);
-		Mockito.when(teacherRepository.findBySchoolId(schoolId)).thenReturn(teachers);
 		Mockito.when(teacherRepository.findAll()).thenReturn(teachers);
 		Mockito.when(Mapper.mapperToEnum(teacherApi.getGender())).thenReturn(teacher.getGender());
 		Mockito.when(teacherRepository.findByDocumentAndGender(teacherApi.getDocument(),
 				Mapper.mapperToEnum(teacherApi.getGender()))).thenReturn(optional);
-
 		Mockito.when(Mapper.mapperToTeacherCourseStudentsDTO(teacher)).thenReturn(teacherDTO);
-
 		Mockito.when(studentService.setStudentToCourseStudentsShort(Mockito.any())).thenReturn(coursesStudents);
+		Mockito.when(schoolService.getById(schoolId.toString())).thenReturn(school);
+		Mockito.when(schoolService.getTeachersById(schoolId.toString())).thenReturn(teachers);
 		
 		ReflectionTestUtils.setField(teacherServiceImpl, "teacherRepository", teacherRepository);
 		ReflectionTestUtils.setField(teacherServiceImpl, "courseService", courseService);
 		ReflectionTestUtils.setField(teacherServiceImpl, "studentService", studentService);
+		ReflectionTestUtils.setField(teacherServiceImpl, "schoolService", schoolService);
 
 	}
 
@@ -184,14 +192,14 @@ public class TeacherServiceTest {
 	}
 
 	@Test
-	public void whenGetBySchoolIsOk() {
+	public void whenGetBySchoolIsOk() throws SchoolException {
 		teacherServiceImpl.getBySchoolId(schoolId.toString());
-		verify(teacherRepository).findBySchoolId(schoolId);
+		verify(schoolService).getTeachersById(schoolId.toString());
 	}
 
 	@Test
-	public void whenGetBySchoolIsEmpty() {
-		schoolId = 6666;
+	public void whenGetBySchoolIsEmpty() throws SchoolException {
+		schoolId = 2L;
 		List<TeacherDTO> listEmpty = teacherServiceImpl.getBySchoolId(schoolId.toString());
 		assertThat(listEmpty).isEmpty();
 	}

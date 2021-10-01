@@ -21,6 +21,7 @@ import click.escuela.school.admin.dto.TeacherCourseStudentsDTO;
 import click.escuela.school.admin.dto.TeacherDTO;
 import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.service.impl.TeacherServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,7 +66,7 @@ public class TeacherController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TeacherDTO.class))) })
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<TeacherDTO>> getBySchoolId(
-			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId) {
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId) throws SchoolException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.getBySchoolId(schoolId));
 	}
 
@@ -83,7 +84,7 @@ public class TeacherController {
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<TeacherMessage> create(
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
-			@RequestBody @Validated TeacherApi teacherApi) throws TeacherException {
+			@RequestBody @Validated TeacherApi teacherApi) throws TeacherException, SchoolException {
 		teacherService.create(schoolId, teacherApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.CREATE_OK);
 	}
