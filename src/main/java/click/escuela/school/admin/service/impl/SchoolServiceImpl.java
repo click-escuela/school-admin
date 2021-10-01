@@ -1,6 +1,5 @@
 package click.escuela.school.admin.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,12 +49,9 @@ public class SchoolServiceImpl implements SchoolServiceGeneric<SchoolApi,SchoolD
 		} else {
 			throw new SchoolException(SchoolMessage.GET_ERROR);
 		}
-
 	}
 	
 	public List<Student> getStudentsById(String schoolId) throws SchoolException{
-		List<Student> students = new ArrayList<>();
-		students = getById(schoolId).getStudents();
-		return students;
+		return  getById(schoolId).getStudents();
 	}
 }

@@ -18,7 +18,6 @@ import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.SchoolMessage;
 import click.escuela.school.admin.exception.SchoolException;
-import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.service.impl.SchoolServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

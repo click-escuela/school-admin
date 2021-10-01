@@ -108,8 +108,7 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> delete(
-			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId) throws StudentException {
-
+			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId) {
 		studentService.delete(studentId);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.DELETE_OK);
 	}
