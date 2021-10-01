@@ -99,9 +99,8 @@ public class StudentController {
 	@PutMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> update(
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
-			@RequestBody @Validated StudentApi studentApi) throws StudentException, SchoolException {
+			@RequestBody @Validated StudentApi studentApi) throws StudentException {
 		studentService.update(schoolId, studentApi);
-
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.UPDATE_OK);
 	}
 

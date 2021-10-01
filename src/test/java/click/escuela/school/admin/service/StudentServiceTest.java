@@ -29,7 +29,6 @@ import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.EducationLevels;
 import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.ParentMessage;
-import click.escuela.school.admin.enumerator.SchoolMessage;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.ParentException;
@@ -89,7 +88,7 @@ public class StudentServiceTest {
 		parent.setId(parentId);
 		School school = new School();
 		school.setId(idSchool);
-		course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
+		course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).school(school).build();
 		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").school(school).division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(parent).course(course).build();
@@ -102,7 +101,6 @@ public class StudentServiceTest {
 		Optional<Student> optional = Optional.of(student);
 		Optional<Course> optionalCourse = Optional.of(course);
 		Optional<Parent> optionalParent = Optional.of(parent);
-		Optional<School> optionalSchool = Optional.of(school);
 		students = new ArrayList<>();
 		students.add(student);
 		courseApi = CourseApi.builder().year(8).division("B").build();
@@ -123,7 +121,6 @@ public class StudentServiceTest {
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 		Mockito.when(parentService.findById(parentId.toString())).thenReturn(optionalParent);
 		Mockito.when(studentRepository.findByParentId(parentId)).thenReturn(students);
-		Mockito.when(schoolService.findById(idSchool.toString())).thenReturn(optionalSchool);
 		Mockito.when(schoolService.getById(idSchool.toString())).thenReturn(school);
 		Mockito.when(schoolService.getStudentsById(idSchool.toString())).thenReturn(students);
 
@@ -136,7 +133,7 @@ public class StudentServiceTest {
 	@Test
 	public void whenCreateIsOk() throws StudentException, SchoolException {
 		studentServiceImpl.create(idSchool.toString(), studentApi);
-		verify(schoolService).update(student,idSchool.toString());
+		verify(studentRepository).save(student);
 	}
 
 	@Test

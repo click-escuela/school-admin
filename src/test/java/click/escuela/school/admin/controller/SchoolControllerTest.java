@@ -69,7 +69,7 @@ public class SchoolControllerTest {
 
 		id = "1234";
 		school = School.builder().id(Long.valueOf(id)).name("Colegio Nacional").cellPhone("47589869")
-				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10)
+				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418")
 				.build();
 		schoolApi = SchoolApi.builder().name("Colegio Nacional").cellPhone("1534567890").email("nacio@edu.com.ar")
 				.adress("Zuviria 2412").countCourses(23).build();

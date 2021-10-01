@@ -19,6 +19,7 @@ import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
@@ -50,7 +51,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CourseMessage> create(@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
-			@RequestBody @Validated CourseApi courseApi) throws CourseException {
+			@RequestBody @Validated CourseApi courseApi) throws CourseException, SchoolException {
 		courseService.create(schoolId,courseApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(CourseMessage.CREATE_OK);
 	}

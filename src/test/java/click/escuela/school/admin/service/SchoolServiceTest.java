@@ -46,7 +46,7 @@ public class SchoolServiceTest {
 
 		id = 1L;
 		school = School.builder().id(id).name("Colegio Nacional").cellPhone("47589869")
-				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10)
+				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418")
 				.build();
 		schoolApi = SchoolApi.builder().name("Colegio Nacional").cellPhone("47589869")
 				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").countCourses(10)

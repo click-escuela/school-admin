@@ -38,16 +38,9 @@ public class SchoolServiceImpl implements SchoolServiceGeneric<SchoolApi,SchoolD
 		}
 	}
 	
-	public Optional<School> findById(String id) throws SchoolException {
+	private Optional<School> findById(String id) throws SchoolException {
 		return Optional.of(schoolRepository.findById(Long.valueOf(id)))
 				.orElseThrow(() -> new SchoolException(SchoolMessage.GET_ERROR));
-	}
-	
-	public void update(Student student, String schoolId) throws SchoolException {
-		School school = getById(schoolId);
-		student.setSchool(school);
-		school.getStudents().add(student);
-		schoolRepository.save(school);
 	}
 
 	public School getById(String id) throws SchoolException {

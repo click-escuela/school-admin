@@ -24,11 +24,14 @@ import click.escuela.school.admin.dto.CourseStudentsDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.CourseRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
+import click.escuela.school.admin.service.impl.SchoolServiceImpl;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Mapper.class })
@@ -36,22 +39,27 @@ public class CourseServiceTest {
 
 	@Mock
 	private CourseRepository courseRepository;
+	
+	@Mock
+	private SchoolServiceImpl schoolService;
 
 	private CourseServiceImpl courseServiceImpl = new CourseServiceImpl();
 	private CourseApi courseApi;
 	private UUID id;
-	private String schoolId = "1234";
+	private Long idSchool;
  	private List<String> ids = new ArrayList<>();
 	private List<Course> courses= new ArrayList<>();
 	private List<CourseStudentsDTO> coursesDTO= new ArrayList<>();
 	private List<StudentDTO> students= new ArrayList<>();
 
 	@Before
-	public void setUp() {
+	public void setUp() throws SchoolException {
 		PowerMockito.mockStatic(Mapper.class);
 		PowerMockito.mock(Iterator.class);
-		
-		Course course = Course.builder().id(id).year(6).division("C").countStudent(20).schoolId(12345)
+		idSchool = 1L;
+		School school = new School();
+		school.setId(idSchool);
+		Course course = Course.builder().id(id).year(6).division("C").countStudent(20)
 				.build();
 		Student student = new Student();
 		student.setCourse(course);
@@ -70,13 +78,15 @@ public class CourseServiceTest {
 		Mockito.when(courseRepository.findById(id)).thenReturn(optional);
 		Mockito.when(courseRepository.findAll()).thenReturn(courses);
 		Mockito.when(Mapper.mapperToCoursesStudentDTO(courses)).thenReturn(coursesDTO);
+		Mockito.when(schoolService.getById(idSchool.toString())).thenReturn(school);
 
 		ReflectionTestUtils.setField(courseServiceImpl, "courseRepository", courseRepository);
+		ReflectionTestUtils.setField(courseServiceImpl, "schoolService", schoolService);
 	}
 
 	@Test
-	public void whenCreateIsOk() throws CourseException   {
-		courseServiceImpl.create(schoolId, courseApi);
+	public void whenCreateIsOk() throws CourseException, SchoolException   {
+		courseServiceImpl.create(idSchool.toString(), courseApi);
 		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
@@ -85,7 +95,7 @@ public class CourseServiceTest {
 		CourseApi courseApi = CourseApi.builder().year(10).division("C").build();
 		Mockito.when(courseRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		assertThatExceptionOfType(CourseException.class).isThrownBy(() -> {
-			courseServiceImpl.create(schoolId, courseApi);
+			courseServiceImpl.create(idSchool.toString(), courseApi);
 		}).withMessage(CourseMessage.CREATE_ERROR.getDescription());
 	}
 	

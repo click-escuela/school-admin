@@ -22,6 +22,7 @@ import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Parent;
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.StudentRepository;
 
@@ -42,8 +43,14 @@ public class StudentServiceImpl {
 
 	public void create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
 		exists(studentApi);
-		Student student = Mapper.mapperToStudent(studentApi);
-		schoolService.update(student, schoolId);
+		School school = schoolService.getById(schoolId);
+		try {
+			Student student = Mapper.mapperToStudent(studentApi);
+			student.setSchool(school);
+			studentRepository.save(student);
+		} catch (Exception e) {
+			throw new StudentException(StudentMessage.CREATE_ERROR);
+		}
 	}
 	
 	
@@ -55,7 +62,6 @@ public class StudentServiceImpl {
 	public StudentDTO getById(String schoolId, String id, Boolean fullDetail) throws StudentException {
 		Student student = findByIdAndSchoolId(schoolId, id)
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
-
 		return Boolean.TRUE.equals(fullDetail) ? Mapper.mapperToStudentFullDTO(student)
 				: Mapper.mapperToStudentDTO(student);
 	}
@@ -65,8 +71,8 @@ public class StudentServiceImpl {
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
 	}
 
-	public Optional<Student> findByIdAndSchoolId(String schoolId, String id) throws StudentException {
-		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Long.valueOf(schoolId))
+	public Optional<Student> findByIdAndSchoolId(String school, String id) throws StudentException {
+		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Long.valueOf(school))
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
 	}
 
