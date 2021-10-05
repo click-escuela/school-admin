@@ -37,7 +37,7 @@ public class Bill  {
 	private UUID id;
 
 	@Column(name = "id_school", nullable = false)
-	private Integer schoolId;
+	private UUID schoolId;
 	
 	@Column(name = "month", nullable = false)
 	private Integer month;

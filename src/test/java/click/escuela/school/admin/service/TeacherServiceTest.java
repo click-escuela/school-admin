@@ -67,7 +67,7 @@ public class TeacherServiceTest {
 	private Teacher teacher;
 	private UUID id;
 	private UUID courseId;
-	private Long schoolId;
+	private UUID schoolId;
 	private List<Teacher> teachers;
 	private List<String> listStringIds = new ArrayList<>();
 	private List<Course> courses = new ArrayList<>();
@@ -81,7 +81,7 @@ public class TeacherServiceTest {
 
 		id = UUID.randomUUID();
 		studentId = UUID.randomUUID();
-		schoolId = 1L;
+		schoolId = UUID.randomUUID();
 		courseId = UUID.randomUUID();
 		listStringIds.add(courseId.toString());
 		Course courseEntity = new Course();
@@ -199,7 +199,7 @@ public class TeacherServiceTest {
 
 	@Test
 	public void whenGetBySchoolIsEmpty() throws SchoolException {
-		schoolId = 2L;
+		schoolId = UUID.randomUUID();
 		List<TeacherDTO> listEmpty = teacherServiceImpl.getBySchoolId(schoolId.toString());
 		assertThat(listEmpty).isEmpty();
 	}

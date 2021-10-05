@@ -68,7 +68,7 @@ public class StudentServiceTest {
 	private CourseApi courseApi;
 	private UUID id;
 	private UUID idCourse;
-	private Long idSchool;
+	private UUID idSchool;
 	private UUID parentId;
 	private List<Student> students;
 	private Student student;
@@ -80,7 +80,7 @@ public class StudentServiceTest {
 
 		PowerMockito.mockStatic(Mapper.class);
 
-		idSchool = 1L;
+		idSchool = UUID.randomUUID();
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
 		parentId = UUID.randomUUID();
@@ -209,7 +209,7 @@ public class StudentServiceTest {
 
 	@Test
 	public void whenGetBySchoolIsError() throws TransactionException {
-		idSchool = 6L;
+		idSchool = UUID.randomUUID();
 		Mockito.when(schoolService.getStudentsById(idSchool.toString())).thenReturn(new ArrayList<>());
 		List<StudentDTO> listEmpty = studentServiceImpl.getBySchool(idSchool.toString(), false);
 		assertThat(listEmpty).isEmpty();

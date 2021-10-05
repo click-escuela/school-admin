@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -67,8 +68,8 @@ public class SchoolControllerTest {
 				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		ReflectionTestUtils.setField(schoolController, "schoolService", schoolService);
 
-		id = "1234";
-		school = School.builder().id(Long.valueOf(id)).name("Colegio Nacional").cellPhone("47589869")
+		id = UUID.randomUUID().toString();
+		school = School.builder().id(UUID.fromString(id)).name("Colegio Nacional").cellPhone("47589869")
 				.email("colegionacional@edu.gob.com").adress("Entre Rios 1418").students(new ArrayList<>()).courses(new ArrayList<>())
 				.build();
 		schoolApi = SchoolApi.builder().name("Colegio Nacional").cellPhone("1534567890").email("nacio@edu.com.ar")

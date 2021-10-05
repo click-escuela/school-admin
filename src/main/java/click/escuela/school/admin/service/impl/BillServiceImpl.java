@@ -47,7 +47,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	public void create(String schoolId, String id, BillApi billApi) throws BillException {
 		try {
 			Bill bill = Mapper.mapperToBill(billApi);
-			bill.setSchoolId(Integer.valueOf(schoolId));
+			bill.setSchoolId(UUID.fromString(schoolId));
 			bill.setStatus(PaymentStatus.PENDING);
 			Student student = studentService.findByIdAndSchoolId(schoolId, id)
 					.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
@@ -69,7 +69,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 	}
 
 	public Bill findById(String billId, String schoolId) throws BillException {
-		return billRepository.findByIdAndSchoolId(UUID.fromString(billId), Integer.valueOf(schoolId))
+		return billRepository.findByIdAndSchoolId(UUID.fromString(billId),UUID.fromString(schoolId))
 				.orElseThrow(() -> new BillException(BillEnum.GET_ERROR));
 	}
 
@@ -101,7 +101,7 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 
 	public void updatePayment(String schoolId, String billId, BillStatusApi billStatusApi) throws TransactionException {
 		Bill bill = findById(billId, schoolId);
-		bill.setSchoolId(Integer.valueOf(schoolId));
+		bill.setSchoolId(UUID.fromString(schoolId));
 		bill.setStatus(Mapper.mapperToEnumPaymentStatus(billStatusApi.getStatus()));
 		bill.setYear(LocalDate.now().getYear());
 		bill.setMonth(LocalDate.now().getMonthValue());

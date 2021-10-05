@@ -64,7 +64,7 @@ public class TeacherServiceImpl {
 	}
 	
 	public Optional<Teacher> findByIdAndSchoolId(String idTeacher, String schoolId) throws TeacherException {
-		return Optional.of(teacherRepository.findByIdAndSchoolId(UUID.fromString(idTeacher),  Long.valueOf(schoolId))
+		return Optional.of(teacherRepository.findByIdAndSchoolId(UUID.fromString(idTeacher),  UUID.fromString(schoolId))
 				.orElseThrow(() -> new TeacherException(TeacherMessage.GET_ERROR)));
 	}
 

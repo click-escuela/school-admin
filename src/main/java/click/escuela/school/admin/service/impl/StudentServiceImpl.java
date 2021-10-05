@@ -72,7 +72,7 @@ public class StudentServiceImpl {
 	}
 
 	public Optional<Student> findByIdAndSchoolId(String school, String id) throws StudentException {
-		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), Long.valueOf(school))
+		return Optional.of(studentRepository.findByIdAndSchoolId(UUID.fromString(id), UUID.fromString(school))
 				.orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR)));
 	}
 

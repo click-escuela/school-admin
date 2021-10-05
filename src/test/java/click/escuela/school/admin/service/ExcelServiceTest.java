@@ -44,7 +44,7 @@ public class ExcelServiceTest {
 	private ExcelServiceImpl excelServiceImpl = new ExcelServiceImpl();
 	private ExcelApi excelApi;
 	private UUID id;
-	private Long idSchool;
+	private UUID idSchool;
 	private List<Excel> excels;
 	private Excel excel;
 
@@ -52,7 +52,7 @@ public class ExcelServiceTest {
 	public void setUp() throws CourseException, SchoolException {
 		PowerMockito.mockStatic(Mapper.class);
 
-		idSchool = 1L;
+		idSchool = UUID.randomUUID();
 		School school = new School();
 		school.setId(idSchool);
 		id = UUID.randomUUID();

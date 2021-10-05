@@ -1,15 +1,17 @@
 package click.escuela.school.admin.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +29,10 @@ import lombok.Setter;
 public class School {
 
 	@Id
-	@Column(name = "id_school")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@Column(name = "id_school", columnDefinition = "BINARY(16)")
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	private UUID id;
 
 	@Column(name = "name", nullable = false)
 	private String name;

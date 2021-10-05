@@ -2,6 +2,7 @@ package click.escuela.school.admin.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class SchoolServiceImpl implements SchoolServiceGeneric<SchoolApi,SchoolD
 	}
 	
 	private Optional<School> findById(String id) throws SchoolException {
-		return Optional.of(schoolRepository.findById(Long.valueOf(id)))
+		return Optional.of(schoolRepository.findById(UUID.fromString(id)))
 				.orElseThrow(() -> new SchoolException(SchoolMessage.GET_ERROR));
 	}
 

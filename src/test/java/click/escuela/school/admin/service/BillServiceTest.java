@@ -79,7 +79,7 @@ public class BillServiceTest {
 	private Bill bill;
 	private UUID id = UUID.randomUUID();
 	private UUID studentId = UUID.randomUUID();
-	private Integer schoolId = 1234;
+	private UUID schoolId = UUID.randomUUID();
 	private List<Bill> bills;
 	private BillStatusApi billStatus = new BillStatusApi();
 
@@ -87,7 +87,7 @@ public class BillServiceTest {
 	public void setUp() throws TransactionException, StudentException {
 		PowerMockito.mockStatic(Mapper.class);
 		School school = new School();
-		school.setId(schoolId.longValue());
+		school.setId(schoolId);
 		Student student = Student.builder().id(studentId).school(school).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(new Course()).build();
@@ -122,7 +122,7 @@ public class BillServiceTest {
 
 	@Test
 	public void whenCreateIsOk() throws BillException, StudentException {
-		billServiceImpl.create("1234", studentId.toString(), billApi);
+		billServiceImpl.create(schoolId.toString(), studentId.toString(), billApi);
 		verify(billRepository).save(bill);
 	}
 

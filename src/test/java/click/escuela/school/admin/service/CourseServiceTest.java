@@ -46,7 +46,7 @@ public class CourseServiceTest {
 	private CourseServiceImpl courseServiceImpl = new CourseServiceImpl();
 	private CourseApi courseApi;
 	private UUID id;
-	private Long idSchool;
+	private UUID idSchool;
  	private List<String> ids = new ArrayList<>();
 	private List<Course> courses= new ArrayList<>();
 	private List<CourseStudentsDTO> coursesDTO= new ArrayList<>();
@@ -56,7 +56,7 @@ public class CourseServiceTest {
 	public void setUp() throws SchoolException {
 		PowerMockito.mockStatic(Mapper.class);
 		PowerMockito.mock(Iterator.class);
-		idSchool = 1L;
+		idSchool = UUID.randomUUID();
 		School school = new School();
 		school.setId(idSchool);
 		Course course = Course.builder().id(id).year(6).division("C").countStudent(20)
