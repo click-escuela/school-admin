@@ -1,6 +1,7 @@
 package click.escuela.school.admin.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -60,4 +62,7 @@ public class Parent{
 	
 	@Column(name = "has_profile", nullable = true)
 	private Integer hasProfile;
+	
+	@OneToMany(mappedBy="parent", cascade={CascadeType.ALL})
+	private List<Student> students;
 }

@@ -68,6 +68,12 @@ public class StudentServiceTest {
 	private Student student;
 	private Course course;
 	private List<UUID> uuids;
+	private String name = "Patrick";
+	private String surname = "Brown";
+	private String document = "256936985";
+	private GenderType gender = GenderType.MALE;
+	private Parent parent = new Parent();
+	private Optional<Parent> optionalParent;
 
 	@Before
 	public void setUp() throws CourseException, ParentException {
@@ -78,13 +84,21 @@ public class StudentServiceTest {
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
 		parentId = UUID.randomUUID();
-		Parent parent = new Parent();
+		
 		parent.setId(parentId);
+		parent.setName(name);
+		parent.setName(surname);
+		parent.setDocument(document);
+		parent.setGender(gender);
 		course = Course.builder().id(idCourse).year(6).division("C").countStudent(20).schoolId(12345).build();
 		student = Student.builder().id(id).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(parent).course(course).build();
 		ParentApi parentApi = new ParentApi();
+		parentApi.setName(name);
+		parentApi.setSurname(surname);
+		parentApi.setDocument(document);
+		parentApi.setGender(gender.toString());
 		parentApi.setAdressApi(new AdressApi());
 		studentApi = StudentApi.builder().adressApi(new AdressApi()).birthday(LocalDate.now()).cellPhone("4534543")
 				.division("C").grade("3°").document("435345").email("oscar@gmail.com")
@@ -92,7 +106,7 @@ public class StudentServiceTest {
 				.parentApi(parentApi).build();
 		Optional<Student> optional = Optional.of(student);
 		Optional<Course> optionalCourse = Optional.of(course);
-		Optional<Parent> optionalParent = Optional.of(parent);
+		optionalParent = Optional.of(parent);
 		students = new ArrayList<>();
 		students.add(student);
 		courseApi = CourseApi.builder().year(8).division("B").build();
@@ -113,7 +127,7 @@ public class StudentServiceTest {
 		Mockito.when(courseService.findById(idCourse.toString())).thenReturn(optionalCourse);
 		Mockito.when(parentService.findById(parentId.toString())).thenReturn(optionalParent);
 		Mockito.when(studentRepository.findByParentId(parentId)).thenReturn(students);
-		
+
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
 		ReflectionTestUtils.setField(studentServiceImpl, "courseService", courseService);
 		ReflectionTestUtils.setField(studentServiceImpl, "parentService", parentService);
@@ -121,9 +135,17 @@ public class StudentServiceTest {
 
 	@Test
 	public void whenCreateIsOk() throws StudentException {
+		Mockito.when(parentService.findByOptions(parent.getName(), parent.getSurname(), parent.getDocument(), parent.getGender())).thenReturn(optionalParent);
 		studentServiceImpl.create(idSchool.toString(), studentApi);
 		verify(studentRepository).save(student);
 	}
+	
+	@Test
+	public void whenCreateIsOkTwo() throws StudentException {
+		studentServiceImpl.create(idSchool.toString(), studentApi);
+		verify(studentRepository).save(student);
+	}
+	
 
 	@Test
 	public void whenUpdateOk() throws StudentException {
