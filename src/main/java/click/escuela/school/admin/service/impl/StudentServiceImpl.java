@@ -47,6 +47,7 @@ public class StudentServiceImpl {
 		try {
 			Student student = Mapper.mapperToStudent(studentApi);
 			student.setSchool(school);
+			student = checkParent(student); 
 			studentRepository.save(student);
 		} catch (Exception e) {
 			throw new StudentException(StudentMessage.CREATE_ERROR);
@@ -57,6 +58,15 @@ public class StudentServiceImpl {
 	public void update(String schoolId, StudentApi studentApi) throws StudentException {
 		Student student = findByIdAndSchoolId(schoolId,studentApi.getId()).orElseThrow(() -> new StudentException(StudentMessage.GET_ERROR));
 		studentRepository.save(Mapper.mapperToStudent(studentApi, student));
+	}
+	
+	private Student checkParent(Student student) {
+		Parent parent = student.getParent();
+		Optional<Parent> optionalParent = parentService.findByOptions(parent.getName(), parent.getSurname(), parent.getDocument(), parent.getGender());
+		if(optionalParent.isPresent()) {
+			student.setParent(optionalParent.get());
+		}
+		return student;
 	}
 
 	public StudentDTO getById(String schoolId, String id, Boolean fullDetail) throws StudentException {
