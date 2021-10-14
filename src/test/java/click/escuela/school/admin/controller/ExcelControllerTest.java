@@ -72,13 +72,13 @@ public class ExcelControllerTest {
 
 		idExcel = UUID.randomUUID();
 		idSchool = 1234;
-		excelApi = ExcelApi.builder().name("Archivo").file("Archivo.excel").studentCount(20).schoolId(idSchool).build();
+		excelApi = ExcelApi.builder().name("Archivo").file("Archivo.excel").studentCount(20).build();
 		Excel excel = Excel.builder().id(idExcel).name("Archivo").date(LocalDate.now()).file("Archivo.excel")
-				.studentCount(20).status(FileStatus.PENDING).schoolId(idSchool).build();
+				.studentCount(20).status(FileStatus.PENDING).build();
 		List<Excel> excels = new ArrayList<>();
 		excels.add(excel);
 
-		doNothing().when(excelService).save(Mockito.any());
+		doNothing().when(excelService).save(Mockito.anyString(),Mockito.any());
 		Mockito.when(excelService.getAll()).thenReturn(Mapper.mapperToExcelsDTO(excels));
 	}
 
@@ -95,12 +95,6 @@ public class ExcelControllerTest {
 				.contains(Validation.NAME_EMPTY.getDescription());
 	}
 
-	@Test
-	public void whenCreateErrorSchoolNull() throws JsonProcessingException, Exception {
-		excelApi.setSchoolId(null);
-		assertThat(resultExcelApi(post("/school/{schoolId}/excel", idSchool.toString())))
-				.contains(Validation.SCHOOL_ID_NULL.getDescription());
-	}
 
 	@Test
 	public void whenCreateErrorFileEMpty() throws JsonProcessingException, Exception {
@@ -118,7 +112,7 @@ public class ExcelControllerTest {
 
 	@Test
 	public void whenCreateErrorService() throws JsonProcessingException, Exception {
-		doThrow(new ExcelException(ExcelMessage.CREATE_ERROR)).when(excelService).save(Mockito.any());
+		doThrow(new ExcelException(ExcelMessage.CREATE_ERROR)).when(excelService).save(Mockito.anyString(),Mockito.any());
 		assertThat(resultExcelApi(post("/school/{schoolId}/excel", idSchool.toString())))
 				.contains(ExcelMessage.CREATE_ERROR.getDescription());
 	}

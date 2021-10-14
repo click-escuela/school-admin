@@ -22,6 +22,7 @@ import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.dto.StudentParentDTO;
 import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.ParentException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
@@ -60,7 +61,7 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDTO.class))) })
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<StudentDTO>> getBySchool(
-			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId, @RequestParam("fullDetail") Boolean fullDetail) {
+			@Parameter(name = "School id", required = true) @PathVariable("schoolId") String schoolId, @RequestParam("fullDetail") Boolean fullDetail) throws SchoolException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.getBySchool(schoolId, fullDetail));
 	}
 	
@@ -88,7 +89,7 @@ public class StudentController {
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> create(
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
-			@RequestBody @Validated StudentApi studentApi) throws StudentException {
+			@RequestBody @Validated StudentApi studentApi) throws StudentException, SchoolException {
 		studentService.create(schoolId, studentApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.CREATE_OK);
 	}
@@ -100,7 +101,6 @@ public class StudentController {
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
 			@RequestBody @Validated StudentApi studentApi) throws StudentException {
 		studentService.update(schoolId, studentApi);
-
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.UPDATE_OK);
 	}
 
@@ -108,8 +108,7 @@ public class StudentController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@DeleteMapping(value = "/{studentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<StudentMessage> delete(
-			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId) throws StudentException {
-
+			@Parameter(name = "Student id", required = true) @PathVariable("studentId") String studentId) {
 		studentService.delete(studentId);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.DELETE_OK);
 	}

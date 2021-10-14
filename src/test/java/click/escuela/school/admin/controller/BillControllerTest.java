@@ -67,7 +67,7 @@ public class BillControllerTest {
 	private Bill bill;
 	private UUID id;
 	private UUID studentId;
-	private Integer schoolId;
+	private UUID schoolId;
 	private List<Bill> bills;
 	private static String EMPTY = "";
 	private BillStatusApi billStatus = new BillStatusApi();
@@ -82,7 +82,7 @@ public class BillControllerTest {
 
 		studentId = UUID.randomUUID();
 		id = UUID.randomUUID();
-		schoolId = 1234;
+		schoolId = UUID.randomUUID();
 		bill = Bill.builder().id(id).schoolId(schoolId).year(2021).month(6).status(PaymentStatus.PENDING)
 				.student(new Student()).file("Mayo").amount((double) 12000).build();
 		billStatus.setStatus(PaymentStatus.CANCELED.name());
@@ -222,7 +222,7 @@ public class BillControllerTest {
 
 	@Test
 	public void getBillsByStudentIdIsEmpty() throws Exception {
-		schoolId = 6666;
+		schoolId = UUID.randomUUID();
 		studentId = UUID.randomUUID();
 		doThrow(NullPointerException.class).when(billService).findBills(schoolId.toString(), studentId.toString(),
 				PaymentStatus.PENDING.toString(), 6, 2021);

@@ -8,6 +8,6 @@ import click.escuela.school.admin.model.Bill;
 
 public interface BillRepository extends JpaRepository<Bill, UUID> {
 
-	Optional<Bill> findByIdAndSchoolId(UUID fromString, Integer valueOf);
+	Optional<Bill> findByIdAndSchoolId(UUID id, UUID schoolId);
 
 }

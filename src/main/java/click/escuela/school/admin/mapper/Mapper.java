@@ -270,7 +270,10 @@ public class Mapper {
 	}
 
 	private static SchoolDTO mapperToSchool(School school) {
-		return modelMapper.map(school, SchoolDTO.class);
+		SchoolDTO schoolDTO = modelMapper.map(school, SchoolDTO.class);
+		schoolDTO.setCountCourses(school.getCourses().size());
+		schoolDTO.setCountStudent(school.getStudents().size());
+		return schoolDTO;
 	}
 
 	// Excel
