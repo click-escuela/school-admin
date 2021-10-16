@@ -82,7 +82,7 @@ public class BillController {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(value = "/automatic", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BillEnum> automaticCreation(
-			@RequestBody @Validated BillApi billApi) throws BillException {
+			@RequestBody @Validated BillApi billApi){
 		billService.automaticCreation(billApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.CREATE_OK);
 	}
