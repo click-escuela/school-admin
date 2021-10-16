@@ -108,19 +108,16 @@ public class BillServiceImpl implements BillServiceGeneric<BillApi, BillDTO> {
 		billRepository.save(bill);
 	}
 
-	public void automaticCreation(BillApi billApi) throws BillException {
-		try {
+	public void automaticCreation(BillApi billApi) {
 			List<Student> students = studentService.getAll();
 			students.stream().forEach( student -> {
 				Bill bill = Mapper.mapperToBill(billApi);
 				bill.setSchoolId(student.getSchool().getId());
 				bill.setStatus(PaymentStatus.PENDING);
 				bill.setStudent(student);
+				bill.setFile(bill.getFile() + ": "+student.getName()+" "+student.getSurname());
 				billRepository.save(bill);
 			});
-		} catch (Exception e) {
-			throw new BillException(BillEnum.CREATE_ERROR);
-		}
 	}
 
 }
