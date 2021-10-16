@@ -136,6 +136,10 @@ public class StudentServiceImpl {
 	public List<StudentDTO> findAll() {
 		return Mapper.mapperToStudentsDTO(studentRepository.findAll());
 	}
+	
+	public List<Student> getAll() {
+		return studentRepository.findAll();
+	}
 
 	public void exists(StudentApi student) throws StudentException {
 
