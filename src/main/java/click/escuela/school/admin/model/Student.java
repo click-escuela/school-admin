@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -56,9 +57,10 @@ public class Student {
 	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private GenderType gender;
-
-	@Column(name = "school_id", nullable = false)
-	private Integer schoolId;
+	
+	@ManyToOne()
+    @JoinColumn(name = "id_school", referencedColumnName="id_school")
+    private School school;
 
 	@Column(name = "grade", nullable = false)
 	private String grade;
