@@ -281,6 +281,17 @@ public class BillControllerTest {
 				new TypeReference<List<BillDTO>>() {}).get(0).getId()).contains(id.toString());
 	}
 
+	@Test
+	public void whenAutomaticCreationIsOk() throws JsonProcessingException, Exception {
+		MvcResult result = mockMvc
+				.perform(post("/school/{schoolId}/bill/automatic", "123")
+						.contentType(MediaType.APPLICATION_JSON).content(toJson(billApi)))
+				.andExpect(status().is2xxSuccessful()).andReturn();
+		String response = result.getResponse().getContentAsString();
+		assertThat(response).contains(BillEnum.CREATE_OK.name());
+
+	}
+	
 	private String toJson(final Object obj) throws JsonProcessingException {
 		return mapper.writeValueAsString(obj);
 	}

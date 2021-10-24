@@ -138,6 +138,7 @@ public class StudentServiceTest {
 		Mockito.when(studentRepository.findByParentId(parentId)).thenReturn(students);
 		Mockito.when(schoolService.getById(idSchool.toString())).thenReturn(school);
 		Mockito.when(schoolService.getStudentsById(idSchool.toString())).thenReturn(students);
+		Mockito.when(studentRepository.findAll()).thenReturn(students);
 
 
 		ReflectionTestUtils.setField(studentServiceImpl, "studentRepository", studentRepository);
@@ -214,6 +215,12 @@ public class StudentServiceTest {
 	public void whenGetByIdIsOK() throws TransactionException {
 		studentServiceImpl.getById(idSchool.toString(),id.toString(), false);
 		verify(studentRepository).findByIdAndSchoolId(id, idSchool);
+	}
+	
+	@Test
+	public void whenGetAllIsOK() {
+		studentServiceImpl.getAll();
+		verify(studentRepository).findAll();
 	}
 
 	@Test

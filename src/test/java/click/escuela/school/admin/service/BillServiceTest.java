@@ -102,6 +102,8 @@ public class BillServiceTest {
 				.file("Mayo").amount((double) 12000).build();
 		List<BillDTO> billsDTO = new ArrayList<>();
 		billsDTO.add(billDTO);
+		List<Student> students = new ArrayList<>();
+		students.add(student);
 		
 		Mockito.when(studentService.findById(studentId.toString())).thenReturn(Optional.of(student));
 		Mockito.when(studentService.findByIdAndSchoolId(schoolId.toString(),studentId.toString())).thenReturn(Optional.of(student));
@@ -110,7 +112,8 @@ public class BillServiceTest {
 		Mockito.when(billRepository.save(bill)).thenReturn(bill);
 		Mockito.when(billRepository.findByIdAndSchoolId(id,schoolId)).thenReturn(optional);
 		Mockito.when(billRepository.findAll()).thenReturn(bills);
-
+		Mockito.when(studentService.getAll()).thenReturn(students);
+		
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(billServiceImpl, "billRepository", billRepository);
 
@@ -149,6 +152,24 @@ public class BillServiceTest {
 		boolean hasError = false;
 		try {
 			billServiceImpl.findBills("1234", studentId.toString(), PaymentStatus.PENDING.toString(), 2, 2021);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isFalse();
+	}
+	
+	@Test
+	public void whenFindBillsIsOkButStatusNull() {
+		Mockito.when(information.getJavaType()).thenReturn(Bill.class);
+		Mockito.when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
+		Mockito.when(criteriaBuilder.createQuery(Bill.class)).thenReturn(query);
+		Mockito.when(entityManager.createQuery(query)).thenReturn(typedQuery);
+		Mockito.when(query.from(Bill.class)).thenReturn(root);
+		Mockito.when(query.select(root)).thenReturn(query);
+
+		boolean hasError = false;
+		try {
+			billServiceImpl.findBills("1234", studentId.toString(), null, 2, 2021);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -205,6 +226,12 @@ public class BillServiceTest {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			billServiceImpl.updatePayment(schoolId.toString(), id.toString(), billStatus);
 		}).withMessage(BillEnum.GET_ERROR.getDescription());
+	}
+	
+	@Test
+	public void whenAutomaticCreationIsOk() throws BillException, StudentException {
+		billServiceImpl.automaticCreation(billApi);
+		verify(billRepository).save(bill);
 	}
 	
 }
