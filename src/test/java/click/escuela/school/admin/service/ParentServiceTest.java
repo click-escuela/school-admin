@@ -36,6 +36,7 @@ public class ParentServiceTest {
 	private String document = "256936985";
 	private GenderType gender = GenderType.MALE;
 
+
 	@Before
 	public void setUp() {
 
@@ -52,6 +53,7 @@ public class ParentServiceTest {
 		Optional<Parent> optional = Optional.of(parent);
 		Mockito.when(parentRepository.findById(id)).thenReturn(optional);
 		Mockito.when(parentRepository.findByNameAndSurnameAndDocumentAndGender(name, surname, document, gender)).thenReturn(optional);
+
 		
 		ReflectionTestUtils.setField(parentServiceImpl, "parentRepository", parentRepository);
 	}
@@ -67,6 +69,7 @@ public class ParentServiceTest {
 	public void whenGetByOptionsIsOK() throws ParentException {
 		parentServiceImpl.findByOptions(name, surname, document, gender);
 		verify(parentRepository).findByNameAndSurnameAndDocumentAndGender(name, surname, document, gender);
+
 	}
 	
 }

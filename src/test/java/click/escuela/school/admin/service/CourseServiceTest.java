@@ -87,6 +87,7 @@ public class CourseServiceTest {
 	@Test
 	public void whenCreateIsOk() throws CourseException, SchoolException   {
 		courseServiceImpl.create(idSchool.toString(), courseApi);
+
 		verify(courseRepository).save(Mapper.mapperToCourse(courseApi));
 	}
 
@@ -96,6 +97,7 @@ public class CourseServiceTest {
 		Mockito.when(courseRepository.save(null)).thenThrow(IllegalArgumentException.class);
 		assertThatExceptionOfType(CourseException.class).isThrownBy(() -> {
 			courseServiceImpl.create(idSchool.toString(), courseApi);
+
 		}).withMessage(CourseMessage.CREATE_ERROR.getDescription());
 	}
 	

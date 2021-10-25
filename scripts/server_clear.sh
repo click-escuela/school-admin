@@ -7,4 +7,3 @@ sudo rm -rf /home/ec2-user/server/school-admin/server_stop.sh
 sudo rm -rf /home/ec2-user/server/school-admin/fix_privileges.sh
 sudo rm -rf /home/ec2-user/server/school-admin/server_prestart.sh
 sudo rm -rf /home/ec2-user/server/school-admin/server_clear.sh
-

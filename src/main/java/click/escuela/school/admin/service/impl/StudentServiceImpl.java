@@ -23,6 +23,7 @@ import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Parent;
 import click.escuela.school.admin.model.School;
+
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.StudentRepository;
 
@@ -40,6 +41,7 @@ public class StudentServiceImpl {
 	
 	@Autowired
 	private SchoolServiceImpl schoolService;
+
 
 	public void create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
 		exists(studentApi);
@@ -107,9 +109,9 @@ public class StudentServiceImpl {
 		}
 		studentRepository.save(student);
 	}
-
-	
+  
 	public void delete(String id){
+
 		studentRepository.deleteById(UUID.fromString(id));
 	}
 

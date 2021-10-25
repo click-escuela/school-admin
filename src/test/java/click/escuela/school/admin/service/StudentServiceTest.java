@@ -33,6 +33,7 @@ import click.escuela.school.admin.enumerator.StudentMessage;
 import click.escuela.school.admin.exception.CourseException;
 import click.escuela.school.admin.exception.ParentException;
 import click.escuela.school.admin.exception.SchoolException;
+
 import click.escuela.school.admin.exception.StudentException;
 import click.escuela.school.admin.exception.TransactionException;
 import click.escuela.school.admin.mapper.Mapper;
@@ -45,6 +46,7 @@ import click.escuela.school.admin.repository.StudentRepository;
 import click.escuela.school.admin.service.impl.CourseServiceImpl;
 import click.escuela.school.admin.service.impl.ParentServiceImpl;
 import click.escuela.school.admin.service.impl.SchoolServiceImpl;
+
 import click.escuela.school.admin.service.impl.StudentServiceImpl;
 
 @RunWith(PowerMockRunner.class)
@@ -63,12 +65,14 @@ public class StudentServiceTest {
 	@Mock
 	private SchoolServiceImpl schoolService;
 
+
 	private StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
 	private StudentApi studentApi;
 	private CourseApi courseApi;
 	private UUID id;
 	private UUID idCourse;
 	private UUID idSchool;
+
 	private UUID parentId;
 	private List<Student> students;
 	private Student student;
@@ -84,13 +88,13 @@ public class StudentServiceTest {
 	@Before
 	public void setUp() throws CourseException, ParentException, SchoolException {
 
+
 		PowerMockito.mockStatic(Mapper.class);
 
 		idSchool = UUID.randomUUID();
 		id = UUID.randomUUID();
 		idCourse = UUID.randomUUID();
-		parentId = UUID.randomUUID();
-		
+		parentId = UUID.randomUUID();		
 		parent.setId(parentId);
 		parent.setName(name);
 		parent.setName(surname);
@@ -116,6 +120,7 @@ public class StudentServiceTest {
 		Optional<Student> optional = Optional.of(student);
 		Optional<Course> optionalCourse = Optional.of(course);
 		optionalParent = Optional.of(parent);
+
 		students = new ArrayList<>();
 		students.add(student);
 		courseApi = CourseApi.builder().year(8).division("B").build();
@@ -145,6 +150,7 @@ public class StudentServiceTest {
 		ReflectionTestUtils.setField(studentServiceImpl, "courseService", courseService);
 		ReflectionTestUtils.setField(studentServiceImpl, "parentService", parentService);
 		ReflectionTestUtils.setField(studentServiceImpl, "schoolService", schoolService);
+
 	}
 
 	@Test
