@@ -11,21 +11,25 @@ import click.escuela.school.admin.api.CourseApi;
 import click.escuela.school.admin.dto.CourseDTO;
 import click.escuela.school.admin.enumerator.CourseMessage;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Course;
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.repository.CourseRepository;
-import click.escuela.school.admin.service.CourseServiceGeneric;
 
 @Service
-public class CourseServiceImpl implements CourseServiceGeneric<CourseApi> {
+public class CourseServiceImpl{
 	@Autowired
 	private CourseRepository courseRepository;
 	
-	@Override
-	public void create(String schoolId, CourseApi courserApi) throws CourseException {
+	@Autowired
+	private SchoolServiceImpl schoolService;
+	
+	public void create(String schoolId, CourseApi courserApi) throws CourseException, SchoolException {
+		School school = schoolService.getById(schoolId);
 		try {
 			Course course = Mapper.mapperToCourse(courserApi);
-			course.setSchoolId(Integer.valueOf(schoolId));
+			course.setSchool(school);
 			course.setCountStudent(0);
 			courseRepository.save(course);
 		} catch (Exception e) {

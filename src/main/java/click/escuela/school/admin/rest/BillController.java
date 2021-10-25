@@ -78,6 +78,15 @@ public class BillController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.CREATE_OK);
 	}
 	
+	@Operation(summary = "Automatic Bills Creation ", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
+	@PostMapping(value = "/automatic", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BillEnum> automaticCreation(
+			@RequestBody @Validated BillApi billApi){
+		billService.automaticCreation(billApi);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(BillEnum.CREATE_OK);
+	}
+	
 	@Operation(summary = "Update Payment Bill", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(value = "/{billId}", produces = { MediaType.APPLICATION_JSON_VALUE })

@@ -40,7 +40,7 @@ public class BillApi {
 	private Double amount;
 
 	@NotBlank(message = "File cannot be empty")
-	@Size(max = 10, message = "File must be 50 characters")
+	@Size(max = 50, message = "File must be 50 characters")
 	@JsonProperty(value = "file", required = true)
 	private String file;
 	

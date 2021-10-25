@@ -42,6 +42,7 @@ import click.escuela.school.admin.enumerator.GenderType;
 import click.escuela.school.admin.enumerator.TeacherMessage;
 import click.escuela.school.admin.enumerator.Validation;
 import click.escuela.school.admin.exception.CourseException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.exception.TeacherException;
 import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Adress;
@@ -76,7 +77,7 @@ public class TeacherControllerTest {
 	private List<CourseStudentsShortDTO> courses = new ArrayList<>();
 
 	@Before
-	public void setUp() throws TeacherException, CourseException {
+	public void setUp() throws TeacherException, CourseException, SchoolException {
 		mockMvc = MockMvcBuilders.standaloneSetup(teacherController).setControllerAdvice(new Handler()).build();
 		mapper = new ObjectMapper().findAndRegisterModules().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 				.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false)
@@ -101,7 +102,7 @@ public class TeacherControllerTest {
 				.cellPhone("1589632485").email("mariAna@gmail.com").adressApi(adressApi).build();
 		Teacher teacher = Teacher.builder().id(UUID.fromString(id)).gender(GenderType.FEMALE).name("Mariana")
 				.surname("Lopez").birthday(LocalDate.now()).documentType(DocumentType.DNI).document("25897863")
-				.cellPhone("1589632485").email("mariAna@gmail.com").courses(course).schoolId(Integer.valueOf(schoolId))
+				.cellPhone("1589632485").email("mariAna@gmail.com").courses(course)
 				.adress(new Adress()).build();
 		List<Teacher> teachers = new ArrayList<>();
 		teachers.add(teacher);

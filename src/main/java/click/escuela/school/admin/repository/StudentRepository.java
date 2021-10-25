@@ -11,7 +11,7 @@ import click.escuela.school.admin.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, UUID> {
 
-	public List<Student> findBySchoolId(Integer school);
+	public List<Student> findBySchoolId(UUID school);
 
 	public Optional<Student> findByDocumentAndGender(String document, GenderType gender);
 
@@ -21,6 +21,6 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
 	
 	public List<Student> findByParentId(UUID parentId);
 
-	public Optional<Student> findByIdAndSchoolId(UUID id, Integer schoolId);
+	public Optional<Student> findByIdAndSchoolId(UUID id, UUID schoolId);
 
 }

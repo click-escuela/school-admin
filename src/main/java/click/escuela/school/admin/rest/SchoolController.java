@@ -17,7 +17,7 @@ import click.escuela.school.admin.api.SchoolApi;
 import click.escuela.school.admin.dto.SchoolDTO;
 import click.escuela.school.admin.dto.StudentDTO;
 import click.escuela.school.admin.enumerator.SchoolMessage;
-import click.escuela.school.admin.exception.TransactionException;
+import click.escuela.school.admin.exception.SchoolException;
 import click.escuela.school.admin.service.impl.SchoolServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,8 +34,7 @@ public class SchoolController {
 	@Operation(summary = "Create School", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<SchoolMessage> create(@RequestBody @Validated SchoolApi schoolApi)
-			throws TransactionException {
+	public ResponseEntity<SchoolMessage> create(@RequestBody @Validated SchoolApi schoolApi) throws SchoolException {
 		schoolService.create(schoolApi);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(SchoolMessage.CREATE_OK);
 	}

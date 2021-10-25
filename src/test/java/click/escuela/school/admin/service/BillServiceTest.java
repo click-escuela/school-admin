@@ -41,6 +41,7 @@ import click.escuela.school.admin.mapper.Mapper;
 import click.escuela.school.admin.model.Bill;
 import click.escuela.school.admin.model.Course;
 import click.escuela.school.admin.model.Parent;
+import click.escuela.school.admin.model.School;
 import click.escuela.school.admin.model.Student;
 import click.escuela.school.admin.repository.BillRepository;
 import click.escuela.school.admin.service.impl.BillServiceImpl;
@@ -78,15 +79,16 @@ public class BillServiceTest {
 	private Bill bill;
 	private UUID id = UUID.randomUUID();
 	private UUID studentId = UUID.randomUUID();
-	private Integer schoolId = 1234;
+	private UUID schoolId = UUID.randomUUID();
 	private List<Bill> bills;
 	private BillStatusApi billStatus = new BillStatusApi();
 
 	@Before
 	public void setUp() throws TransactionException, StudentException {
 		PowerMockito.mockStatic(Mapper.class);
-		
-		Student student = Student.builder().id(studentId).schoolId(schoolId).absences(3).birthday(LocalDate.now()).cellPhone("535435")
+		School school = new School();
+		school.setId(schoolId);
+		Student student = Student.builder().id(studentId).school(school).absences(3).birthday(LocalDate.now()).cellPhone("535435")
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(new Course()).build();
 		bill = Bill.builder().id(id).year(2021).month(6).status(PaymentStatus.PENDING).student(student).file("Mayo")
@@ -100,6 +102,8 @@ public class BillServiceTest {
 				.file("Mayo").amount((double) 12000).build();
 		List<BillDTO> billsDTO = new ArrayList<>();
 		billsDTO.add(billDTO);
+		List<Student> students = new ArrayList<>();
+		students.add(student);
 		
 		Mockito.when(studentService.findById(studentId.toString())).thenReturn(Optional.of(student));
 		Mockito.when(studentService.findByIdAndSchoolId(schoolId.toString(),studentId.toString())).thenReturn(Optional.of(student));
@@ -108,7 +112,8 @@ public class BillServiceTest {
 		Mockito.when(billRepository.save(bill)).thenReturn(bill);
 		Mockito.when(billRepository.findByIdAndSchoolId(id,schoolId)).thenReturn(optional);
 		Mockito.when(billRepository.findAll()).thenReturn(bills);
-
+		Mockito.when(studentService.getAll()).thenReturn(students);
+		
 		// inyecta en el servicio el objeto repository
 		ReflectionTestUtils.setField(billServiceImpl, "billRepository", billRepository);
 
@@ -120,7 +125,7 @@ public class BillServiceTest {
 
 	@Test
 	public void whenCreateIsOk() throws BillException, StudentException {
-		billServiceImpl.create("1234", studentId.toString(), billApi);
+		billServiceImpl.create(schoolId.toString(), studentId.toString(), billApi);
 		verify(billRepository).save(bill);
 	}
 
@@ -147,6 +152,24 @@ public class BillServiceTest {
 		boolean hasError = false;
 		try {
 			billServiceImpl.findBills("1234", studentId.toString(), PaymentStatus.PENDING.toString(), 2, 2021);
+		} catch (Exception e) {
+			hasError = true;
+		}
+		assertThat(hasError).isFalse();
+	}
+	
+	@Test
+	public void whenFindBillsIsOkButStatusNull() {
+		Mockito.when(information.getJavaType()).thenReturn(Bill.class);
+		Mockito.when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
+		Mockito.when(criteriaBuilder.createQuery(Bill.class)).thenReturn(query);
+		Mockito.when(entityManager.createQuery(query)).thenReturn(typedQuery);
+		Mockito.when(query.from(Bill.class)).thenReturn(root);
+		Mockito.when(query.select(root)).thenReturn(query);
+
+		boolean hasError = false;
+		try {
+			billServiceImpl.findBills("1234", studentId.toString(), null, 2, 2021);
 		} catch (Exception e) {
 			hasError = true;
 		}
@@ -203,6 +226,12 @@ public class BillServiceTest {
 		assertThatExceptionOfType(TransactionException.class).isThrownBy(() -> {
 			billServiceImpl.updatePayment(schoolId.toString(), id.toString(), billStatus);
 		}).withMessage(BillEnum.GET_ERROR.getDescription());
+	}
+	
+	@Test
+	public void whenAutomaticCreationIsOk() throws BillException, StudentException {
+		billServiceImpl.automaticCreation(billApi);
+		verify(billRepository).save(bill);
 	}
 	
 }
