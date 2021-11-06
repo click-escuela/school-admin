@@ -43,14 +43,15 @@ public class StudentServiceImpl {
 	private SchoolServiceImpl schoolService;
 
 
-	public void create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
+	public StudentDTO create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
 		exists(studentApi);
 		School school = schoolService.getById(schoolId);
 		try {
 			Student student = Mapper.mapperToStudent(studentApi);
 			student.setSchool(school);
-			student = checkParent(student); 
-			studentRepository.save(student);
+			student = studentRepository.save(checkParent(student));
+			StudentDTO studentToReturn = Mapper.mapperToStudentDTOToReturn(student);
+			return studentToReturn;
 		} catch (Exception e) {
 			throw new StudentException(StudentMessage.CREATE_ERROR);
 		}

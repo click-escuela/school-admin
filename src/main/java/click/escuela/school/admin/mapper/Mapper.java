@@ -54,9 +54,7 @@ public class Mapper {
 	}
 
 	public static Student mapperToStudent(StudentApi studentApi, Student student) {
-
 		modelMapper.map(studentApi, student);
-
 		student.setGender(mapperToEnum(studentApi.getGender()));
 		student.setLevel(mapperToEnumLevel(studentApi.getLevel()));
 		student.setAdress(mapperToAdress(studentApi.getAdressApi()));
@@ -65,12 +63,18 @@ public class Mapper {
 	}
 
 	public static StudentDTO mapperToStudentDTO(Student student) {
-
 		StudentDTO studentDTO = modelMapper.map(student, StudentDTO.class);
 		studentDTO.setBills(null);
 		if(!Objects.isNull(student.getCourse()))
 			studentDTO.setCourseId(student.getCourse().getId().toString());
-
+		return studentDTO;
+	}
+	
+	public static StudentDTO mapperToStudentDTOToReturn(Student student) {
+		if(student.getParent().getStudents() != null) {
+			student.getParent().getStudents().clear();
+		}
+		StudentDTO studentDTO = mapperToStudentDTO(student);
 		return studentDTO;
 	}
 
@@ -226,7 +230,10 @@ public class Mapper {
 	}
 
 	public static TeacherDTO mapperToTeacherDTO(Teacher teacher) {
-		return modelMapper.map(teacher, TeacherDTO.class);
+		TeacherDTO teacherDTO = modelMapper.map(teacher, TeacherDTO.class);
+		if(!Objects.isNull(teacher.getSchool()))
+			teacherDTO.setSchoolId(teacher.getSchool().getId().toString());
+		return teacherDTO;
 	}
 	
 	public static TeacherCourseStudentsDTO mapperToTeacherCourseStudentsDTO(Teacher teacher) {
