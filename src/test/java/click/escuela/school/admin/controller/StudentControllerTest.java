@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -68,6 +67,7 @@ public class StudentControllerTest {
 	private Student student;
 	private ParentApi parentApi;
 	private AdressApi adressApi;
+	private StudentDTO studentDTO;
 	private UUID idStudent;
 	private UUID idCourse;
 	private UUID parentId;
@@ -107,16 +107,18 @@ public class StudentControllerTest {
 		studentApi.setCourseApi(courseApi);
 		studentsDTO.add(Mapper.mapperToStudentDTO(studentApi));
 		
+		studentDTO = Mapper.mapperToStudentDTO(student);
+		
 		StudentParentDTO studentParent = new StudentParentDTO();
 		studentParent.setId(student.getId().toString());
 		studentParent.setName(student.getName());
 		studentParent.setSurname(student.getSurname());
 		List<StudentParentDTO> studentsParent = new ArrayList<>();
 		studentsParent.add(studentParent);
-
+		
 		Mockito.when(studentService.getBySchool(schoolId.toString(), false))
 				.thenReturn(Mapper.mapperToStudentsDTO(students));
-		doNothing().when(studentService).create(Mockito.anyString(), Mockito.any());
+		Mockito.when(studentService.create(Mockito.anyString(), Mockito.any())).thenReturn(studentDTO);
 		Mockito.when(studentService.getByCourse(idCourse.toString(), false)).thenReturn(studentsDTO);
 		Mockito.when(studentService.getById(schoolId.toString(),idStudent.toString(), false))
 				.thenReturn(Mapper.mapperToStudentDTO(student));
@@ -125,7 +127,8 @@ public class StudentControllerTest {
 
 	@Test
 	public void whenCreateOk() throws JsonProcessingException, Exception {
-		assertThat(resultStudentApi(post(URL, schoolId))).contains(StudentMessage.CREATE_OK.name());
+		assertThat(mapper.readValue(resultStudentApi(post(URL, schoolId)), StudentDTO.class))
+				.hasFieldOrPropertyWithValue("id", idStudent.toString());
 	}
 
 	@Test
