@@ -71,7 +71,7 @@ public class Mapper {
 	}
 	
 	public static StudentDTO mapperToStudentDTOToReturn(Student student) {
-		if (student.getParent().getStudents() != null) {
+		if (!Objects.isNull(student.getParent().getStudents())) {
 			student.getParent().getStudents().clear();
 		}
 		return mapperToStudentDTO(student);
