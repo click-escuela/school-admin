@@ -107,7 +107,7 @@ public class StudentControllerTest {
 		studentApi.setCourseApi(courseApi);
 		studentsDTO.add(Mapper.mapperToStudentDTO(studentApi));
 		
-		studentDTO = Mapper.mapperToStudentDTO(student);
+		studentDTO = Mapper.mapperToStudentDTOToReturn(student);
 		
 		StudentParentDTO studentParent = new StudentParentDTO();
 		studentParent.setId(student.getId().toString());

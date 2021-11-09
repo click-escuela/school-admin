@@ -71,11 +71,10 @@ public class Mapper {
 	}
 	
 	public static StudentDTO mapperToStudentDTOToReturn(Student student) {
-		if(student.getParent().getStudents() != null) {
+		if (student.getParent().getStudents() != null) {
 			student.getParent().getStudents().clear();
 		}
-		StudentDTO studentDTO = mapperToStudentDTO(student);
-		return studentDTO;
+		return mapperToStudentDTO(student);
 	}
 
 	public static Student mapperToStudent(StudentDTO studentdto) {

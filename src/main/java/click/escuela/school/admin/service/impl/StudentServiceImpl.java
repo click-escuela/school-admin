@@ -50,8 +50,7 @@ public class StudentServiceImpl {
 			Student student = Mapper.mapperToStudent(studentApi);
 			student.setSchool(school);
 			student = studentRepository.save(checkParent(student));
-			StudentDTO studentToReturn = Mapper.mapperToStudentDTOToReturn(student);
-			return studentToReturn;
+			return  Mapper.mapperToStudentDTOToReturn(student);
 		} catch (Exception e) {
 			throw new StudentException(StudentMessage.CREATE_ERROR);
 		}
