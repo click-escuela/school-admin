@@ -66,6 +66,7 @@ public class TeacherControllerTest {
 
 	private ObjectMapper mapper;
 	private TeacherApi teacherApi;
+	private TeacherDTO teacherDTO;
 	private AdressApi adressApi;
 	private static String EMPTY = "";
 	private String id;
@@ -106,6 +107,7 @@ public class TeacherControllerTest {
 				.adress(new Adress()).build();
 		List<Teacher> teachers = new ArrayList<>();
 		teachers.add(teacher);
+		teacherDTO = Mapper.mapperToTeacherDTO(teacher);
 		
 		CourseStudentsShortDTO courseStudent = new CourseStudentsShortDTO();
 		courseStudent.setCountStudent(20);
@@ -121,6 +123,7 @@ public class TeacherControllerTest {
 		courseStudent.setStudents(students);
 		courses.add(courseStudent);
 
+		Mockito.when(teacherService.create(Mockito.anyString(), Mockito.any())).thenReturn(teacherDTO);
 		Mockito.when(teacherService.getById(id)).thenReturn(Mapper.mapperToTeacherDTO(teacher));
 		Mockito.when(teacherService.getCoursesByTeacherId(id)).thenReturn(courses);
 		Mockito.when(teacherService.getCourseAndStudents(id))
@@ -132,7 +135,7 @@ public class TeacherControllerTest {
 
 	@Test
 	public void whenCreateTests() throws JsonProcessingException, Exception {
-		assertThat(result(post(URL, schoolId).content(toJson(teacherApi)))).contains(TeacherMessage.CREATE_OK.name());
+		assertThat(mapper.readValue(result(post(URL, schoolId).content(toJson(teacherApi))),TeacherDTO.class)).hasFieldOrPropertyWithValue("id", teacherDTO.getId());
 
 		doThrow(new TeacherException(TeacherMessage.CREATE_ERROR)).when(teacherService).create(Mockito.anyString(),
 				Mockito.any());
