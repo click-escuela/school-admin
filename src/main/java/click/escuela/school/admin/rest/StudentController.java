@@ -92,6 +92,7 @@ public class StudentController {
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
 			@RequestBody @Validated StudentApi studentApi) throws StudentException, SchoolException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.create(schoolId, studentApi));
+
 	}
 
 	@Operation(summary = "Update student by studentId", responses = {

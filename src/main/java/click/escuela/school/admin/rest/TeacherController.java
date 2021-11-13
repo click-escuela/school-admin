@@ -86,6 +86,7 @@ public class TeacherController {
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
 			@RequestBody @Validated TeacherApi teacherApi) throws TeacherException, SchoolException {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.create(schoolId, teacherApi));
+
 	}
  
 	@Operation(summary = "Update Teacher", responses = {

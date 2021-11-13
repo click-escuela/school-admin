@@ -36,12 +36,14 @@ public class TeacherServiceImpl {
 	private SchoolServiceImpl schoolService;
 
 	public TeacherDTO create(String schoolId, TeacherApi teacherApi) throws TeacherException, SchoolException {
+
 		exists(teacherApi);
 		School school = schoolService.getById(schoolId);
 		try {
 			Teacher teacher = Mapper.mapperToTeacher(teacherApi);
 			teacher.setSchool(school);
 			return Mapper.mapperToTeacherDTO(teacherRepository.save(teacher));
+
 		} catch (Exception e) {
 			throw new TeacherException(TeacherMessage.CREATE_ERROR);
 		}

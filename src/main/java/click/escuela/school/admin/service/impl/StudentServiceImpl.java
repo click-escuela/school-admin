@@ -42,8 +42,8 @@ public class StudentServiceImpl {
 	@Autowired
 	private SchoolServiceImpl schoolService;
 
-
 	public StudentDTO create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
+
 		exists(studentApi);
 		School school = schoolService.getById(schoolId);
 		try {
@@ -51,6 +51,7 @@ public class StudentServiceImpl {
 			student.setSchool(school);
 			student = studentRepository.save(checkParent(student));
 			return  Mapper.mapperToStudentDTOToReturn(student);
+
 		} catch (Exception e) {
 			throw new StudentException(StudentMessage.CREATE_ERROR);
 		}
