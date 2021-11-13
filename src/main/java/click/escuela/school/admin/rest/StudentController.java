@@ -88,11 +88,11 @@ public class StudentController {
 	@Operation(summary = "Create student", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<StudentMessage> create(
+	public ResponseEntity<StudentDTO> create(
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
 			@RequestBody @Validated StudentApi studentApi) throws StudentException, SchoolException {
-		studentService.create(schoolId, studentApi);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(StudentMessage.CREATE_OK);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentService.create(schoolId, studentApi));
+
 	}
 
 	@Operation(summary = "Update student by studentId", responses = {

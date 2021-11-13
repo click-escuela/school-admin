@@ -37,11 +37,11 @@ public class MapperStudetnTest {
 	private Mapper mapper;
 
 	private Student student = new Student();
+	private Parent parent = new Parent();
 	private StudentDTO studentDTO = new StudentDTO();
 	private StudentParentDTO studenParent = new StudentParentDTO();
 	private UUID id = UUID.randomUUID();
 	private List<Student> students = new ArrayList<>();
-
 
 	@Before
 	public void setUp() {
@@ -51,12 +51,12 @@ public class MapperStudetnTest {
 				.document("342343232").division("B").grade("2°").email("oscar@gmail.com").gender(GenderType.MALE)
 				.name("oscar").level(EducationLevels.SECUNDARIO).parent(new Parent()).course(course)
 				.bills(new ArrayList<>()).build();
-		
 		students.add(student);
+		parent.setStudents(students);
 
 		when(modelMapper.map(student, StudentDTO.class)).thenReturn(studentDTO);
 		when(modelMapper.map(student, StudentParentDTO.class)).thenReturn(studenParent);
-
+		
 		ReflectionTestUtils.setField(mapper, "modelMapper", modelMapper);
 	}
 
@@ -80,7 +80,15 @@ public class MapperStudetnTest {
 		
 		List<StudentParentDTO> studentsParent2 = Mapper.mapperToStudentsParentFullDTO(students);
 		assertThat(studentsParent2).isNotEmpty();
-
+		
+		
+		StudentDTO studentDTOToReturn = Mapper.mapperToStudentDTOToReturn(student);
+		assertThat(studentDTOToReturn).isNotNull();
+		
+		student.setParent(parent);
+		StudentDTO studentDTOToReturn2 = Mapper.mapperToStudentDTOToReturn(student);
+		assertThat(studentDTOToReturn2).isNotNull();
+		
 	}
 
 }

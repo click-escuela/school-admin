@@ -82,13 +82,13 @@ public class TeacherController {
 	@Operation(summary = "Create Teacher", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<TeacherMessage> create(
+	public ResponseEntity<TeacherDTO> create(
 			@Parameter(name = "School Id", required = true) @PathVariable("schoolId") String schoolId,
 			@RequestBody @Validated TeacherApi teacherApi) throws TeacherException, SchoolException {
-		teacherService.create(schoolId, teacherApi);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(TeacherMessage.CREATE_OK);
-	}
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(teacherService.create(schoolId, teacherApi));
 
+	}
+ 
 	@Operation(summary = "Update Teacher", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json")) })
 	@PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE })

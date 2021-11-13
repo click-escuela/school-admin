@@ -23,6 +23,9 @@ public class ParentDTO {
 
 	@JsonProperty(value = "gender")
 	private GenderType gender;
+	
+	@JsonProperty(value = "id")
+	private String id;
 
 	@JsonProperty(value = "birthday")
 	private LocalDate birthday;

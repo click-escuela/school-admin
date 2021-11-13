@@ -42,15 +42,16 @@ public class StudentServiceImpl {
 	@Autowired
 	private SchoolServiceImpl schoolService;
 
+	public StudentDTO create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
 
-	public void create(String schoolId, StudentApi studentApi) throws StudentException, SchoolException {
 		exists(studentApi);
 		School school = schoolService.getById(schoolId);
 		try {
 			Student student = Mapper.mapperToStudent(studentApi);
 			student.setSchool(school);
-			student = checkParent(student); 
-			studentRepository.save(student);
+			student = studentRepository.save(checkParent(student));
+			return  Mapper.mapperToStudentDTOToReturn(student);
+
 		} catch (Exception e) {
 			throw new StudentException(StudentMessage.CREATE_ERROR);
 		}
